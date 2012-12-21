@@ -20,34 +20,42 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-config</artifactId>
-            <version>0.16-SNAPSHOT</version>
+            <version>0.16</version>
         </dependency>
         <!-- to send/receive motech events -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-event</artifactId>
-            <version>0.16-SNAPSHOT</version>
+            <version>0.16</version>
         </dependency>
         <!-- to access motech's couchdb datastore -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-commons-couchdb</artifactId>
-            <version>0.16-SNAPSHOT</version>
+            <version>0.16</version>
         </dependency>
         <!-- to schedule jobs on motech -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-scheduler</artifactId>
-            <version>0.16-SNAPSHOT</version>
+            <version>0.16</version>
         </dependency>
         <!-- to build your ui on motech's server console -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-bundle</artifactId>
-            <version>0.16-SNAPSHOT</version>
+            <version>0.16</version>
         </dependency>
 
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>motech-repo</id>
+            <name>MOTECH Maven Repository</name>
+            <url>http://nexus.motechproject.org/content/repositories/public</url>
+        </repository>
+    </repositories>
 
     <build>
 
