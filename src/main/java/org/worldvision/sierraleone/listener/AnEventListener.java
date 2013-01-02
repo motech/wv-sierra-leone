@@ -1,4 +1,4 @@
-package com.example.yourmodule.listener;
+package org.worldvision.sierraleone.listener;
 
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;

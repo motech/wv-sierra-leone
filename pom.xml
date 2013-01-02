@@ -85,7 +85,7 @@
                     <instructions>
                         <Bundle-SymbolicName>org.motechproject.wv-sierra-leone</Bundle-SymbolicName>
                         <Bundle-Activator>
-                            com.example.yourmodule.osgi.Activator
+                            org.worldvision.sierraleone.osgi.Activator
                         </Bundle-Activator>
                         <Import-Package>
                             org.motechproject.server.config,

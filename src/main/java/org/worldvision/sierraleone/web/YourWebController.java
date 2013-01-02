@@ -1,4 +1,4 @@
-package com.example.yourmodule.web;
+package org.worldvision.sierraleone.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

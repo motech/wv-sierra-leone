@@ -1,4 +1,4 @@
-package com.example.yourmodule.osgi;
+package org.worldvision.sierraleone.osgi;
 
 import org.apache.commons.io.IOUtils;
 import org.motechproject.commons.api.MotechException;
