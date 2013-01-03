@@ -15,12 +15,12 @@
 
     <!-- get a settings instance to store your module's properties -->
     <bean id="settings" class="org.motechproject.server.config.SettingsFacade" autowire="byType">
-        <property name="moduleName" value="your-module"/>
+        <property name="moduleName" value="sierra-leone"/>
     </bean>
 
     <!-- get a couchdb connector to access motech's datastore -->
     <bean id="dbConnector" factory-bean="settings" factory-method="getConnector">
-        <constructor-arg value="your-module"/>
+        <constructor-arg value="sierra-leone"/>
         <constructor-arg value="couchdb.properties"/>
     </bean>
 

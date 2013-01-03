@@ -9,8 +9,8 @@
     <name>MOTECH Sierra Leone</name>
     <description>Custom module for registration and eventing logic specific to the SL implementation.</description>
 
-    <groupId>wv-sierra-leone</groupId>
-    <artifactId>wv-sierra-leone</artifactId>
+    <groupId>org.motechproject</groupId>
+    <artifactId>motech-wv-sierra-leone</artifactId>
     <version>1.0</version>
     <packaging>bundle</packaging>
 
@@ -83,7 +83,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>org.motechproject.wv-sierra-leone</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>org.motechproject.motech-wv-sierra-leone</Bundle-SymbolicName>
                         <Bundle-Activator>
                             org.worldvision.sierraleone.osgi.Activator
                         </Bundle-Activator>

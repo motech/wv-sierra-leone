@@ -24,11 +24,11 @@ public class Activator implements BundleActivator {
 
     private static final String CONTEXT_CONFIG_LOCATION = "appContext.xml";
 
-    private static final String MODULE_NAME = "Your Module";
+    private static final String MODULE_NAME = "WV: Sierra Leone";
 
-    private static final String SERVLET_URL_MAPPING = "/your-module/api";
-    private static final String RESOURCE_URL_MAPPING = "/your-module";
-    public static final String ANGULAR_MODULE = "your-module";
+    private static final String SERVLET_URL_MAPPING = "/sierra-leone/api";
+    private static final String RESOURCE_URL_MAPPING = "/sierra-leone";
+    public static final String ANGULAR_MODULE = "sierra-leone";
     public static final String WEBAPP_DIRECTORY = "/webapp";
 
     private ServiceTracker httpServiceTracker;
