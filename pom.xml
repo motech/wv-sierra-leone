@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -13,6 +11,9 @@
     <artifactId>motech-wv-sierra-leone</artifactId>
     <version>1.0</version>
     <packaging>bundle</packaging>
+    <properties>
+        <motech.version>0.17-SNAPSHOT</motech.version>
+    </properties>
 
     <dependencies>
 
@@ -20,36 +21,42 @@
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-config</artifactId>
-            <version>0.17-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
         <!-- to send/receive motech events -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-event</artifactId>
-            <version>0.17-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
         <!-- to access motech's couchdb datastore -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-commons-couchdb</artifactId>
-            <version>0.17-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
         <!-- to schedule jobs on motech -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-scheduler</artifactId>
-            <version>0.17-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
         <!-- to build your ui on motech's server console -->
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-server-bundle</artifactId>
-            <version>0.17-SNAPSHOT</version>
+            <version>${motech.version}</version>
         </dependency>
         <dependency>
             <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-osgi-web-util</artifactId>
-            <version>0.17-SNAPSHOT</version>
+            <version>${motech.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-commcare-api</artifactId>
+            <version>${motech.version}</version>
         </dependency>
     </dependencies>
 

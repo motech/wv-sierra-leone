@@ -24,6 +24,8 @@
         <constructor-arg value="couchdb.properties"/>
     </bean>
 
+    <osgi:reference id="commcareFormServiceOsgi" interface="org.motechproject.commcare.service.CommcareFormService" cardinality="0..1" />
+
     <osgi:reference id="schedulerServiceOsgi" interface="org.motechproject.scheduler.MotechSchedulerService" cardinality="0..1" />
 
     <osgi:reference id="platformSettingsServiceOsgi" interface="org.motechproject.server.config.service.PlatformSettingsService" />
