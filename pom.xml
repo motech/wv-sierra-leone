@@ -1,22 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <modelVersion>4.0.0</modelVersion>
-
-    <name>MOTECH Sierra Leone</name>
-    <description>Custom module for registration and eventing logic specific to the SL implementation.</description>
-
-    <groupId>org.motechproject</groupId>
-    <artifactId>motech-wv-sierra-leone</artifactId>
-    <version>1.0</version>
-    <packaging>bundle</packaging>
-    <properties>
-        <motech.version>0.17-SNAPSHOT</motech.version>
-    </properties>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.worldvision</groupId>
+  <artifactId>wv-sierra-leone</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  <properties>
+      <motech.version>0.17-SNAPSHOT</motech.version>
+  </properties>
     <dependencies>
-
         <!-- to configure your module properties -->
         <dependency>
             <groupId>org.motechproject</groupId>
@@ -44,11 +36,6 @@
         <!-- to build your ui on motech's server console -->
         <dependency>
             <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-server-bundle</artifactId>
-            <version>${motech.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.motechproject</groupId>
             <artifactId>motech-platform-osgi-web-util</artifactId>
             <version>${motech.version}</version>
         </dependency>
@@ -58,15 +45,14 @@
             <artifactId>motech-commcare-api</artifactId>
             <version>${motech.version}</version>
         </dependency>
-    </dependencies>
 
-    <repositories>
-        <repository>
-            <id>motech-repo</id>
-            <name>MOTECH Maven Repository</name>
-            <url>http://nexus.motechproject.org/content/repositories/public</url>
-        </repository>
-    </repositories>
+        <dependency>
+            <groupId>org.junit</groupId>
+            <artifactId>org.motechproject.org.junit</artifactId>
+            <version>4.9.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
 
@@ -82,7 +68,7 @@
                 </configuration>
             </plugin>
 
-            <!-- build a bundle out of your jar -->
+            <!-- build a OSGI bundle  -->
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -90,15 +76,15 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>org.motechproject.motech-wv-sierra-leone</Bundle-SymbolicName>
                         <Bundle-Activator>
                             org.worldvision.sierraleone.osgi.Activator
                         </Bundle-Activator>
                         <Import-Package>
+                            org.motechproject.commons.couchdb.service,
                             org.motechproject.server.config,
                             org.motechproject.server.config.service,
                             org.motechproject.event.listener.annotations,
-                            org.motechproject.server.ui,
+                            org.motechproject.osgi.web,
                             *
                         </Import-Package>
                     </instructions>
@@ -133,5 +119,11 @@
         </plugins>
 
     </build>
-
+    <repositories>
+        <repository>
+            <id>motech-repo</id>
+            <name>MOTECH Maven Repository</name>
+            <url>http://nexus.motechproject.org/content/repositories/public</url>
+        </repository>
+    </repositories>
 </project>

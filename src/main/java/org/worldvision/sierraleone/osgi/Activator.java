@@ -2,7 +2,11 @@ package org.worldvision.sierraleone.osgi;
 
 import org.apache.commons.io.IOUtils;
 import org.motechproject.commons.api.MotechException;
-import org.motechproject.osgi.web.*;
+import org.motechproject.osgi.web.MotechOsgiWebApplicationContext;
+import org.motechproject.osgi.web.ServletRegistrationException;
+import org.motechproject.osgi.web.ModuleRegistrationData;
+import org.motechproject.osgi.web.UIFrameworkService;
+import org.motechproject.osgi.web.UiHttpContext;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -20,7 +24,7 @@ public class Activator implements BundleActivator {
 
     private static final String CONTEXT_CONFIG_LOCATION = "appContext.xml";
 
-    private static final String MODULE_NAME = "WV: Sierra Leone";
+    private static final String MODULE_LINK = "WV: Sierra Leone";
 
     private static final String SERVLET_URL_MAPPING = "/sierra-leone/api";
     private static final String RESOURCE_URL_MAPPING = "/sierra-leone";
@@ -108,7 +112,7 @@ public class Activator implements BundleActivator {
     private void serviceAdded(UIFrameworkService service) {
         String resourceRoot = ".." + RESOURCE_URL_MAPPING;
         ModuleRegistrationData regData = new ModuleRegistrationData();
-        regData.setModuleName(MODULE_NAME);
+        regData.setModuleName(MODULE_LINK);
         regData.setUrl(resourceRoot);
         regData.addAngularModule(ANGULAR_MODULE);
         regData.addI18N("messages", resourceRoot + "/bundles/");
@@ -132,7 +136,7 @@ public class Activator implements BundleActivator {
     }
 
     private void serviceRemoved(UIFrameworkService service) {
-        service.unregisterModule(MODULE_NAME);
+        service.unregisterModule(MODULE_LINK);
         logger.debug("Unregistered your module from ui framework");
     }
 
