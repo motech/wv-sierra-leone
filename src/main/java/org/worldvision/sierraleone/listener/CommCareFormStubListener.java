@@ -1,6 +1,8 @@
 package org.worldvision.sierraleone.listener;
 
+import com.google.common.collect.Multimap;
 import org.motechproject.commcare.domain.CommcareForm;
+import org.motechproject.commcare.domain.FormValueElement;
 import org.motechproject.commcare.events.constants.EventDataKeys;
 import org.motechproject.commcare.events.constants.EventSubjects;
 import org.motechproject.commcare.service.CommcareFormService;
@@ -28,8 +30,10 @@ public class CommCareFormStubListener {
     @Autowired
     CommcareFormService commcareFormService;
 
-    @MotechListener(subjects = EventSubjects.FORM_STUB_EVENT)
+    @MotechListener(subjects = EventSubjects.FORM_STUB_EVENT )
     public void handle(MotechEvent event) {
+        logger.error("MotechEvent received on " + EventSubjects.FORM_STUB_EVENT);
+
         if (commcareFormService == null) {
             logger.error("CommCare service is not available!");
             return;
@@ -44,17 +48,28 @@ public class CommCareFormStubListener {
         }
 
         // Get the form from CommCare
+        logger.error("About to request from from commcare");
         CommcareForm form = commcareFormService.retrieveForm(formId);
         if (form == null) {
             logger.error("Unable to load form " + formId + " from CommCare");
             return;
         }
 
+        logger.error("loaded form " + form.toString());
+
         String formName = form.getType();
+        logger.error("form name" + formName);
+        logger.info("name " + formName);
+
         Map<String, String> attributes = form.getForm().getAttributes();
         for (Map.Entry entry : attributes.entrySet()) {
-            logger.info("Key: " + entry.getKey() + " Value: " + entry.getValue());
+            logger.error("Attribute: Key: " + entry.getKey() + " Value: " + entry.getValue());
         }
 
+        Multimap<String, FormValueElement> subElements = form.getForm().getSubElements();
+        for (Map.Entry<String, FormValueElement> entry : subElements.entries()) {
+            FormValueElement value = entry.getValue();
+            logger.error("Form Key(" + entry.getKey() + "): " + value.getElementName() + " Value: " + value.getValue());
+        }
     }
 }

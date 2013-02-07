@@ -5,8 +5,9 @@
   <artifactId>wv-sierra-leone</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
+  <name>World Vision Sierra Leone</name>
   <properties>
-      <motech.version>0.17-SNAPSHOT</motech.version>
+      <motech.version>0.18-SNAPSHOT</motech.version>
   </properties>
     <dependencies>
         <!-- to configure your module properties -->
@@ -84,6 +85,7 @@
                             org.motechproject.server.config,
                             org.motechproject.server.config.service,
                             org.motechproject.event.listener.annotations,
+                            org.motechproject.event.listener,
                             org.motechproject.osgi.web,
                             *
                         </Import-Package>
