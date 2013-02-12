@@ -32,6 +32,8 @@
 
     <osgi:reference id="eventListenerRegistryService" cardinality="0..1" interface="org.motechproject.event.listener.EventListenerRegistryService" />
 
+    <osgi:reference id="eventRelayOsgi" cardinality="0..1" interface="org.motechproject.event.listener.EventRelay" />
+
     <bean class="org.motechproject.event.listener.annotations.EventAnnotationBeanPostProcessor" >
         <property name="eventListenerRegistry" ref="eventListenerRegistryService"/>
     </bean>
