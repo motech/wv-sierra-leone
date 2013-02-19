@@ -48,6 +48,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-message-campaign</artifactId>
+            <version>${motech.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit</groupId>
             <artifactId>org.motechproject.org.junit</artifactId>
             <version>4.9.0</version>

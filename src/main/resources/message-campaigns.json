@@ -1,0 +1,32 @@
+[
+  {
+    "name" : "Health Center Postnatal Consultation Reminder",
+    "type" : "REPEAT_INTERVAL",
+    "maxDuration" : "6 weeks",
+    "messages" : [
+      {
+        "name" : "Weekly Reminder Message",
+        "formats" : ["SMS"],
+        "languages" : ["en"],
+        "messageKey": "postnatal-consultation-reminder",
+        "repeatEvery" : "1 Week",
+        "startTime" : "10:30"
+      }
+    ]
+  },
+  {
+    "name" : "Mother Referral Reminder",
+    "type" : "REPEAT_INTERVAL",
+    "maxDuration" : "2 weeks",
+    "messages" : [
+      {
+        "name" : "Daily Reminder Message",
+        "formats" : ["SMS"],
+        "languages" : ["en"],
+        "messageKey": "mother-referral-reminder",
+        "repeatEvery" : "1 day",
+        "startTime" : "10:30"
+      }
+    ]
+  }
+]
