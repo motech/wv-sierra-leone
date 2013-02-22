@@ -9,8 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.worldvision.sierraleone.Constants;
-import org.worldvision.sierraleone.EventKeys;
+import org.worldvision.sierraleone.constants.Campaign;
+import org.worldvision.sierraleone.constants.EventKeys;
+import org.worldvision.sierraleone.constants.EventKeys;
 
 @Component
 public class MotherReferralListener {
@@ -23,8 +24,6 @@ public class MotherReferralListener {
     public void postnatalConsultationAttendance(MotechEvent event) {
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
         String referralCaseId = EventKeys.getStringValue(event, EventKeys.REFERRAL_CASE_ID);
-
-        // TODO: Handle null mother or referral case id
 
         // Rule 2:
         // IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to
@@ -41,7 +40,7 @@ public class MotherReferralListener {
         // caseId:referalId
         String externalId = motherCaseId + ":" + referralCaseId;
         CampaignRequest cr = new CampaignRequest(externalId,
-                                                 Constants.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
+                                                 Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
                                                  dateOfVisit.toLocalDate(),
                                                  null, null);
         messageCampaignService.startFor(cr);

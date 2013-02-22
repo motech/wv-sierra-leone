@@ -10,8 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.worldvision.sierraleone.Constants;
-import org.worldvision.sierraleone.EventKeys;
+import org.worldvision.sierraleone.constants.Campaign;
+import org.worldvision.sierraleone.constants.EventKeys;
+import org.worldvision.sierraleone.constants.EventKeys;
 
 @Component
 public class PostPartumVisitListener {
@@ -51,7 +52,7 @@ public class PostPartumVisitListener {
             String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
             CampaignRequest cr = new CampaignRequest(motherCaseId,
-                                                     Constants.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN,
+                                                     Campaign.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN,
                                                      dateOfBirth.toLocalDate(),
                                                      null, null);
             messageCampaignService.startFor(cr);
@@ -66,10 +67,12 @@ public class PostPartumVisitListener {
         Rule 5:
 	    If CHW records a home delivery, send SMS reporting the delivery to PHU (health clinic)
         */
+        // TODO:  Will I send this notification multiple times?
         String placeOfBirth = EventKeys.getStringValue(event, EventKeys.PLACE_OF_BIRTH);
 
         if ("home".equals(placeOfBirth)) {
             // Look up PHU
+            // Todo: store phu_id to fixture id.  Also waiting on response to questions from dimagi
 
             // Send SMS
         }
