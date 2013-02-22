@@ -31,5 +31,7 @@ public final class Commcare {
     public static final String MOTHER_ALIVE = "mother_alive";
     public static final String SUBCASE = "subcase_0";
     public static final String INDEX = "index";
+    public static final String MOTHER_PHONE_NUMBER = "mother_phone_number";
+    public static final String OPEN = "open";
 }
 

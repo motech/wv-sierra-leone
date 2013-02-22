@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.Utils;
+import org.worldvision.sierraleone.constants.Commcare;
 
 @Component
 public class MessageCampaignListener {
@@ -59,9 +60,9 @@ public class MessageCampaignListener {
 
                 if (null != motherCase) {
                     // Verify she is still alive and still has not attended postnatal consultation
-                    String stillAlive = motherCase.getFieldValues().get("still_alive");
-                    String attendedPostnatal = motherCase.getFieldValues().get("attended_postnatal");
-                    String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get("mother_phone_number"));
+                    String stillAlive = motherCase.getFieldValues().get(Commcare.STILL_ALIVE);
+                    String attendedPostnatal = motherCase.getFieldValues().get(Commcare.ATTENDED_POSTNATAL);
+                    String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
 
                     // Send SMS to her
                     if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal) && null != phone) {
@@ -113,11 +114,11 @@ public class MessageCampaignListener {
                     return;
                 }
 
-                String caseOpen = referralCase.getFieldValues().get("open");
+                String caseOpen = referralCase.getFieldValues().get(Commcare.OPEN);
 
                 if ("true".equals(caseOpen)) {
                     // If open send SMS
-                    String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get("mother_phone_number"));
+                    String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
 
                     // TODO: Enable SMS service
                     // smsService.sendSMS(phone, message);
@@ -153,8 +154,8 @@ public class MessageCampaignListener {
 
                 childCase = commcareCaseService.getCaseByCaseId(childCaseId);
 
-                String vitaminA = childCase.getFieldValues().get("vitamin_a");
-                String dob = childCase.getFieldValues().get("dob");
+                String vitaminA = childCase.getFieldValues().get(Commcare.VITAMIN_A);
+                String dob = childCase.getFieldValues().get(Commcare.DATE_OF_BIRTH);
 
                 DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
                         .appendYear(4, 4)
@@ -167,7 +168,7 @@ public class MessageCampaignListener {
                 DateTime dateOfBirth = dateFormatter.parseDateTime(dob);
                 if (Months.monthsBetween(dateOfBirth, new DateTime()).getMonths() > 6 && "no".equals(vitaminA)) {
                     motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
-                    String phone = motherCase.getFieldValues().get("phone");
+                    String phone = motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER);
 
                     // TODO: Enable SMS service
                     // smsService.sendSMS(phone, message);
