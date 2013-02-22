@@ -29,4 +29,19 @@
       }
     ]
   }
+  {
+    "name" : "Child Vitamin A Reminder",
+    "type" : "REPEAT_INTERVAL",
+    "maxDuration" : "1 year",
+    "messages" : [
+      {
+        "name" : "Monthly Vitamin A Reminder Message",
+        "formats" : ["SMS"],
+        "languages" : ["en"],
+        "messageKey": "child-vitamin-a-reminder",
+        "repeatEvery" : "1 month",
+        "startTime" : "10:30"
+      }
+    ]
+  }
 ]
