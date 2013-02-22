@@ -1,5 +1,9 @@
 package org.worldvision.sierraleone.task;
 
+import org.joda.time.DateTime;
+import org.joda.time.Months;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.event.MotechEvent;
@@ -11,10 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.worldvision.sierraleone.Constants;
+import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.Utils;
-
-import java.util.Map;
 
 @Component
 public class MessageCampaignListener {
@@ -31,19 +33,27 @@ public class MessageCampaignListener {
         logger.info("MotechEvent " + event + " received on " + EventKeys.SEND_MESSAGE);
 
         CaseInfo motherCase = null;
+        CaseInfo childCase = null;
+        CaseInfo referralCase = null;
 
-        /*
-        Rule 1:
-        IF patient has delivered AND patient has not attended postnatal consultation at health center THEN send SMS to
-        patient every week until 45 days after delivery.
-        */
+        String motherCaseId = null;
+        String childCaseId = null;
+        String referralCaseId = null;
+
+        String[] elements = null;
+
         String campaignName = (String) event.getParameters().get(EventKeys.CAMPAIGN_NAME_KEY);
         String externalId = (String) event.getParameters().get(EventKeys.EXTERNAL_ID_KEY);
 
         logger.info("Handling event for " + campaignName);
 
         switch (campaignName) {
-            case Constants.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN:
+            /*
+             Rule 1:
+             IF patient has delivered AND patient has not attended postnatal consultation at health center THEN send SMS to
+             patient every week until 45 days after delivery.
+            */
+            case Campaign.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN:
                 // Load the mothers case
                 motherCase = commcareCaseService.getCaseByCaseId(externalId);
 
@@ -62,7 +72,7 @@ public class MessageCampaignListener {
 
                         // If the mother has died or attended postnatal consultations we can unenroll the campaign
                         CampaignRequest cr = new CampaignRequest(externalId,
-                                                                 Constants.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN,
+                                                                 Campaign.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN,
                                                                  null, null, null);
                         logger.info("unenrolling mothercase: " + externalId + " stillAlive: " + stillAlive + " attended: " + attendedPostnatal);
                         messageCampaignService.stopAll(cr);
@@ -74,11 +84,16 @@ public class MessageCampaignListener {
 
                 break;
 
-            case Constants.MOTHER_REFERRAL_REMINDER_CAMPAIGN:
+            /*
+             Rule 2:
+	         IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to patient
+	         every 24 hours until referral is completed.
+            */
+            case Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN:
                 // The externalId encodes the mother case id and the referral id.
-                String[] elements = externalId.split(":");
-                String motherCaseId = elements[0];
-                String referralCaseId = elements[1];
+                elements = externalId.split(":");
+                motherCaseId = elements[0];
+                referralCaseId = elements[1];
 
                 logger.info("motherCaseId: " + motherCaseId + " referralId: " + referralCaseId);
 
@@ -91,17 +106,82 @@ public class MessageCampaignListener {
                 }
 
                 // Load referral case
-                CaseInfo referralCase = commcareCaseService.getCaseByCaseId(referralCaseId);
+                referralCase = commcareCaseService.getCaseByCaseId(referralCaseId);
 
                 if (null == referralCase) {
                     logger.error("Unable to load referralcase: " + referralCaseId + " from commcare");
                     return;
                 }
 
-                // If open send SMS
+                String caseOpen = referralCase.getFieldValues().get("open");
 
-                // If closed unenroll from message campaign
+                if ("true".equals(caseOpen)) {
+                    // If open send SMS
+                    String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get("mother_phone_number"));
 
+                    // TODO: Enable SMS service
+                    // smsService.sendSMS(phone, message);
+                    logger.info("Sending reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+
+                } else {
+                    // If closed unenroll from message campaign
+                    CampaignRequest cr = new CampaignRequest(externalId,
+                            Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
+                            null, null, null);
+
+                    logger.info("unenrolling mothercase: " + motherCaseId + " referralcase: " + referralCaseId + " from " + Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN);
+                    messageCampaignService.stopAll(cr);
+                }
+
+
+                break;
+
+            /*
+             Rule 6:
+	          IF Child has missed vitamin A dose, send a message to mother reminding her
+	          (NN: I looked back at this SMS again, and what it is saying is to send an SMS to the mother.  This SMS should
+	          go out once per month until the field "has received it in last 6 months" is changed to yes.  I'll be
+	          seperately alerting the CHW in the app to go check if this has been done, so the CHW will mark that the
+	          vitamin A dose has been received.  So you would filter on: DOB > 6 months ago AND vitamin_A_received = 'No'
+	          then just send that once monthly until it changes to yes.)
+            */
+            case Campaign.CHILD_VITAMIN_A_REMINDER_CAMPAIGN:
+                // The external id encodes the child and mother case ids
+                elements = externalId.split(":");
+                childCaseId = elements[0];
+                motherCaseId = elements[1];
+
+                childCase = commcareCaseService.getCaseByCaseId(childCaseId);
+
+                String vitaminA = childCase.getFieldValues().get("vitamin_a");
+                String dob = childCase.getFieldValues().get("dob");
+
+                DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
+                        .appendYear(4, 4)
+                        .appendLiteral('-')
+                        .appendMonthOfYear(2)
+                        .appendLiteral('-')
+                        .appendDayOfMonth(2)
+                        .toFormatter();
+
+                DateTime dateOfBirth = dateFormatter.parseDateTime(dob);
+                if (Months.monthsBetween(dateOfBirth, new DateTime()).getMonths() > 6 && "no".equals(vitaminA)) {
+                    motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
+                    String phone = motherCase.getFieldValues().get("phone");
+
+                    // TODO: Enable SMS service
+                    // smsService.sendSMS(phone, message);
+
+                    logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+
+                } else if ("yes".equals(vitaminA)) {
+                    CampaignRequest cr = new CampaignRequest(externalId,
+                            Campaign.CHILD_VITAMIN_A_REMINDER_CAMPAIGN,
+                            null, null, null);
+
+                    logger.info("unenrolling childcase: " + externalId + " from " + Campaign.CHILD_VITAMIN_A_REMINDER_CAMPAIGN);
+                    messageCampaignService.stopAll(cr);
+                }
                 break;
 
             default:
