@@ -73,10 +73,6 @@ public class CommCareFormStubListener {
         List<MotechEvent> events = new ArrayList<>(0);
 
         switch (formName) {
-            case "Register Child":
-                events.addAll(convertRegisterChildFormToEvents(form));
-                break;
-
             case "Post-Partum Visit":
                 events.addAll(convertPostPartumFormToEvents(form, caseIds));
                 break;
@@ -310,48 +306,5 @@ public class CommCareFormStubListener {
         event.getParameters().put(EventKeys.DATE_OF_VISIT, dateOfVisit);
 
         return event;
-    }
-
-    private List<MotechEvent> convertRegisterChildFormToEvents(CommcareForm form) {
-        FormValueElement registration = form.getForm().getElementByName(Commcare.REGISTRATION);
-        FormValueElement dob = registration.getElementByName(Commcare.DATE_OF_BIRTH);
-
-        FormValueElement motherAlive = form.getForm().getElementByName(Commcare.MOTHER_ALIVE);
-
-        logger.info("dob: " + dob.getValue());
-        logger.info("mother_alive: " + motherAlive.getValue());
-
-        String childCaseId = null;
-        String motherCaseId = null;
-
-        FormValueElement subcase_0 = form.getForm().getElementByName(Commcare.SUBCASE);
-        FormValueElement _case = subcase_0.getElementByName(Commcare.CASE);
-
-        if (null != _case) {
-            childCaseId = _case.getAttributes().get(Commcare.CASE_ID);
-
-            try {
-                FormValueElement parentElement = _case.getElementByName(Commcare.INDEX).getElementByName(Commcare.PARENT);
-
-                if ("mother".equals(parentElement.getAttributes().get(Commcare.CASE_TYPE))) {
-                    motherCaseId = parentElement.getValue();
-                } else {
-                    logger.debug("case_type(" + parentElement.getAttributes().get(Commcare.CASE_TYPE) + ") != 'mother'");
-                }
-            } catch (NullPointerException e) {
-                logger.debug(e.getMessage());
-                // I just don't want to die if this happens.  I'll deal with the missing values below
-                // when I verify I have a value for motherCaseId
-            }
-        } else {
-            logger.info("case is null");
-        }
-
-        logger.info("Child Case Id: " + childCaseId);
-        logger.info("Mother Case Id: " + motherCaseId);
-
-        //formEvent.getParameters().put(EventKeys.DATE_OF_BIRTH, form.getForm().getSubElements().get());
-
-        return null;
     }
 }
