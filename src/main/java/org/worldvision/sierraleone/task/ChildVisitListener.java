@@ -25,7 +25,7 @@ public class ChildVisitListener {
     MessageCampaignService messageCampaignService;
 
     @MotechListener(subjects = EventKeys.CHILD_VISIT_FORM_SUBJECT)
-    public void postnatalConsultationAttendance(MotechEvent event) {
+    public void childVitaminAReminder(MotechEvent event) {
         logger.info("MotechEvent " + event + " received on " + EventKeys.CHILD_VISIT_FORM_SUBJECT + " Rule: Child Vitamin A");
 
         /*

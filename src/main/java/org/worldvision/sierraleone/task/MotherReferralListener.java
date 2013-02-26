@@ -21,7 +21,7 @@ public class MotherReferralListener {
     MessageCampaignService messageCampaignService;
 
     @MotechListener(subjects = EventKeys.MOTHER_REFERRAL_SUBJECT)
-    public void postnatalConsultationAttendance(MotechEvent event) {
+    public void motherReferralReminder(MotechEvent event) {
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
         String referralCaseId = EventKeys.getStringValue(event, EventKeys.REFERRAL_CASE_ID);
 

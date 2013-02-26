@@ -36,6 +36,7 @@ public class PostPartumVisitListener {
         String gaveBirth = EventKeys.getStringValue(event, EventKeys.GAVE_BIRTH);
         String attendedPostnatal = EventKeys.getStringValue(event, EventKeys.ATTENDED_POSTNATAL);
         Integer daysSinceBirth = EventKeys.getIntegerValue(event, EventKeys.DAYS_SINCE_BIRTH);
+        String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
         DateTime dateOfBirth = null;
         try {
@@ -49,7 +50,6 @@ public class PostPartumVisitListener {
         if ("yes".equals(gaveBirth) && "no".equals(attendedPostnatal) &&
                 new Integer(45).compareTo(daysSinceBirth) > 0) {
             // Enroll mother in message campaign reminding her to attend postnatal consultation
-            String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
             CampaignRequest cr = new CampaignRequest(motherCaseId,
                                                      Campaign.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN,

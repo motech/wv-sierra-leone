@@ -154,6 +154,11 @@ public class MessageCampaignListener {
 
                 childCase = commcareCaseService.getCaseByCaseId(childCaseId);
 
+                if (null == childCase) {
+                    logger.error("Unable to load childcase: " + childCaseId + " from commcare");
+                    return;
+                }
+
                 String vitaminA = childCase.getFieldValues().get(Commcare.VITAMIN_A);
                 String dob = childCase.getFieldValues().get(Commcare.DATE_OF_BIRTH);
 
@@ -168,12 +173,17 @@ public class MessageCampaignListener {
                 DateTime dateOfBirth = dateFormatter.parseDateTime(dob);
                 if (Months.monthsBetween(dateOfBirth, new DateTime()).getMonths() > 6 && "no".equals(vitaminA)) {
                     motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
-                    String phone = motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER);
 
-                    // TODO: Enable SMS service
-                    // smsService.sendSMS(phone, message);
+                    if (null != motherCase) {
+                        String phone = motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER);
 
-                    logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+                        // TODO: Enable SMS service
+                        // smsService.sendSMS(phone, message);
+
+                        logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+                    } else {
+                        logger.error("Unable to load mothercase: " + motherCaseId + " from commcare");
+                    }
 
                 } else if ("yes".equals(vitaminA)) {
                     CampaignRequest cr = new CampaignRequest(externalId,
