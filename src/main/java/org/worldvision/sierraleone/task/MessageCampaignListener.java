@@ -15,8 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.Utils;
+import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 
 @Component

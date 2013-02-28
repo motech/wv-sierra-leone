@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.EventKeys;
-import org.worldvision.sierraleone.constants.EventKeys;
 
 @Component
 public class PostPartumVisitListener {
