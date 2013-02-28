@@ -22,12 +22,6 @@
             <artifactId>motech-platform-event</artifactId>
             <version>${motech.version}</version>
         </dependency>
-        <!-- to access motech's couchdb datastore -->
-        <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-platform-commons-couchdb</artifactId>
-            <version>${motech.version}</version>
-        </dependency>
         <!-- to schedule jobs on motech -->
         <dependency>
             <groupId>org.motechproject</groupId>
