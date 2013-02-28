@@ -64,6 +64,7 @@ public class FixtureIdMapIT {
 
         CommcareFixture fixture = new CommcareFixture();
         fixture.setId("AAAAAAAA");
+        fixture.setFixtureType("phu");
 
         Map<String, String> fields = new HashMap<>();
         fields.put(Commcare.PHU_ID, "vic");
@@ -76,6 +77,20 @@ public class FixtureIdMapIT {
 
         fixture = new CommcareFixture();
         fixture.setId("BBBBBBBB");
+        fixture.setFixtureType("phu");
+
+        fields = new HashMap<>();
+        fields.put(Commcare.PHU_ID, "gnu");
+
+        fixture.setFields(fields);
+
+        ret.add(fixture);
+
+        fields = new HashMap<>();
+
+        fixture = new CommcareFixture();
+        fixture.setId("CCCCCCCC");
+        fixture.setFixtureType("community");
 
         fields = new HashMap<>();
         fields.put(Commcare.PHU_ID, "gnu");

@@ -47,7 +47,7 @@ public class FixtureIdMap {
         for (CommcareFixture fixture : allFixtures ) {
             String phuId = fixture.getFields().get(Commcare.PHU_ID);
 
-            if (null != phuId) {
+            if (null != phuId && "phu".equals(fixture.getFixtureType())) {
                 fixtures.put(phuId, fixture);
             }
         }
