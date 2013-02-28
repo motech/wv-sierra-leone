@@ -2,7 +2,6 @@ package org.worldvision.sierraleone.constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.security.x509.CertAttrSet;
 
 /**
  *
@@ -33,5 +32,6 @@ public final class Commcare {
     public static final String INDEX = "index";
     public static final String MOTHER_PHONE_NUMBER = "mother_phone_number";
     public static final String OPEN = "open";
+    public static final String PHU_ID = "phu_id";
 }
 
