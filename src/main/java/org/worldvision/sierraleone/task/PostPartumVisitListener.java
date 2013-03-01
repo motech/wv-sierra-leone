@@ -1,6 +1,10 @@
 package org.worldvision.sierraleone.task;
 
 import org.joda.time.DateTime;
+import org.motechproject.commcare.domain.CaseInfo;
+import org.motechproject.commcare.domain.CommcareFixture;
+import org.motechproject.commcare.service.CommcareCaseService;
+import org.motechproject.commcare.service.CommcareFixtureService;
 import org.motechproject.commcare.service.CommcareFormService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
@@ -11,14 +15,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.constants.Campaign;
+import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
+import org.worldvision.sierraleone.repository.FixtureIdMap;
 
 @Component
 public class PostPartumVisitListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    CommcareFormService commcareFormService;
+    CommcareCaseService commcareCaseService;
+
+    @Autowired
+    CommcareFixtureService commcareFixtureService;
+
+    @Autowired
+    FixtureIdMap fixtureIdMap;
 
     @Autowired
     MessageCampaignService messageCampaignService;
@@ -70,10 +82,56 @@ public class PostPartumVisitListener {
         String placeOfBirth = EventKeys.getStringValue(event, EventKeys.PLACE_OF_BIRTH);
 
         if ("home".equals(placeOfBirth)) {
+            String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
+
             // Look up PHU
-            // Todo: store phu_id to fixture id.  Also waiting on response to questions from dimagi
+            CaseInfo motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
+            if (null == motherCase) {
+                logger.error("Unable to load mothercase " + motherCaseId + " from commcare");
+                return;
+            }
+
+            String phuId = motherCase.getFieldValues().get(Commcare.PHU_ID);
+            if (null == phuId) {
+                logger.error("mothercase " + motherCaseId + " does not contain a phu");
+                return;
+            }
+
+            // This code could be better.  Basically I try to load from commcare.  If fixture has been updated
+            // then it's fixtureId has changed and I'll get null back.  So then I refresh the in memory cache and try
+            // to load it again.
+            String fixtureId = fixtureIdMap.fixtureIdForPHUId(phuId);
+            if (null == fixtureId) {
+                logger.error("Unable to get fixtureId for phu " + phuId);
+                return;
+            }
+
+            CommcareFixture fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
+            if (null == fixture) {
+                fixtureIdMap.refreshFixtureMap();
+
+                fixtureId = fixtureIdMap.fixtureIdForPHUId(phuId);
+                if (null == fixtureId) {
+                    logger.error("Unable to get fixtureId for phu " + phuId);
+                    return;
+                }
+
+                fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
+            }
+
+            if (null == fixture) {
+                logger.error("Unable to load fixture " + fixtureId + " from commcare");
+                return;
+            }
+
+            String phone = fixture.getFields().get(Commcare.PHONE);
+            if (null == phone) {
+                logger.error("No phone for phu " + phuId + " fixture " + fixtureId);
+                return;
+            }
 
             // Send SMS
+            // TODO enable SMS
         }
     }
 }

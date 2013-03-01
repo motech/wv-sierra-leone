@@ -1,6 +1,9 @@
 package org.worldvision.sierraleone;
 
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,5 +39,17 @@ public final class Utils {
         }
 
         return ret;
+    }
+
+    public static DateTime dateTimeFromCommcareDateString(String dateStr) {
+        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
+                .appendYear(4, 4)
+                .appendLiteral('-')
+                .appendMonthOfYear(2)
+                .appendLiteral('-')
+                .appendDayOfMonth(2)
+                .toFormatter();
+
+        return dateFormatter.parseDateTime(dateStr);
     }
 }

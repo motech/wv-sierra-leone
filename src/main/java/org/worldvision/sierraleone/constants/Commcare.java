@@ -33,5 +33,6 @@ public final class Commcare {
     public static final String MOTHER_PHONE_NUMBER = "mother_phone_number";
     public static final String OPEN = "open";
     public static final String PHU_ID = "phu_id";
+    public static final String PHONE = "phone";
 }
 

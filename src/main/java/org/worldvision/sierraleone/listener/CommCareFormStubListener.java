@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
 
@@ -124,15 +125,7 @@ public class CommCareFormStubListener {
 
         dob = childCase.getFieldValues().get(Commcare.DATE_OF_BIRTH);
 
-        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
-                .appendYear(4, 4)
-                .appendLiteral('-')
-                .appendMonthOfYear(2)
-                .appendLiteral('-')
-                .appendDayOfMonth(2)
-                .toFormatter();
-
-        DateTime dateOfBirth = dateFormatter.parseDateTime(dob);
+        DateTime dateOfBirth = Utils.dateTimeFromCommcareDateString(dob);
 
         logger.info("Child Case Id: " + childCaseId);
         logger.info("Mother Case Id: " + motherCaseId);
@@ -170,15 +163,7 @@ public class CommCareFormStubListener {
         element = form.getForm().getElementByName(Commcare.DATE_OF_VISIT);
         dov = ((element != null) ? element.getValue() : null);
 
-        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
-                .appendYear(4, 4)
-                .appendLiteral('-')
-                .appendMonthOfYear(2)
-                .appendLiteral('-')
-                .appendDayOfMonth(2)
-                .toFormatter();
-
-        DateTime dateOfVisit = dateFormatter.parseDateTime(dov);
+        DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
 
         logger.info("createReferral: " + createReferral);
         logger.info("referralId: " + referralId);
@@ -234,16 +219,8 @@ public class CommCareFormStubListener {
         element = postPartumVisit.getElementByName(Commcare.PLACE_OF_BIRTH);
         placeOfBirth = ((element != null) ? element.getValue() : null);
 
-        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
-                .appendYear(4, 4)
-                .appendLiteral('-')
-                .appendMonthOfYear(2)
-                .appendLiteral('-')
-                .appendDayOfMonth(2)
-                .toFormatter();
-
-        DateTime dateOfVisit = dateFormatter.parseDateTime(dov);
-        DateTime dateOfBirth = dateFormatter.parseDateTime(dob);
+        DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
+        DateTime dateOfBirth = Utils.dateTimeFromCommcareDateString(dob);
         int daysSinceBirth = Days.daysBetween(dateOfBirth, new DateTime()).getDays();
 
         element = form.getForm().getElementByName(Commcare.CASE);
