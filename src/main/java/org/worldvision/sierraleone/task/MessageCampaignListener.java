@@ -11,6 +11,8 @@ import org.motechproject.event.listener.annotations.MotechListener;
 import org.motechproject.server.messagecampaign.EventKeys;
 import org.motechproject.server.messagecampaign.contract.CampaignRequest;
 import org.motechproject.server.messagecampaign.service.MessageCampaignService;
+import org.motechproject.sms.api.service.SendSmsRequest;
+import org.motechproject.sms.api.service.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
+import org.worldvision.sierraleone.constants.SMSContent;
+
+import java.util.Arrays;
 
 @Component
 public class MessageCampaignListener {
@@ -28,6 +33,9 @@ public class MessageCampaignListener {
 
     @Autowired
     MessageCampaignService messageCampaignService;
+
+    @Autowired
+    SmsService smsService;
 
     @MotechListener(subjects = EventKeys.SEND_MESSAGE)
     public void handle(MotechEvent event) {
@@ -66,8 +74,9 @@ public class MessageCampaignListener {
 
                     // Send SMS to her
                     if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal) && null != phone) {
-                        // TODO: Enable SMS service
-                        // smsService.sendSMS(phone, message);
+                        // TODO: Handle using mother's name
+                        String message = SMSContent.POSTNATAL_CONSULTATION_REMINDER;
+                        smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                         logger.info("Sending reminder SMS to " + phone + " for mothercase: " + externalId);
                     } else if ("no".equals(stillAlive) || "yes".equals(attendedPostnatal)) {
 
@@ -79,7 +88,6 @@ public class MessageCampaignListener {
                         messageCampaignService.stopAll(cr);
                     }
                 } else {
-                    // TODO: handle missing mother case in commcare
                     logger.error("Unable to find mothercase: " + externalId + " in commcare");
                 }
 
@@ -120,8 +128,9 @@ public class MessageCampaignListener {
                     // If open send SMS
                     String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
 
-                    // TODO: Enable SMS service
-                    // smsService.sendSMS(phone, message);
+                    String message = SMSContent.MOTHER_REFERRAL_REMINDER;
+                    // TODO: Handle using mothers name
+                    smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                     logger.info("Sending reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
 
                 } else {
@@ -177,9 +186,9 @@ public class MessageCampaignListener {
                     if (null != motherCase) {
                         String phone = motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER);
 
-                        // TODO: Enable SMS service
-                        // smsService.sendSMS(phone, message);
-
+                        // TODO: Handle using childs name
+                        String message = SMSContent.CHILD_VITAMIN_A_REMINDER;
+                        smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                         logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
                     } else {
                         logger.error("Unable to load mothercase: " + motherCaseId + " from commcare");

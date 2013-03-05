@@ -10,6 +10,8 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
 import org.motechproject.server.messagecampaign.contract.CampaignRequest;
 import org.motechproject.server.messagecampaign.service.MessageCampaignService;
+import org.motechproject.sms.api.service.SendSmsRequest;
+import org.motechproject.sms.api.service.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,10 @@ import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
+import org.worldvision.sierraleone.constants.SMSContent;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
+
+import java.util.Arrays;
 
 @Component
 public class PostPartumVisitListener {
@@ -34,6 +39,9 @@ public class PostPartumVisitListener {
 
     @Autowired
     MessageCampaignService messageCampaignService;
+
+    @Autowired
+    SmsService smsService;
 
     @MotechListener(subjects = EventKeys.POST_PARTUM_FORM_SUBJECT)
     public void postnatalConsultationAttendance(MotechEvent event) {
@@ -131,7 +139,10 @@ public class PostPartumVisitListener {
             }
 
             // Send SMS
-            // TODO enable SMS
+            // TODO Handle CHW name
+            String message = SMSContent.HOME_BIRTH_NOTIFICATION;
+            smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+            logger.info("Sending home birth notification SMS to " + phone + " for mothercase: " + motherCaseId);
         }
     }
 }
