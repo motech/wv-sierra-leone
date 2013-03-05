@@ -1,5 +1,6 @@
 package org.worldvision.sierraleone;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,20 +36,20 @@ public class FormChecker {
         if (fields.isEmpty()) {
             return true;
         } else {
-            StringBuffer msg = new StringBuffer("Form Error: ");
+            StringBuffer msg = new StringBuffer("Form Missing Fields: ");
 
             if (!metadata.isEmpty()) {
                 msg.append("metadata(");
+                List<String> list = new ArrayList<String>();
                 for (String key : metadata.keySet()) {
-                    msg.append(key + ":" + metadata.get(key));
+                    list.add(key + ":" + metadata.get(key));
                 }
+                msg.append(StringUtils.join(list, ", "));
                 msg.append(") ");
             }
 
             msg.append("fields(");
-            for (String field : fields) {
-                msg.append(field);
-            }
+            msg.append(StringUtils.join(fields, ','));
             msg.append(") ");
 
             logger.error(msg.toString());
