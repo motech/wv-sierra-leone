@@ -200,7 +200,6 @@ public class CommCareFormStubListener {
     // Pulls data out of the commcare form and constructs events used by rule handlers
     private List<MotechEvent> convertPostPartumFormToEvents(CommcareForm form, List<String> caseIds) {
         String dov = null;
-        String stillAlive = null;
         String gaveBirth = null;
         String createReferral = null;
         String referralId = null;
@@ -209,10 +208,7 @@ public class CommCareFormStubListener {
         String placeOfBirth = null;
         String motherCaseId = null;
 
-        FormValueElement element = form.getForm().getElementByName(Commcare.STILL_ALIVE);
-        stillAlive = ((element != null) ? element.getValue() : null);
-
-        element = form.getForm().getElementByName(Commcare.GAVE_BIRTH);
+        FormValueElement element = form.getForm().getElementByName(Commcare.GAVE_BIRTH);
         gaveBirth = ((element != null) ? element.getValue() : null);
 
         element = form.getForm().getElementByName(Commcare.CREATE_REFERRAL);
@@ -241,7 +237,6 @@ public class CommCareFormStubListener {
         element = form.getForm().getElementByName(Commcare.CASE);
         motherCaseId = element.getAttributes().get(Commcare.CASE_ID);
 
-        logger.info("still_alive: " + stillAlive);
         logger.info("gaveBirth: " + gaveBirth);
         logger.info("createReferral: " + createReferral);
         logger.info("referralId: " + referralId);
@@ -256,12 +251,6 @@ public class CommCareFormStubListener {
         checker.addMetadata("name", form.getForm().getAttributes().get(Commcare.NAME));
         checker.addMetadata("id", form.getId());
 
-        checker.checkFieldExists(Commcare.STILL_ALIVE, stillAlive);
-        checker.checkFieldExists(Commcare.GAVE_BIRTH, gaveBirth);
-        checker.checkFieldExists(Commcare.DATE_OF_BIRTH, dob);
-        checker.checkFieldExists("dateOfBirth", dateOfBirth);
-        checker.checkFieldExists(Commcare.ATTENDED_POSTNATAL, attendedPostnatal);
-        checker.checkFieldExists(Commcare.PLACE_OF_BIRTH, placeOfBirth);
         checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
 
         if (!checker.check()) {
@@ -271,7 +260,6 @@ public class CommCareFormStubListener {
         List<MotechEvent> ret = new ArrayList<>();
         MotechEvent event = new MotechEvent(EventKeys.POST_PARTUM_FORM_SUBJECT);
 
-        event.getParameters().put(EventKeys.MOTHER_ALIVE, stillAlive);
         event.getParameters().put(EventKeys.GAVE_BIRTH, gaveBirth);
         event.getParameters().put(EventKeys.DATE_OF_BIRTH, dateOfBirth);
         event.getParameters().put(EventKeys.DATE_OF_VISIT, dateOfVisit);

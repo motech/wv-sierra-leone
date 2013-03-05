@@ -15,7 +15,6 @@ public final class EventKeys {
     public static final String DATE_OF_BIRTH = "date_of_birth";
     public static final String DATE_OF_VISIT = "date_of_visit";
     public static final String DAYS_SINCE_BIRTH = "days_since_birth";
-    public static final String MOTHER_ALIVE = "mother_alive";
     public static final String GAVE_BIRTH = "gave_birth";
     public static final String REFERRAL_CASE_ID = "referral_case_id";
     public static final String ATTENDED_POSTNATAL = "attended_postnatal";
@@ -26,7 +25,6 @@ public final class EventKeys {
 
     public static final String BASE_SUBJECT = "org.worldvision.sierraleone.";
     public static final String FORM_BASE_SUBJECT = BASE_SUBJECT + "form.";
-    public static final String REGISTER_CHILD_FORM_SUBJECT = FORM_BASE_SUBJECT + "register-child";
     public static final String CHILD_VISIT_FORM_SUBJECT = FORM_BASE_SUBJECT + "child-visit";
     public static final String POST_PARTUM_FORM_SUBJECT = FORM_BASE_SUBJECT + "post-partum";
     public static final String MOTHER_REFERRAL_SUBJECT = BASE_SUBJECT + "mother-referral";
