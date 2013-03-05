@@ -18,11 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.worldvision.sierraleone.FormChecker;
 import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +40,6 @@ public class CommCareFormStubListener {
 
     @Autowired
     EventRelay eventRelay;
-
-    // Todo: Verify all events are only published if all fields are included
 
     @MotechListener(subjects = EventSubjects.FORM_STUB_EVENT )
     public void handle(MotechEvent event) {
@@ -116,21 +116,36 @@ public class CommCareFormStubListener {
                 motherCaseId = childCase.getIndices().get(Commcare.PARENT).get(Commcare.CASE_ID);
             } else {
                 logger.error("Parent of childcase " + childCaseId + " is not a mothercase (" + parent.get(Commcare.CASE_TYPE) + ")");
+                return Collections.<MotechEvent>emptyList();
             }
         } else {
             logger.error("No parent case for childcase: " + childCaseId);
+            return Collections.<MotechEvent>emptyList();
         }
 
         vitaminA = childCase.getFieldValues().get(Commcare.VITAMIN_A);
-
         dob = childCase.getFieldValues().get(Commcare.DATE_OF_BIRTH);
-
         DateTime dateOfBirth = Utils.dateTimeFromCommcareDateString(dob);
 
         logger.info("Child Case Id: " + childCaseId);
         logger.info("Mother Case Id: " + motherCaseId);
         logger.info("dateOfBirth: " + dateOfBirth);
         logger.info("vitaminA: " + vitaminA);
+
+        FormChecker checker = new FormChecker();
+        checker.addMetadata("type", form.getId());
+        checker.addMetadata("name", form.getForm().getAttributes().get(Commcare.NAME));
+        checker.addMetadata("id", form.getId());
+
+        checker.checkFieldExists(Commcare.VITAMIN_A, vitaminA);
+        checker.checkFieldExists(Commcare.DATE_OF_BIRTH, dob);
+        checker.checkFieldExists("dateOfBirth", dateOfBirth);
+        checker.checkFieldExists(Commcare.CASE_ID, childCaseId);
+        checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
+
+        if (!checker.check()) {
+            return Collections.<MotechEvent>emptyList();
+        }
 
         List<MotechEvent> ret = new ArrayList<>();
         MotechEvent event = new MotechEvent(EventKeys.CHILD_VISIT_FORM_SUBJECT);
@@ -236,6 +251,23 @@ public class CommCareFormStubListener {
         logger.info("placeOfBirth: " + placeOfBirth);
         logger.info("Mother Case Id: " + motherCaseId);
 
+        FormChecker checker = new FormChecker();
+        checker.addMetadata("type", form.getId());
+        checker.addMetadata("name", form.getForm().getAttributes().get(Commcare.NAME));
+        checker.addMetadata("id", form.getId());
+
+        checker.checkFieldExists(Commcare.STILL_ALIVE, stillAlive);
+        checker.checkFieldExists(Commcare.GAVE_BIRTH, gaveBirth);
+        checker.checkFieldExists(Commcare.DATE_OF_BIRTH, dob);
+        checker.checkFieldExists("dateOfBirth", dateOfBirth);
+        checker.checkFieldExists(Commcare.ATTENDED_POSTNATAL, attendedPostnatal);
+        checker.checkFieldExists(Commcare.PLACE_OF_BIRTH, placeOfBirth);
+        checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
+
+        if (!checker.check()) {
+            return Collections.<MotechEvent>emptyList();
+        }
+
         List<MotechEvent> ret = new ArrayList<>();
         MotechEvent event = new MotechEvent(EventKeys.POST_PARTUM_FORM_SUBJECT);
 
@@ -273,6 +305,19 @@ public class CommCareFormStubListener {
                     referralId = caseId;
                 }
             }
+        }
+
+        FormChecker checker = new FormChecker();
+        checker.addMetadata("type", "referral");
+        checker.addMetadata("name", form.getForm().getAttributes().get(Commcare.NAME));
+        checker.addMetadata("id", form.getId());
+
+        checker.checkFieldExists(Commcare.DATE_OF_VISIT, dateOfVisit);
+        checker.checkFieldExists(EventKeys.REFERRAL_CASE_ID, referralId);
+        checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
+
+        if (!checker.check()) {
+            return null;
         }
 
         MotechEvent event;
