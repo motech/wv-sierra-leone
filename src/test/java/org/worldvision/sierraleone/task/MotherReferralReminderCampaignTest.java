@@ -14,6 +14,8 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.server.messagecampaign.EventKeys;
 import org.motechproject.server.messagecampaign.contract.CampaignRequest;
 import org.motechproject.server.messagecampaign.service.MessageCampaignService;
+import org.motechproject.sms.api.service.SendSmsRequest;
+import org.motechproject.sms.api.service.SmsService;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 
@@ -33,6 +35,9 @@ public class MotherReferralReminderCampaignTest {
 
     @Mock
     private MessageCampaignService messageCampaignService;
+
+    @Mock
+    private SmsService smsService;
 
     @InjectMocks
     private MessageCampaignListener messageCampaignListener = new MessageCampaignListener();
@@ -57,7 +62,7 @@ public class MotherReferralReminderCampaignTest {
         messageCampaignListener.handle(event);
 
         verify(messageCampaignService, never()).stopAll(Matchers.any(CampaignRequest.class));
-        //verify(smsService, never()).sendSMS(Matchers.anyString(), Matchers.anyString());
+        verify(smsService, never()).sendSMS(Matchers.any(SendSmsRequest.class));
     }
 
     @Test
@@ -76,7 +81,7 @@ public class MotherReferralReminderCampaignTest {
         messageCampaignListener.handle(event);
 
         verify(messageCampaignService, never()).stopAll(Matchers.any(CampaignRequest.class));
-        //verify(smsService, never()).sendSMS(Matchers.anyString(), Matchers.anyString());
+        verify(smsService, never()).sendSMS(Matchers.any(SendSmsRequest.class));
     }
 
     @Test
@@ -99,7 +104,7 @@ public class MotherReferralReminderCampaignTest {
 
         ArgumentCaptor<CampaignRequest> cr = ArgumentCaptor.forClass(CampaignRequest.class);
         verify(messageCampaignService, times(1)).stopAll(cr.capture());
-        //verify(smsService, never()).sendSMS(Matchers.anyString(), Matchers.anyString());
+        verify(smsService, never()).sendSMS(Matchers.any(SendSmsRequest.class));
 
         CampaignRequest campaignRequest = cr.getValue();
 
@@ -126,7 +131,7 @@ public class MotherReferralReminderCampaignTest {
         messageCampaignListener.handle(event);
 
         verify(messageCampaignService, never()).stopAll(Matchers.any(CampaignRequest.class));
-        //verify(smsService, times(1)).sendSMS(Matchers.anyString(), Matchers.anyString());
+        verify(smsService, times(1)).sendSMS(Matchers.any(SendSmsRequest.class));
     }
 
     @Test
@@ -148,7 +153,7 @@ public class MotherReferralReminderCampaignTest {
         messageCampaignListener.handle(event);
 
         verify(messageCampaignService, never()).stopAll(Matchers.any(CampaignRequest.class));
-        //verify(smsService, times(1)).sendSMS(Matchers.anyString(), Matchers.anyString());
+        verify(smsService, never()).sendSMS(Matchers.any(SendSmsRequest.class));
     }
 
     private CaseInfo MotherCase(boolean includePhone) {
@@ -156,7 +161,7 @@ public class MotherReferralReminderCampaignTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
 
         if (includePhone) {
-            fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "9999999");
+            fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "011 111 111");
         } else {
             fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, null);
         }

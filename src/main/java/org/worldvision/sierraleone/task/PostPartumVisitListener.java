@@ -134,7 +134,7 @@ public class PostPartumVisitListener {
 
             String phone = fixture.getFields().get(Commcare.PHONE);
             if (null == phone) {
-                logger.error("No phone for phu " + phuId + " fixture " + fixtureId);
+                logger.error("No phone for phu " + phuId + " fixture " + fixtureId + " not sending home birth notification");
                 return;
             }
 

@@ -73,11 +73,15 @@ public class MessageCampaignListener {
                     String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
 
                     // Send SMS to her
-                    if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal) && null != phone) {
+                    if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal)) {
                         // TODO: Handle using mother's name
-                        String message = SMSContent.POSTNATAL_CONSULTATION_REMINDER;
-                        smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
-                        logger.info("Sending reminder SMS to " + phone + " for mothercase: " + externalId);
+                        if (null != phone) {
+                            String message = SMSContent.POSTNATAL_CONSULTATION_REMINDER;
+                            smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+                            logger.info("Sending reminder SMS to " + phone + " for mothercase: " + externalId);
+                        } else {
+                            logger.info("No phone for mothercase " + externalId + " not sending postnatal consultation remidner");
+                        }
                     } else if ("no".equals(stillAlive) || "yes".equals(attendedPostnatal)) {
 
                         // If the mother has died or attended postnatal consultations we can unenroll the campaign
@@ -128,10 +132,14 @@ public class MessageCampaignListener {
                     // If open send SMS
                     String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
 
-                    String message = SMSContent.MOTHER_REFERRAL_REMINDER;
-                    // TODO: Handle using mothers name
-                    smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
-                    logger.info("Sending reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+                    if (null != phone) {
+                        String message = SMSContent.MOTHER_REFERRAL_REMINDER;
+                        // TODO: Handle using mothers name
+                        smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+                        logger.info("Sending reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+                    } else {
+                        logger.info("No phone number for mothercase: " + motherCaseId + " referralcase: " + referralCaseId + " not sending mother referral reminder");
+                    }
 
                 } else {
                     // If closed unenroll from message campaign
@@ -186,10 +194,14 @@ public class MessageCampaignListener {
                     if (null != motherCase) {
                         String phone = motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER);
 
-                        // TODO: Handle using childs name
-                        String message = SMSContent.CHILD_VITAMIN_A_REMINDER;
-                        smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
-                        logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+                        if (null != phone) {
+                            // TODO: Handle using childs name
+                            String message = SMSContent.CHILD_VITAMIN_A_REMINDER;
+                            smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+                            logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
+                        } else {
+                            logger.info("No phone for mothercase: " + motherCaseId + " referralcase: " + referralCaseId + " not sending child vitamin a reminder");
+                        }
                     } else {
                         logger.error("Unable to load mothercase: " + motherCaseId + " from commcare");
                     }

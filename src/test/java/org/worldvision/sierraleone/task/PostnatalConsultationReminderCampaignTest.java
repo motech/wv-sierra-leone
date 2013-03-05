@@ -70,7 +70,7 @@ public class PostnatalConsultationReminderCampaignTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
         fieldValues.put(Commcare.STILL_ALIVE, "yes");
         fieldValues.put(Commcare.ATTENDED_POSTNATAL, "no");
-        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "999999999");
+        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "011 111 111");
 
         motherCase.setFieldValues(fieldValues);
 
@@ -118,7 +118,7 @@ public class PostnatalConsultationReminderCampaignTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
         fieldValues.put(Commcare.STILL_ALIVE, "no");
         fieldValues.put(Commcare.ATTENDED_POSTNATAL, "no");
-        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "9999999");
+        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "011 111 111");
 
         motherCase.setFieldValues(fieldValues);
 
@@ -148,7 +148,7 @@ public class PostnatalConsultationReminderCampaignTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
         fieldValues.put(Commcare.STILL_ALIVE, "yes");
         fieldValues.put(Commcare.ATTENDED_POSTNATAL, "yes");
-        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "9999999");
+        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "011 111 111");
 
         motherCase.setFieldValues(fieldValues);
 
@@ -178,7 +178,7 @@ public class PostnatalConsultationReminderCampaignTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
         fieldValues.put(Commcare.STILL_ALIVE, "no");
         fieldValues.put(Commcare.ATTENDED_POSTNATAL, "yes");
-        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "9999999");
+        fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "011 111 111");
 
         motherCase.setFieldValues(fieldValues);
 

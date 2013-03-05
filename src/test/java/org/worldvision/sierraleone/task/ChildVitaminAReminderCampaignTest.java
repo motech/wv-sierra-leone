@@ -218,7 +218,7 @@ public class ChildVitaminAReminderCampaignTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
 
         if (includePhone) {
-            fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "9999999");
+            fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, "011 111 111");
         } else {
             fieldValues.put(Commcare.MOTHER_PHONE_NUMBER, null);
         }

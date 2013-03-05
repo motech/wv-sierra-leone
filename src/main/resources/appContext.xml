@@ -24,6 +24,8 @@
 
     <osgi:reference id="messageCampaignService" interface="org.motechproject.server.messagecampaign.service.MessageCampaignService" cardinality="0..1" />
 
+    <osgi:reference id="smsServiceOsgi" interface="org.motechproject.sms.api.service.SmsService" cardinality="0..1" />
+
     <!--
     <osgi:reference id="couchDbManager" interface="org.motechproject.commons.couchdb.service.CouchDbManager" />
     <bean id="dbConnector" factory-bean="couchDbManager" factory-method="getConnector">
