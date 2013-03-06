@@ -29,6 +29,24 @@ public final class EventKeys {
     public static final String POST_PARTUM_FORM_SUBJECT = FORM_BASE_SUBJECT + "post-partum";
     public static final String MOTHER_REFERRAL_SUBJECT = BASE_SUBJECT + "mother-referral";
 
+    public static final String CONSECUTIVE_CHILD_VISIT_BASE_SUBJECT = BASE_SUBJECT + "child-visit.";
+    public static final String CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT = CONSECUTIVE_CHILD_VISIT_BASE_SUBJECT + "*";
+
+    public static final String CONSECUTIVE_POST_PARTUM_VISIT_BASE_SUBJECT = BASE_SUBJECT + "post-partum.";
+    public static final String CONSECUTIVE_POST_PARTUM_VISIT_WILDCARD_SUBJECT = CONSECUTIVE_POST_PARTUM_VISIT_BASE_SUBJECT + "*";
+
+    public static final String CHILD_VISIT_5A_DATE = "child_v5a_date";
+    public static final String CHILD_VISIT_5B_DATE = "child_v5b_date";
+    public static final String CHILD_VISIT_5C_DATE = "child_v5c_date";
+    public static final String CHILD_VISIT_5D_DATE = "child_v5d_date";
+    public static final String CHILD_VISIT_6_DATE = "child_v6_date";
+    public static final String CHILD_VISIT_7_DATE = "child_v7_date";
+    public static final String CHILD_VISIT_8_DATE = "child_v8_date";
+    public static final String CHILD_VISIT_9_DATE = "child_v9_date";
+    public static final String CHILD_VISIT_10_DATE = "child_v10_date";
+    public static final String CHILD_VISIT_11_DATE = "child_v11_date";
+
+
     public static String getStringValue(MotechEvent event, String key) {
         String ret = null;
         try {

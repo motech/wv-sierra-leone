@@ -2,6 +2,8 @@ package org.worldvision.sierraleone.repository;
 
 import org.motechproject.commcare.domain.CommcareFixture;
 import org.motechproject.commcare.service.CommcareFixtureService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.worldvision.sierraleone.constants.Commcare;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 @Repository
 public class FixtureIdMap {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private Map<String, CommcareFixture> fixtures = null;
 
     @Autowired
@@ -51,5 +54,41 @@ public class FixtureIdMap {
                 fixtures.put(phuId, fixture);
             }
         }
+    }
+
+    public String getPhoneForFixture(String phuId) {
+        // This code could be better.  Basically I try to load from commcare.  If fixture has been updated
+        // then it's fixtureId has changed and I'll get null back.  So then I refresh the in memory cache and try
+        // to load it again.
+        String fixtureId = fixtureIdForPHUId(phuId);
+        if (null == fixtureId) {
+            logger.error("Unable to get fixtureId for phu " + phuId);
+            return null;
+        }
+
+        CommcareFixture fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
+        if (null == fixture) {
+            refreshFixtureMap();
+
+            fixtureId = fixtureIdForPHUId(phuId);
+            if (null == fixtureId) {
+                logger.error("Unable to get fixtureId for phu " + phuId);
+                return null;
+            }
+
+            fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
+        }
+
+        if (null == fixture) {
+            logger.error("Unable to load fixture " + fixtureId + " from commcare");
+            return null;
+        }
+
+        String phone = fixture.getFields().get(Commcare.PHONE);
+        if (null == phone) {
+            logger.error("No phone for phu " + phuId + " fixture " + fixtureId);
+        }
+
+        return phone;
     }
 }

@@ -6,4 +6,6 @@ public class SMSContent {
     public static final String MOTHER_REFERRAL_REMINDER = "You / (woman's name) have been referred for care at your health centre. Please go directly to the facility for urgent care.";
     public static final String CHILD_VITAMIN_A_REMINDER = "your child (child names) has missed a Vitamin A dose which they need to grow healthy and resist disease. Take the child to  (health centre name) as soon as possible.";
     public static final String HOME_BIRTH_NOTIFICATION = "CHW (Name) has registered a home delivery by woman (woman's name) - Call to confirm woman is referred and cared for at home.";
+    public static final String MISSED_CONSECUTIVE_CHILD_VISITS = "CHW (Name) has now missed 2 scheduled visits in a row, call to check on their progress.";
+    public static final String MISSED_CONSECUTIVE_POST_PARTUM_VISITS = "CHW (Name) has now missed 2 scheduled visits in a row, call to check on their progress.";
 }

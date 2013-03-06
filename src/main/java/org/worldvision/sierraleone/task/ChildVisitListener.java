@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 import org.motechproject.commcare.service.CommcareFormService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
+import org.motechproject.scheduler.MotechSchedulerService;
+import org.motechproject.scheduler.domain.RunOnceSchedulableJob;
 import org.motechproject.server.messagecampaign.contract.CampaignRequest;
 import org.motechproject.server.messagecampaign.service.MessageCampaignService;
 import org.slf4j.Logger;
@@ -13,15 +15,18 @@ import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.EventKeys;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class ChildVisitListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    CommcareFormService commcareFormService;
+    MessageCampaignService messageCampaignService;
 
     @Autowired
-    MessageCampaignService messageCampaignService;
+    MotechSchedulerService schedulerService;
 
     @MotechListener(subjects = EventKeys.CHILD_VISIT_FORM_SUBJECT)
     public void childVitaminAReminder(MotechEvent event) {
@@ -62,6 +67,48 @@ public class ChildVisitListener {
                     null, null);
 
             messageCampaignService.startFor(cr);
+        }
+    }
+
+    @MotechListener(subjects = EventKeys.CHILD_VISIT_FORM_SUBJECT)
+    public void childMissedVisitHandler(MotechEvent event) {
+        logger.info("MotechEvent " + event + " received on " + EventKeys.CHILD_VISIT_FORM_SUBJECT + " Rule: Consecutive Missed Infant Visits");
+
+        /*
+          If CHW has missed 2 consecutive infant visits for the same patient, send SMS to supervisor
+        */
+        String childCaseId = EventKeys.getStringValue(event, EventKeys.CHILD_CASE_ID);
+        String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
+
+        List<DateTime> dates = new ArrayList<DateTime>();
+
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5A_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5B_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5C_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5D_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_6_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_7_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_8_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_9_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_10_DATE));
+        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_11_DATE));
+
+        String baseSubject = EventKeys.CONSECUTIVE_CHILD_VISIT_BASE_SUBJECT + childCaseId;
+
+        // First we delete any scheduled events for child visit checks for this child
+        schedulerService.safeUnscheduleAllJobs(baseSubject);
+
+        for (DateTime visitDate : dates) {
+            String subject = baseSubject + "." + visitDate.toString();
+
+            // if the date is in the future schedule an event to fire the next day so we can see if the visit has happened
+            if (visitDate.isAfterNow()) {
+                MotechEvent e = new MotechEvent(subject);
+                e.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
+                e.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
+
+                schedulerService.scheduleRunOnceJob(new RunOnceSchedulableJob(e, visitDate.plusDays(1).toDate()));
+            }
         }
     }
 }

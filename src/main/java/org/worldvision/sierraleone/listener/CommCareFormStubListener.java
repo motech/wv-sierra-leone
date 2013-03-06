@@ -100,7 +100,6 @@ public class CommCareFormStubListener {
     }
 
     private List<MotechEvent> convertChildVisitFormToEvents(CommcareForm form) {
-        String dob = null;
         String childCaseId = null;
         String motherCaseId = null;
         String vitaminA = null;
@@ -124,8 +123,19 @@ public class CommCareFormStubListener {
         }
 
         vitaminA = childCase.getFieldValues().get(Commcare.VITAMIN_A);
-        dob = childCase.getFieldValues().get(Commcare.DATE_OF_BIRTH);
-        DateTime dateOfBirth = Utils.dateTimeFromCommcareDateString(dob);
+
+        DateTime dateOfBirth = getDateField(childCase, Commcare.DATE_OF_BIRTH);
+        DateTime dateOfVisit = getDateField(childCase, Commcare.DATE_OF_VISIT);
+        DateTime dateOfV5a = getDateField(childCase, Commcare.CHILD_VISIT_5A_DATE);
+        DateTime dateOfV5b = getDateField(childCase, Commcare.CHILD_VISIT_5B_DATE);
+        DateTime dateOfV5c = getDateField(childCase, Commcare.CHILD_VISIT_5C_DATE);
+        DateTime dateOfV5d = getDateField(childCase, Commcare.CHILD_VISIT_5D_DATE);
+        DateTime dateOfV6 = getDateField(childCase, Commcare.CHILD_VISIT_6_DATE);
+        DateTime dateOfV7 = getDateField(childCase, Commcare.CHILD_VISIT_7_DATE);
+        DateTime dateOfV8 = getDateField(childCase, Commcare.CHILD_VISIT_8_DATE);
+        DateTime dateOfV9 = getDateField(childCase, Commcare.CHILD_VISIT_9_DATE);
+        DateTime dateOfV10 = getDateField(childCase, Commcare.CHILD_VISIT_10_DATE);
+        DateTime dateOfV11 = getDateField(childCase, Commcare.CHILD_VISIT_11_DATE);
 
         logger.info("Child Case Id: " + childCaseId);
         logger.info("Mother Case Id: " + motherCaseId);
@@ -137,9 +147,8 @@ public class CommCareFormStubListener {
         checker.addMetadata("name", form.getForm().getAttributes().get(Commcare.NAME));
         checker.addMetadata("id", form.getId());
 
-        checker.checkFieldExists(Commcare.VITAMIN_A, vitaminA);
-        checker.checkFieldExists(Commcare.DATE_OF_BIRTH, dob);
         checker.checkFieldExists("dateOfBirth", dateOfBirth);
+        checker.checkFieldExists("dateOfVisit", dateOfVisit);
         checker.checkFieldExists(Commcare.CASE_ID, childCaseId);
         checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
 
@@ -154,10 +163,27 @@ public class CommCareFormStubListener {
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
         event.getParameters().put(EventKeys.VITAMIN_A, vitaminA);
+        event.getParameters().put(EventKeys.CHILD_VISIT_5A_DATE, dateOfV5a);
+        event.getParameters().put(EventKeys.CHILD_VISIT_5B_DATE, dateOfV5b);
+        event.getParameters().put(EventKeys.CHILD_VISIT_5C_DATE, dateOfV5c);
+        event.getParameters().put(EventKeys.CHILD_VISIT_5D_DATE, dateOfV5d);
+        event.getParameters().put(EventKeys.CHILD_VISIT_6_DATE, dateOfV6);
+        event.getParameters().put(EventKeys.CHILD_VISIT_7_DATE, dateOfV7);
+        event.getParameters().put(EventKeys.CHILD_VISIT_8_DATE, dateOfV8);
+        event.getParameters().put(EventKeys.CHILD_VISIT_9_DATE, dateOfV9);
+        event.getParameters().put(EventKeys.CHILD_VISIT_10_DATE, dateOfV10);
+        event.getParameters().put(EventKeys.CHILD_VISIT_11_DATE, dateOfV11);
 
         ret.add(event);
 
         return ret;
+    }
+
+    private DateTime getDateField(CaseInfo caseInfo, String fieldName) {
+        String d = caseInfo.getFieldValues().get(fieldName);
+        DateTime dateTime = Utils.dateTimeFromCommcareDateString(d);
+
+        return dateTime;
     }
 
     private List<MotechEvent> convertPregnancyVisitFormToEvents(CommcareForm form, List<String> caseIds) {
@@ -237,6 +263,8 @@ public class CommCareFormStubListener {
         element = form.getForm().getElementByName(Commcare.CASE);
         motherCaseId = element.getAttributes().get(Commcare.CASE_ID);
 
+        // TODO: Get all the pp_v*_date fields and add to event
+
         logger.info("gaveBirth: " + gaveBirth);
         logger.info("createReferral: " + createReferral);
         logger.info("referralId: " + referralId);
@@ -252,6 +280,7 @@ public class CommCareFormStubListener {
         checker.addMetadata("id", form.getId());
 
         checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
+        checker.checkFieldExists(EventKeys.DATE_OF_VISIT, dateOfVisit);
 
         if (!checker.check()) {
             return Collections.<MotechEvent>emptyList();

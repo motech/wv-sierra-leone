@@ -34,5 +34,15 @@ public final class Commcare {
     public static final String OPEN = "open";
     public static final String PHU_ID = "phu_id";
     public static final String PHONE = "phone";
+    public static final String CHILD_VISIT_5A_DATE = "child_v5a_date";
+    public static final String CHILD_VISIT_5B_DATE = "child_v5b_date";
+    public static final String CHILD_VISIT_5C_DATE = "child_v5c_date";
+    public static final String CHILD_VISIT_5D_DATE = "child_v5d_date";
+    public static final String CHILD_VISIT_6_DATE = "child_v6_date";
+    public static final String CHILD_VISIT_7_DATE = "child_v7_date";
+    public static final String CHILD_VISIT_8_DATE = "child_v8_date";
+    public static final String CHILD_VISIT_9_DATE = "child_v9_date";
+    public static final String CHILD_VISIT_10_DATE = "child_v10_date";
+    public static final String CHILD_VISIT_11_DATE = "child_v11_date";
 }
 
