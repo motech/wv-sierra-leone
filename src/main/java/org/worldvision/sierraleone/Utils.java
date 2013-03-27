@@ -42,6 +42,10 @@ public final class Utils {
     }
 
     public static DateTime dateTimeFromCommcareDateString(String dateStr) {
+        if (null == dateStr) {
+            return null;
+        }
+
         DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
                 .appendYear(4, 4)
                 .appendLiteral('-')

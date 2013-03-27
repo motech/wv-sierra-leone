@@ -28,7 +28,7 @@
         "startTime" : "10:30"
       }
     ]
-  }
+  },
   {
     "name" : "Child Vitamin A Reminder",
     "type" : "REPEAT_INTERVAL",

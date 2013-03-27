@@ -151,7 +151,7 @@ public class CommCareFormStubListenerTest {
         AddSingleValueFormField(form, Commcare.DATE_OF_VISIT, "2013-01-03");
 
         FormValueElement aCase = AddSingleValueFormField(form, Commcare.CASE, "case");
-        aCase.addAttribute(Commcare.CASE_ID, "caseId");
+//        aCase.addAttribute(Commcare.CASE_ID, "caseId");
 
         FormValueElement postPartumVisit = new FormValueElement();
         postPartumVisit.setElementName(Commcare.POST_PARTUM_VISIT);
@@ -289,6 +289,7 @@ public class CommCareFormStubListenerTest {
         Map<String, String> fieldValues = new HashMap<String, String>();
         fieldValues.put(Commcare.VITAMIN_A, "yes");
         fieldValues.put(Commcare.DATE_OF_BIRTH, "2013-01-03");
+        fieldValues.put(Commcare.DATE_OF_VISIT, "2013-01-03");
 
         childCase.setFieldValues(fieldValues);
         childCase.setIndices(indices);
