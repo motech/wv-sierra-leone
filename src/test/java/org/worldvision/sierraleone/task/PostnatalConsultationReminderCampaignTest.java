@@ -11,9 +11,9 @@ import org.mockito.Mock;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.server.messagecampaign.EventKeys;
-import org.motechproject.server.messagecampaign.contract.CampaignRequest;
-import org.motechproject.server.messagecampaign.service.MessageCampaignService;
+import org.motechproject.messagecampaign.EventKeys;
+import org.motechproject.messagecampaign.contract.CampaignRequest;
+import org.motechproject.messagecampaign.service.MessageCampaignService;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 

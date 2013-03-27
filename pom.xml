@@ -99,9 +99,10 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-Activator>
-                            org.worldvision.sierraleone.osgi.Activator
-                        </Bundle-Activator>
+                        <Context-Path>sierra-leone/api</Context-Path>
+                        <Context-File>META-INF/osgi/applicationWVTTCBundle.xml</Context-File>
+                        <Resource-Path>sierra-leone/resources</Resource-Path>
+                        <Blueprint-Enabled>true</Blueprint-Enabled>
                         <Import-Package>
                             org.motechproject.commons.couchdb.service,
                             org.motechproject.server.config,

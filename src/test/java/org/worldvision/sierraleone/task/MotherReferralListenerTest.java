@@ -8,8 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.server.messagecampaign.contract.CampaignRequest;
-import org.motechproject.server.messagecampaign.service.MessageCampaignService;
+import org.motechproject.messagecampaign.contract.CampaignRequest;
+import org.motechproject.messagecampaign.service.MessageCampaignService;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.EventKeys;
 
