@@ -3,7 +3,9 @@ package org.worldvision.sierraleone.task;
 
 import org.joda.time.DateTime;
 import org.motechproject.commcare.domain.CaseInfo;
+import org.motechproject.commcare.domain.CommcareUser;
 import org.motechproject.commcare.service.CommcareCaseService;
+import org.motechproject.commcare.service.CommcareUserService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
 import org.motechproject.sms.api.service.SendSmsRequest;
@@ -29,6 +31,9 @@ public class ConsecutiveMissedVisitListener {
     CommcareCaseService commcareCaseService;
 
     @Autowired
+    CommcareUserService commcareUserService;
+
+    @Autowired
     FixtureIdMap fixtureIdMap;
 
     @Autowired
@@ -44,19 +49,19 @@ public class ConsecutiveMissedVisitListener {
 
         CaseInfo childCase = commcareCaseService.getCaseByCaseId(childCaseId);
         if (null == childCase) {
-            logger.error("Unable to load childCase " + childCaseId + " from commcare");
+            logger.error("Unable to load childCase " + childCaseId + " from commcare not sending missed consecutive child visit");
             return;
         }
 
         CaseInfo motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
         if (null == motherCase) {
-            logger.error("Unable to load mothercase " + motherCaseId + " from commcare");
+            logger.error("Unable to load mothercase " + motherCaseId + " from commcare not sending missed consecutive child visit");
             return;
         }
 
         String phuId = motherCase.getFieldValues().get(Commcare.PHU_ID);
         if (null == phuId) {
-            logger.error("mothercase " + motherCaseId + " does not contain a phu");
+            logger.error("mothercase " + motherCaseId + " does not contain a phu not sending missed consecutive child visit");
             return;
         }
 
@@ -78,15 +83,13 @@ public class ConsecutiveMissedVisitListener {
         if (hasMissedConsecutiveAppointments(dates, lastVisitDate)) {
             // Get PHU phone
             String phone = fixtureIdMap.getPhoneForFixture(phuId);
-            if (null == phone) {
-                logger.error("No phone for phu " + phuId + " fixture not sending missed consecutive child visit message");
-                return;
-            }
 
             // Send SMS
             if (null != phone) {
-                // TODO: Handle using CHWs name
-                String message = SMSContent.MISSED_CONSECUTIVE_CHILD_VISITS;
+                CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
+                String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
+
+                String message = String.format(SMSContent.MISSED_CONSECUTIVE_CHILD_VISITS, chwName);
                 smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                 logger.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId + " childcase: " + childCaseId);
             } else {
@@ -97,17 +100,33 @@ public class ConsecutiveMissedVisitListener {
 
     @MotechListener(subjects = EventKeys.CONSECUTIVE_POST_PARTUM_VISIT_WILDCARD_SUBJECT)
     public void postPartumMissedVisitHandler(MotechEvent event) {
-        List<DateTime> dates = null;
-        DateTime lastVisitDate = null;
+        // The only time this will fire is if two consecutive apts have been missed
+        String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
-        // Get last visit date
+        CaseInfo motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
+        if (null == motherCase) {
+            logger.error("Unable to load mothercase " + motherCaseId + " from commcare can't send missed consecutive post partum message");
+            return;
+        }
 
-        // Place all expected visits dates in array
+        String phuId = motherCase.getFieldValues().get(Commcare.PHU_ID);
+        if (null == phuId) {
+            logger.error("mothercase " + motherCaseId + " does not contain a phu can't send missed consecutive post partum message");
+            return;
+        }
 
-        if (hasMissedConsecutiveAppointments(dates, lastVisitDate)) {
-            // Get PHU phone
+        String phone = fixtureIdMap.getPhoneForFixture(phuId);
 
-            // Send SMS
+        // Send SMS
+        if (null != phone) {
+            CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
+            String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
+
+            String message = String.format(SMSContent.MISSED_CONSECUTIVE_POST_PARTUM_VISITS, chwName);
+            smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+            logger.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId);
+        } else {
+            logger.error("No phone for phu: " + phuId + "  for mothercase: " + motherCaseId + " not sending missed consecutive post partum visit");
         }
     }
 

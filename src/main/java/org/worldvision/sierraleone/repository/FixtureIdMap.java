@@ -57,14 +57,53 @@ public class FixtureIdMap {
     }
 
     public String getPhoneForFixture(String phuId) {
-        // This code could be better.  Basically I try to load from commcare.  If fixture has been updated
-        // then it's fixtureId has changed and I'll get null back.  So then I refresh the in memory cache and try
-        // to load it again.
         String fixtureId = fixtureIdForPHUId(phuId);
         if (null == fixtureId) {
             logger.error("Unable to get fixtureId for phu " + phuId);
             return null;
         }
+
+        CommcareFixture fixture = fixtureIdForPHUIdWithRetry(fixtureId, phuId);
+
+        if (null == fixture) {
+            logger.error("Unable to load fixture " + fixtureId + " from commcare");
+            return null;
+        }
+
+        String phone = fixture.getFields().get(Commcare.PHONE);
+        if (null == phone) {
+            logger.error("No phone for phu " + phuId + " fixture " + fixtureId);
+        }
+
+        return phone;
+    }
+
+    public String getNameForFixture(String phuId) {
+        String fixtureId = fixtureIdForPHUId(phuId);
+        if (null == fixtureId) {
+            logger.error("Unable to get fixtureId for phu " + phuId);
+            return null;
+        }
+
+        CommcareFixture fixture = fixtureIdForPHUIdWithRetry(fixtureId, phuId);
+
+        if (null == fixture) {
+            logger.error("Unable to load fixture " + fixtureId + " from commcare");
+            return null;
+        }
+
+        String phone = fixture.getFields().get(Commcare.PHONE);
+        if (null == phone) {
+            logger.error("No name for phu " + phuId + " fixture " + fixtureId);
+        }
+
+        return phone;
+    }
+
+    private CommcareFixture fixtureIdForPHUIdWithRetry(String fixtureId, String phuId) {
+        // This code could be better.  Basically I try to load from commcare.  If fixture has been updated
+        // then it's fixtureId has changed and I'll get null back.  So then I refresh the in memory cache and try
+        // to load it again.
 
         CommcareFixture fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
         if (null == fixture) {
@@ -79,16 +118,6 @@ public class FixtureIdMap {
             fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
         }
 
-        if (null == fixture) {
-            logger.error("Unable to load fixture " + fixtureId + " from commcare");
-            return null;
-        }
-
-        String phone = fixture.getFields().get(Commcare.PHONE);
-        if (null == phone) {
-            logger.error("No phone for phu " + phuId + " fixture " + fixtureId);
-        }
-
-        return phone;
+        return fixture;
     }
 }

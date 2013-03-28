@@ -22,6 +22,7 @@ public final class EventKeys {
     public static final String MOTHER_CASE_ID = "mother_case_id";
     public static final String CHILD_CASE_ID = "child_case_id";
     public static final String VITAMIN_A = "vitamin_a";
+    public static final String SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE = "second_consecutive_visit";
 
     public static final String BASE_SUBJECT = "org.worldvision.sierraleone.";
     public static final String FORM_BASE_SUBJECT = BASE_SUBJECT + "form.";

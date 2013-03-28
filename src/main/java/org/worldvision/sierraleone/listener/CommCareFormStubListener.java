@@ -233,6 +233,7 @@ public class CommCareFormStubListener {
         String attendedPostnatal = null;
         String placeOfBirth = null;
         String motherCaseId = null;
+        String nextVisitDatePlus1 = null;
 
         FormValueElement element = form.getForm().getElementByName(Commcare.GAVE_BIRTH);
         gaveBirth = ((element != null) ? element.getValue() : null);
@@ -245,6 +246,9 @@ public class CommCareFormStubListener {
 
         element = form.getForm().getElementByName(Commcare.DATE_OF_VISIT);
         dov = ((element != null) ? element.getValue() : null);
+
+        element = form.getForm().getElementByName(Commcare.NEXT_VISIT_DATE_PLUS_1);
+        nextVisitDatePlus1 = ((element != null) ? element.getValue() : null);
 
         FormValueElement postPartumVisit = form.getForm().getElementByName(Commcare.POST_PARTUM_VISIT);
         element = postPartumVisit.getElementByName(Commcare.DATE_OF_BIRTH);
@@ -260,6 +264,8 @@ public class CommCareFormStubListener {
         DateTime dateOfBirth = Utils.dateTimeFromCommcareDateString(dob);
         int daysSinceBirth = Days.daysBetween(dateOfBirth, new DateTime()).getDays();
 
+        DateTime secondConsecutiveVisitDate = Utils.dateTimeFromCommcareDateString(nextVisitDatePlus1);
+
         element = form.getForm().getElementByName(Commcare.CASE);
         motherCaseId = element.getAttributes().get(Commcare.CASE_ID);
 
@@ -273,6 +279,7 @@ public class CommCareFormStubListener {
         logger.info("attendedPostnatal: " + attendedPostnatal);
         logger.info("placeOfBirth: " + placeOfBirth);
         logger.info("Mother Case Id: " + motherCaseId);
+        logger.info("Second Consecutive Visit Date: " + secondConsecutiveVisitDate);
 
         FormChecker checker = new FormChecker();
         checker.addMetadata("type", form.getId());
@@ -281,6 +288,7 @@ public class CommCareFormStubListener {
 
         checker.checkFieldExists(EventKeys.MOTHER_CASE_ID, motherCaseId);
         checker.checkFieldExists(EventKeys.DATE_OF_VISIT, dateOfVisit);
+        checker.checkFieldExists(EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE, secondConsecutiveVisitDate);
 
         if (!checker.check()) {
             return Collections.<MotechEvent>emptyList();
@@ -296,6 +304,7 @@ public class CommCareFormStubListener {
         event.getParameters().put(EventKeys.ATTENDED_POSTNATAL, attendedPostnatal);
         event.getParameters().put(EventKeys.PLACE_OF_BIRTH, placeOfBirth);
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
+        event.getParameters().put(EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE, secondConsecutiveVisitDate);
 
         ret.add(event);
 

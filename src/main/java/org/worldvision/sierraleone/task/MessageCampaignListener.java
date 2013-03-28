@@ -21,6 +21,7 @@ import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.SMSContent;
+import org.worldvision.sierraleone.repository.FixtureIdMap;
 
 import java.util.Arrays;
 
@@ -36,6 +37,9 @@ public class MessageCampaignListener {
 
     @Autowired
     SmsService smsService;
+
+    @Autowired
+    FixtureIdMap fixtureIdMap;
 
     @MotechListener(subjects = EventKeys.SEND_MESSAGE)
     public void handle(MotechEvent event) {
@@ -71,12 +75,12 @@ public class MessageCampaignListener {
                     String stillAlive = motherCase.getFieldValues().get(Commcare.STILL_ALIVE);
                     String attendedPostnatal = motherCase.getFieldValues().get(Commcare.ATTENDED_POSTNATAL);
                     String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
+                    String motherName = motherCase.getFieldValues().get(Commcare.MOTHER_NAME);
 
                     // Send SMS to her
                     if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal)) {
-                        // TODO: Handle using mother's name
                         if (null != phone) {
-                            String message = SMSContent.POSTNATAL_CONSULTATION_REMINDER;
+                            String message = String.format(SMSContent.POSTNATAL_CONSULTATION_REMINDER, motherName);
                             smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                             logger.info("Sending reminder SMS to " + phone + " for mothercase: " + externalId);
                         } else {
@@ -131,10 +135,10 @@ public class MessageCampaignListener {
                 if ("true".equals(caseOpen)) {
                     // If open send SMS
                     String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
+                    String motherName = motherCase.getFieldValues().get(Commcare.MOTHER_NAME);
 
                     if (null != phone) {
-                        String message = SMSContent.MOTHER_REFERRAL_REMINDER;
-                        // TODO: Handle using mothers name
+                        String message = String.format(SMSContent.MOTHER_REFERRAL_REMINDER, motherName);
                         smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                         logger.info("Sending reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
                     } else {
@@ -187,16 +191,19 @@ public class MessageCampaignListener {
                         .appendDayOfMonth(2)
                         .toFormatter();
 
+                String childName = childCase.getFieldValues().get(Commcare.CHILD_NAME);
+
                 DateTime dateOfBirth = dateFormatter.parseDateTime(dob);
                 if (Months.monthsBetween(dateOfBirth, new DateTime()).getMonths() > 6 && "no".equals(vitaminA)) {
                     motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
 
                     if (null != motherCase) {
                         String phone = motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER);
+                        String phuId = motherCase.getFieldValues().get(Commcare.PHU_ID);
+                        String phuName = fixtureIdMap.getNameForFixture(phuId);
 
                         if (null != phone) {
-                            // TODO: Handle using childs name
-                            String message = SMSContent.CHILD_VITAMIN_A_REMINDER;
+                            String message = String.format(SMSContent.CHILD_VITAMIN_A_REMINDER, childName, phuName);
                             smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                             logger.info("Sending vitamin a reminder SMS to " + phone + " for mothercase: " + motherCaseId + " referralcase: " + referralCaseId);
                         } else {

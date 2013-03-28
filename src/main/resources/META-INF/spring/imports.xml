@@ -15,6 +15,8 @@
 
     <osgi:reference id="commcareFixtureServiceOsgi" interface="org.motechproject.commcare.service.CommcareFixtureService" cardinality="0..1" />
 
+    <osgi:reference id="commcareUserServiceOsgi" interface="org.motechproject.commcare.service.CommcareUserService" cardinality="0..1" />
+
     <osgi:reference id="messageCampaignService" interface="org.motechproject.messagecampaign.service.MessageCampaignService" cardinality="0..1" />
 
     <osgi:reference id="smsServiceOsgi" interface="org.motechproject.sms.api.service.SmsService" cardinality="0..1" />

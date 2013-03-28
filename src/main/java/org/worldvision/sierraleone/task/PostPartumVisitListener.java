@@ -3,8 +3,10 @@ package org.worldvision.sierraleone.task;
 import org.joda.time.DateTime;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareFixture;
+import org.motechproject.commcare.domain.CommcareUser;
 import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.commcare.service.CommcareFixtureService;
+import org.motechproject.commcare.service.CommcareUserService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
 import org.motechproject.scheduler.MotechSchedulerService;
@@ -36,6 +38,9 @@ public class PostPartumVisitListener {
 
     @Autowired
     CommcareFixtureService commcareFixtureService;
+
+    @Autowired
+    CommcareUserService commcareUserService;
 
     @Autowired
     FixtureIdMap fixtureIdMap;
@@ -120,8 +125,11 @@ public class PostPartumVisitListener {
             }
 
             // Send SMS
-            // TODO Handle CHW name
-            String message = SMSContent.HOME_BIRTH_NOTIFICATION;
+            String motherName = motherCase.getFieldValues().get(Commcare.MOTHER_NAME);
+            CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
+            String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
+
+            String message = String.format(SMSContent.HOME_BIRTH_NOTIFICATION, chwName, motherName);
             smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
             logger.info("Sending home birth notification SMS to " + phone + " for mothercase: " + motherCaseId);
         }
@@ -141,36 +149,23 @@ public class PostPartumVisitListener {
             return;
         }
 
-        List<DateTime> dates = new ArrayList<DateTime>();
+        DateTime secondConsecutiveAptDate = null;
+        try {
+            secondConsecutiveAptDate = (DateTime) event.getParameters().get(EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE);
+        } catch (ClassCastException e) {
+            logger.warn("Event: " + event + " Key: " + EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE + " is not a DateTime");
+        }
 
-        // TODO get actual dates from mother case
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5A_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5B_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5C_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_5D_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_6_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_7_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_8_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_9_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_10_DATE));
-        dates.add((DateTime) event.getParameters().get(EventKeys.CHILD_VISIT_11_DATE));
+        logger.info("Second Consecutive Apt Date: " + secondConsecutiveAptDate.toString());
 
         String baseSubject = EventKeys.CONSECUTIVE_POST_PARTUM_VISIT_BASE_SUBJECT + motherCaseId;
 
         // First we delete any scheduled events for child visit checks for this child
         schedulerService.safeUnscheduleAllJobs(baseSubject);
 
-        for (DateTime visitDate : dates) {
-            String subject = baseSubject + "." + visitDate.toString();
+        MotechEvent e = new MotechEvent(baseSubject);
+        e.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
 
-            // if the date is in the future schedule an event to fire the next day so we can see if the visit has happened
-            if (visitDate.isAfterNow()) {
-                MotechEvent e = new MotechEvent(subject);
-                e.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
-
-                schedulerService.scheduleRunOnceJob(new RunOnceSchedulableJob(e, visitDate.plusDays(1).toDate()));
-            }
-
-        }
+        schedulerService.scheduleRunOnceJob(new RunOnceSchedulableJob(e, secondConsecutiveAptDate.plusDays(1).toDate()));
     }
 }

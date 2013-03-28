@@ -33,7 +33,12 @@ public final class Commcare {
     public static final String MOTHER_PHONE_NUMBER = "mother_phone_number";
     public static final String OPEN = "open";
     public static final String PHU_ID = "phu_id";
+    public static final String USER_ID = "user_id";
+    public static final String PHU_NAME = "phu_name";
     public static final String PHONE = "phone";
+    public static final String MOTHER_NAME = "mother_name";
+    public static final String CHILD_NAME = "child_name";
+    public static final String NEXT_VISIT_DATE_PLUS_1 = "next_visit_date_plus_1";
     public static final String CHILD_VISIT_5A_DATE = "child_v5a_date";
     public static final String CHILD_VISIT_5B_DATE = "child_v5b_date";
     public static final String CHILD_VISIT_5C_DATE = "child_v5c_date";
