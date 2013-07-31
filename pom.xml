@@ -8,6 +8,8 @@
     <packaging>bundle</packaging>
     <name>World Vision Sierra Leone</name>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <motech.version>0.21-SNAPSHOT</motech.version>
         <jdk.version>1.7</jdk.version>
 
@@ -146,9 +148,69 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>${basedir}/pmd.xml</ruleset>
+                    </rulesets>
+                    <includeTests>false</includeTests>
+                    <targetJdk>${jdk.version}</targetJdk>
+                    <skip>${maven.test.skip}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>cpd-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <configLocation>${basedir}/checkstyle.xml</configLocation>
+                    <includeTestSourceDirectory>false</includeTestSourceDirectory>
+                    <enableFilesSummary>true</enableFilesSummary>
+                    <failsOnError>true</failsOnError>
+                    <consoleOutput>true</consoleOutput>
+                    <skip>${maven.test.skip}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <repositories>
         <repository>
             <id>motech-repo</id>
@@ -156,6 +218,7 @@
             <url>http://nexus.motechproject.org/content/repositories/public</url>
         </repository>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>motech-repo</id>
@@ -166,4 +229,5 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
 </project>

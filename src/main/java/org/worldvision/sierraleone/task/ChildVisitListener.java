@@ -1,13 +1,12 @@
 package org.worldvision.sierraleone.task;
 
 import org.joda.time.DateTime;
-import org.motechproject.commcare.service.CommcareFormService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
-import org.motechproject.scheduler.MotechSchedulerService;
-import org.motechproject.scheduler.domain.RunOnceSchedulableJob;
 import org.motechproject.messagecampaign.contract.CampaignRequest;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
+import org.motechproject.scheduler.MotechSchedulerService;
+import org.motechproject.scheduler.domain.RunOnceSchedulableJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,10 @@ public class ChildVisitListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    MessageCampaignService messageCampaignService;
+    private MessageCampaignService messageCampaignService;
 
     @Autowired
-    MotechSchedulerService schedulerService;
+    private MotechSchedulerService schedulerService;
 
     @MotechListener(subjects = EventKeys.CHILD_VISIT_FORM_SUBJECT)
     public void childVitaminAReminder(MotechEvent event) {
@@ -34,13 +33,13 @@ public class ChildVisitListener {
 
         /*
         Rule 6:
-	     IF Child has missed vitamin A dose, send a message to mother reminding her
-	     (NN: I looked back at this SMS again, and what it is saying is to send an SMS to the mother.  This SMS should
-	     go out once per month until the field "has received it in last 6 months" is changed to yes.  I'll be
-	     seperately alerting the CHW in the app to go check if this has been done, so the CHW will mark that the
-	     vitamin A dose has been received.  So you would filter on: DOB > 6 months ago AND vitamin_A_received = 'No'
-	     then just send that once monthly until it changes to yes.)
-	     (RL: is there an upper limit to the number of reminders to send?)
+         IF Child has missed vitamin A dose, send a message to mother reminding her
+         (NN: I looked back at this SMS again, and what it is saying is to send an SMS to the mother.  This SMS should
+         go out once per month until the field "has received it in last 6 months" is changed to yes.  I'll be
+         seperately alerting the CHW in the app to go check if this has been done, so the CHW will mark that the
+         vitamin A dose has been received.  So you would filter on: DOB > 6 months ago AND vitamin_A_received = 'No'
+         then just send that once monthly until it changes to yes.)
+         (RL: is there an upper limit to the number of reminders to send?)
         */
         String childCaseId = EventKeys.getStringValue(event, EventKeys.CHILD_CASE_ID);
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);

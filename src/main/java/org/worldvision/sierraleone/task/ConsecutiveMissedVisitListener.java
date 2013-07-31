@@ -28,16 +28,16 @@ public class ConsecutiveMissedVisitListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    CommcareCaseService commcareCaseService;
+    private CommcareCaseService commcareCaseService;
 
     @Autowired
-    CommcareUserService commcareUserService;
+    private CommcareUserService commcareUserService;
 
     @Autowired
-    FixtureIdMap fixtureIdMap;
+    private FixtureIdMap fixtureIdMap;
 
     @Autowired
-    SmsService smsService;
+    private SmsService smsService;
 
     @MotechListener(subjects = EventKeys.CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT)
     public void childMissedVisitHandler(MotechEvent event) {

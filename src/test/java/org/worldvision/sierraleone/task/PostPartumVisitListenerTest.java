@@ -15,7 +15,9 @@ import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.EventKeys;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**

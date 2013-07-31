@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public final class EventKeys {
     private EventKeys() { }
 
-    private static final Logger logger = LoggerFactory.getLogger("org.worldvision.sierraleone.constants.EventKeys");
+    private static final Logger LOGGER = LoggerFactory.getLogger("org.worldvision.sierraleone.constants.EventKeys");
 
     public static final String DATE_OF_BIRTH = "date_of_birth";
     public static final String DATE_OF_VISIT = "date_of_visit";
@@ -53,7 +53,7 @@ public final class EventKeys {
         try {
             ret = (String) event.getParameters().get(key);
         } catch (ClassCastException e) {
-            logger.warn("Event: " + event + " Key: " + key + " is not a String");
+            LOGGER.warn("Event: " + event + " Key: " + key + " is not a String");
         }
 
         return ret;
@@ -64,7 +64,7 @@ public final class EventKeys {
         try {
             ret = (Integer) event.getParameters().get(key);
         } catch (NumberFormatException e) {
-            logger.warn("Event: " + event + " Key: " + key + " is not an Integer");
+            LOGGER.warn("Event: " + event + " Key: " + key + " is not an Integer");
         }
 
         return ret;

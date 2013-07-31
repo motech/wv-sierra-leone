@@ -2,17 +2,15 @@ package org.worldvision.sierraleone.task;
 
 import org.joda.time.DateTime;
 import org.motechproject.commcare.domain.CaseInfo;
-import org.motechproject.commcare.domain.CommcareFixture;
 import org.motechproject.commcare.domain.CommcareUser;
 import org.motechproject.commcare.service.CommcareCaseService;
-import org.motechproject.commcare.service.CommcareFixtureService;
 import org.motechproject.commcare.service.CommcareUserService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
-import org.motechproject.scheduler.MotechSchedulerService;
-import org.motechproject.scheduler.domain.RunOnceSchedulableJob;
 import org.motechproject.messagecampaign.contract.CampaignRequest;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
+import org.motechproject.scheduler.MotechSchedulerService;
+import org.motechproject.scheduler.domain.RunOnceSchedulableJob;
 import org.motechproject.sms.api.service.SendSmsRequest;
 import org.motechproject.sms.api.service.SmsService;
 import org.slf4j.Logger;
@@ -25,34 +23,29 @@ import org.worldvision.sierraleone.constants.EventKeys;
 import org.worldvision.sierraleone.constants.SMSContent;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Component
 public class PostPartumVisitListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    CommcareCaseService commcareCaseService;
+    private CommcareCaseService commcareCaseService;
 
     @Autowired
-    CommcareFixtureService commcareFixtureService;
+    private CommcareUserService commcareUserService;
 
     @Autowired
-    CommcareUserService commcareUserService;
+    private FixtureIdMap fixtureIdMap;
 
     @Autowired
-    FixtureIdMap fixtureIdMap;
+    private MessageCampaignService messageCampaignService;
 
     @Autowired
-    MessageCampaignService messageCampaignService;
+    private SmsService smsService;
 
     @Autowired
-    SmsService smsService;
-
-    @Autowired
-    MotechSchedulerService schedulerService;
+    private MotechSchedulerService schedulerService;
 
     // It should delete any scehduled events and reschedule new ones that fire on the pp_dates to check if two
     // consecutive have been missed
@@ -81,7 +74,7 @@ public class PostPartumVisitListener {
         logger.info("Date Of Birth: " + dateOfBirth.toString());
 
         if ("yes".equals(gaveBirth) && "no".equals(attendedPostnatal) &&
-                new Integer(45).compareTo(daysSinceBirth) > 0) {
+                Integer.compare(45, daysSinceBirth) > 0) {
             // Enroll mother in message campaign reminding her to attend postnatal consultation
 
             CampaignRequest cr = new CampaignRequest(motherCaseId,
@@ -98,7 +91,7 @@ public class PostPartumVisitListener {
 
         /*
         Rule 5:
-	    If CHW records a home delivery, send SMS reporting the delivery to PHU (health clinic)
+        If CHW records a home delivery, send SMS reporting the delivery to PHU (health clinic)
         */
         String placeOfBirth = EventKeys.getStringValue(event, EventKeys.PLACE_OF_BIRTH);
 

@@ -12,9 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Utils {
-    private static final Logger logger = LoggerFactory.getLogger("org.worldvision.sierraleone.Utils");
+    private static final Logger LOGGER = LoggerFactory.getLogger("org.worldvision.sierraleone.Utils");
 
-    static Pattern p = Pattern.compile("0(\\d\\d \\d\\d\\d \\d\\d\\d)");
+    private static Pattern p = Pattern.compile("0(\\d\\d \\d\\d\\d \\d\\d\\d)");
+
+    private Utils() { }
 
     // It is called "mother_phone_number".  Are you able to do post-processing on the number to add in the prefix +232.
     // They will be typing the number as 0## ### ###.  You would need to turn that into +232 ## ### ###
@@ -30,12 +32,12 @@ public final class Utils {
         if (m.matches()) {
             MatchResult mr = m.toMatchResult();
 
-            logger.info("Group 1: " + mr.group(1));
-            logger.info("Result: +232 " + mr.group(1));
+            LOGGER.info("Group 1: " + mr.group(1));
+            LOGGER.info("Result: +232 " + mr.group(1));
 
             ret = "+232 " + mr.group(1);
         } else {
-            logger.error("Phone " + phone + " does not match expected pattern 0## ### ###");
+            LOGGER.error("Phone " + phone + " does not match expected pattern 0## ### ###");
         }
 
         return ret;

@@ -17,7 +17,7 @@ public class MotherReferralListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    MessageCampaignService messageCampaignService;
+    private MessageCampaignService messageCampaignService;
 
     @MotechListener(subjects = EventKeys.MOTHER_REFERRAL_SUBJECT)
     public void motherReferralReminder(MotechEvent event) {
@@ -39,9 +39,9 @@ public class MotherReferralListener {
         // caseId:referalId
         String externalId = motherCaseId + ":" + referralCaseId;
         CampaignRequest cr = new CampaignRequest(externalId,
-                                                 Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
-                                                 dateOfVisit.toLocalDate(),
-                                                 null, null);
+                Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
+                dateOfVisit.toLocalDate(),
+                null, null);
         messageCampaignService.startFor(cr);
     }
 }

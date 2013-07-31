@@ -1,15 +1,10 @@
 package org.worldvision.sierraleone.constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  *
  */
 public final class Commcare {
     private Commcare() { }
-
-    private static final Logger logger = LoggerFactory.getLogger("org.worldvision.sierraleone.constants.Commcare");
 
     public static final String VITAMIN_A = "vitamin_a";
     public static final String NAME = "name";

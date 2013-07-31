@@ -1,6 +1,8 @@
 package org.worldvision.sierraleone.constants;
 
-public class SMSContent {
+public final class SMSContent {
+    private SMSContent() { }
+
     // TODO: Extract strings
     public static final String POSTNATAL_CONSULTATION_REMINDER = "You / %s have been referred for post-partum consultation care at your health centre. Please go directly to the facility as soon as possible";
     public static final String MOTHER_REFERRAL_REMINDER = "You / %s have been referred for care at your health centre. Please go directly to the facility for urgent care.";
