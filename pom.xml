@@ -1,14 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.worldvision</groupId>
-  <artifactId>wv-sierra-leone</artifactId>
-  <version>0.1-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-  <name>World Vision Sierra Leone</name>
-  <properties>
-      <motech.version>0.19-SNAPSHOT</motech.version>
-  </properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.worldvision</groupId>
+    <artifactId>wv-sierra-leone</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    <name>World Vision Sierra Leone</name>
+    <properties>
+        <motech.version>0.21-SNAPSHOT</motech.version>
+        <jdk.version>1.7</jdk.version>
+
+        <external.dependency.release.tag>r020</external.dependency.release.tag>
+    </properties>
     <dependencies>
         <!-- to configure your module properties -->
         <dependency>
@@ -54,9 +58,9 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <groupId>org.junit</groupId>
+            <artifactId>org.motechproject.org.junit</artifactId>
+            <version>4.9-${external.dependency.release.tag}</version>
             <scope>test</scope>
         </dependency>
 
@@ -64,6 +68,7 @@
             <groupId>org.mockito</groupId>
             <artifactId>com.springsource.org.mockito</artifactId>
             <version>1.8.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -76,8 +81,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
 
@@ -151,4 +156,14 @@
             <url>http://nexus.motechproject.org/content/repositories/public</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>motech-repo</id>
+            <name>MOTECH Maven Repository</name>
+            <url>http://nexus.motechproject.org/content/repositories/public</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

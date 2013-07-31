@@ -64,6 +64,7 @@ public class CommCareFormStubListenerTest {
     public void postPartumVisitWithoutReferralShouldPublishOneEvent() {
         String formId = "formId";
         CommcareForm form = CommcareForm("Post-Partum Visit");
+        form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.STILL_ALIVE, "yes");
         AddSingleValueFormField(form, Commcare.GAVE_BIRTH, "yes");
@@ -98,6 +99,7 @@ public class CommCareFormStubListenerTest {
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
         CommcareForm form = CommcareForm("Post-Partum Visit");
+        form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.STILL_ALIVE, "yes");
         AddSingleValueFormField(form, Commcare.GAVE_BIRTH, "yes");
@@ -146,6 +148,7 @@ public class CommCareFormStubListenerTest {
     public void postPartumVisitWithMissingFieldShouldNotPublishEvent() {
         String formId = "formId";
         CommcareForm form = CommcareForm("Post-Partum Visit");
+        form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.GAVE_BIRTH, "yes");
         AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "no");
@@ -175,6 +178,7 @@ public class CommCareFormStubListenerTest {
     public void pregnancyVisitWithoutReferralShouldPublishNoEvent() {
         String formId = "formId";
         CommcareForm form = CommcareForm("Pregnancy Visit");
+        form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "no");
         AddSingleValueFormField(form, Commcare.REFERRAL_ID, null);
@@ -197,6 +201,7 @@ public class CommCareFormStubListenerTest {
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
         CommcareForm form = CommcareForm("Pregnancy Visit");
+        form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "yes");
         AddSingleValueFormField(form, Commcare.REFERRAL_ID, "referralId");
@@ -236,6 +241,7 @@ public class CommCareFormStubListenerTest {
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
         CommcareForm form = CommcareForm("Pregnancy Visit");
+        form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "yes");
         AddSingleValueFormField(form, Commcare.DATE_OF_VISIT, "2013-01-03");
@@ -271,6 +277,7 @@ public class CommCareFormStubListenerTest {
     public void childVisitFormShouldPublishEvent() {
         String formId = "formId";
         CommcareForm form = CommcareForm("Child Visit");
+        form.getForm().setElementName("form");
 
         String childCaseId = "childCaseId";
         FormValueElement formValueElement = new FormValueElement();
@@ -308,6 +315,7 @@ public class CommCareFormStubListenerTest {
     public void childVisitFormMissingFieldShouldNotPublishEvent() {
         String formId = "formId";
         CommcareForm form = CommcareForm("Child Visit");
+        form.getForm().setElementName("form");
 
         String childCaseId = "childCaseId";
         FormValueElement formValueElement = new FormValueElement();

@@ -104,7 +104,7 @@ public class CommCareFormStubListener {
         String motherCaseId = null;
         String vitaminA = null;
 
-        FormValueElement element = form.getForm().getElementByName(Commcare.CASE);
+        FormValueElement element = form.getForm().getElement(Commcare.CASE);
         childCaseId = element.getAttributes().get(Commcare.CASE_ID);
 
         CaseInfo childCase = commcareCaseService.getCaseByCaseId(childCaseId);
@@ -192,16 +192,16 @@ public class CommCareFormStubListener {
         String referralId = null;
         String motherCaseId = null;
 
-        FormValueElement element = form.getForm().getElementByName(Commcare.CREATE_REFERRAL);
+        FormValueElement element = form.getForm().getElement(Commcare.CREATE_REFERRAL);
         createReferral = ((element != null) ? element.getValue() : null);
 
-        element = form.getForm().getElementByName(Commcare.REFERRAL_ID);
+        element = form.getForm().getElement(Commcare.REFERRAL_ID);
         referralId = ((element != null) ? element.getValue() : null);
 
-        element = form.getForm().getElementByName(Commcare.CASE);
+        element = form.getForm().getElement(Commcare.CASE);
         motherCaseId = element.getAttributes().get(Commcare.CASE_ID);
 
-        element = form.getForm().getElementByName(Commcare.DATE_OF_VISIT);
+        element = form.getForm().getElement(Commcare.DATE_OF_VISIT);
         dov = ((element != null) ? element.getValue() : null);
 
         DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
@@ -235,29 +235,29 @@ public class CommCareFormStubListener {
         String motherCaseId = null;
         String nextVisitDatePlus1 = null;
 
-        FormValueElement element = form.getForm().getElementByName(Commcare.GAVE_BIRTH);
+        FormValueElement element = form.getForm().getElement(Commcare.GAVE_BIRTH);
         gaveBirth = ((element != null) ? element.getValue() : null);
 
-        element = form.getForm().getElementByName(Commcare.CREATE_REFERRAL);
+        element = form.getForm().getElement(Commcare.CREATE_REFERRAL);
         createReferral = ((element != null) ? element.getValue() : null);
 
-        element = form.getForm().getElementByName(Commcare.REFERRAL_ID);
+        element = form.getForm().getElement(Commcare.REFERRAL_ID);
         referralId = ((element != null) ? element.getValue() : null);
 
-        element = form.getForm().getElementByName(Commcare.DATE_OF_VISIT);
+        element = form.getForm().getElement(Commcare.DATE_OF_VISIT);
         dov = ((element != null) ? element.getValue() : null);
 
-        element = form.getForm().getElementByName(Commcare.NEXT_VISIT_DATE_PLUS_1);
+        element = form.getForm().getElement(Commcare.NEXT_VISIT_DATE_PLUS_1);
         nextVisitDatePlus1 = ((element != null) ? element.getValue() : null);
 
-        FormValueElement postPartumVisit = form.getForm().getElementByName(Commcare.POST_PARTUM_VISIT);
-        element = postPartumVisit.getElementByName(Commcare.DATE_OF_BIRTH);
+        FormValueElement postPartumVisit = form.getForm().getElement(Commcare.POST_PARTUM_VISIT);
+        element = postPartumVisit.getElement(Commcare.DATE_OF_BIRTH);
         dob = ((element != null) ? element.getValue() : null);
 
-        element = postPartumVisit.getElementByName(Commcare.ATTENDED_POSTNATAL);
+        element = postPartumVisit.getElement(Commcare.ATTENDED_POSTNATAL);
         attendedPostnatal = ((element != null) ? element.getValue() : null);
 
-        element = postPartumVisit.getElementByName(Commcare.PLACE_OF_BIRTH);
+        element = postPartumVisit.getElement(Commcare.PLACE_OF_BIRTH);
         placeOfBirth = ((element != null) ? element.getValue() : null);
 
         DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
@@ -266,7 +266,7 @@ public class CommCareFormStubListener {
 
         DateTime secondConsecutiveVisitDate = Utils.dateTimeFromCommcareDateString(nextVisitDatePlus1);
 
-        element = form.getForm().getElementByName(Commcare.CASE);
+        element = form.getForm().getElement(Commcare.CASE);
         motherCaseId = element.getAttributes().get(Commcare.CASE_ID);
 
         // TODO: Get all the pp_v*_date fields and add to event
