@@ -27,4 +27,20 @@
 
     <context:component-scan base-package="org.worldvision.sierraleone"/>
 
+    <bean id="wvSettings" class="org.worldvision.sierraleone.WorldVisionSettings" autowire="byType">
+        <property name="configFiles">
+            <list>
+                <value>classpath:wv-settings.properties</value>
+            </list>
+        </property>
+        <property name="rawConfigFiles">
+            <list>
+                <value>classpath:message-campaigns.json</value>
+                <value>classpath:sms-http-template.json</value>
+                <value>classpath:sms-messages.json</value>
+            </list>
+        </property>
+        <property name="moduleName" value="sierra-leone"/>
+    </bean>
+
 </beans>

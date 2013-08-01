@@ -2,6 +2,8 @@ package org.worldvision.sierraleone.task;
 
 
 import org.joda.time.DateTime;
+import org.motechproject.cmslite.api.model.ContentNotFoundException;
+import org.motechproject.cmslite.api.service.CMSLiteService;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareUser;
 import org.motechproject.commcare.service.CommcareCaseService;
@@ -15,13 +17,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.Utils;
+import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
-import org.worldvision.sierraleone.constants.SMSContent;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.worldvision.sierraleone.constants.SMSContent.MISSED_CONSECUTIVE_CHILD_VISITS;
+import static org.worldvision.sierraleone.constants.SMSContent.MISSED_CONSECUTIVE_POST_PARTUM_VISITS;
 
 @Component
 public class ConsecutiveMissedVisitListener {
@@ -39,8 +44,14 @@ public class ConsecutiveMissedVisitListener {
     @Autowired
     private SmsService smsService;
 
+    @Autowired
+    private CMSLiteService cmsLiteService;
+
+    @Autowired
+    private WorldVisionSettings settings;
+
     @MotechListener(subjects = EventKeys.CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT)
-    public void childMissedVisitHandler(MotechEvent event) {
+    public void childMissedVisitHandler(MotechEvent event) throws ContentNotFoundException {
         List<DateTime> dates = null;
         DateTime lastVisitDate = null;
 
@@ -89,7 +100,7 @@ public class ConsecutiveMissedVisitListener {
                 CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
                 String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
-                String message = String.format(SMSContent.MISSED_CONSECUTIVE_CHILD_VISITS, chwName);
+                String message = String.format(getMessage(MISSED_CONSECUTIVE_CHILD_VISITS), chwName);
                 smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                 logger.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId + " childcase: " + childCaseId);
             } else {
@@ -99,7 +110,7 @@ public class ConsecutiveMissedVisitListener {
     }
 
     @MotechListener(subjects = EventKeys.CONSECUTIVE_POST_PARTUM_VISIT_WILDCARD_SUBJECT)
-    public void postPartumMissedVisitHandler(MotechEvent event) {
+    public void postPartumMissedVisitHandler(MotechEvent event) throws ContentNotFoundException {
         // The only time this will fire is if two consecutive apts have been missed
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
@@ -122,7 +133,7 @@ public class ConsecutiveMissedVisitListener {
             CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
             String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
-            String message = String.format(SMSContent.MISSED_CONSECUTIVE_POST_PARTUM_VISITS, chwName);
+            String message = String.format(getMessage(MISSED_CONSECUTIVE_POST_PARTUM_VISITS), chwName);
             smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
             logger.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId);
         } else {
@@ -146,5 +157,9 @@ public class ConsecutiveMissedVisitListener {
         DateTime dateTime = Utils.dateTimeFromCommcareDateString(d);
 
         return dateTime;
+    }
+
+    private String getMessage(String name) throws ContentNotFoundException {
+        return cmsLiteService.getStringContent(settings.getLanguage(), name).getValue();
     }
 }

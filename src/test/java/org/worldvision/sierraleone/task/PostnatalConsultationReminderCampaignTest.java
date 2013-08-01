@@ -13,6 +13,7 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.messagecampaign.EventKeys;
 import org.motechproject.messagecampaign.contract.CampaignRequest;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
+import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 
@@ -36,6 +37,9 @@ public class PostnatalConsultationReminderCampaignTest {
     @Mock
     private MessageCampaignService messageCampaignService;
 
+    @Mock
+    private WorldVisionSettings settings;
+
     @InjectMocks
     private MessageCampaignListener messageCampaignListener = new MessageCampaignListener();
 
@@ -45,7 +49,7 @@ public class PostnatalConsultationReminderCampaignTest {
     }
 
     @Test
-    public void motherNotFoundInCommcare() {
+    public void motherNotFoundInCommcare() throws Exception {
         String motherCaseId = "motherCaseId";
 
         MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
@@ -61,7 +65,7 @@ public class PostnatalConsultationReminderCampaignTest {
     }
 
     @Ignore
-    public void shouldSendMotherSMS() {
+    public void shouldSendMotherSMS() throws Exception {
         String motherCaseId = "motherCaseId";
 
         MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
@@ -85,7 +89,7 @@ public class PostnatalConsultationReminderCampaignTest {
     }
 
     @Test
-    public void noPhoneNoAction() {
+    public void noPhoneNoAction() throws Exception {
         String motherCaseId = "motherCaseId";
 
         MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
@@ -109,7 +113,7 @@ public class PostnatalConsultationReminderCampaignTest {
     }
 
     @Test
-    public void shouldUnenrollMotherNoLongerAlive() {
+    public void shouldUnenrollMotherNoLongerAlive() throws Exception {
         String motherCaseId = "motherCaseId";
 
         MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
@@ -139,7 +143,7 @@ public class PostnatalConsultationReminderCampaignTest {
     }
 
     @Test
-    public void shouldUnenrollMotherAttendedPostnatal() {
+    public void shouldUnenrollMotherAttendedPostnatal() throws Exception {
         String motherCaseId = "motherCaseId";
 
         MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
@@ -169,7 +173,7 @@ public class PostnatalConsultationReminderCampaignTest {
     }
 
     @Test
-    public void shouldUnenrollMother() {
+    public void shouldUnenrollMother() throws Exception {
         String motherCaseId = "motherCaseId";
 
         MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);

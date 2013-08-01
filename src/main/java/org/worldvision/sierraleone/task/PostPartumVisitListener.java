@@ -1,6 +1,8 @@
 package org.worldvision.sierraleone.task;
 
 import org.joda.time.DateTime;
+import org.motechproject.cmslite.api.model.ContentNotFoundException;
+import org.motechproject.cmslite.api.service.CMSLiteService;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareUser;
 import org.motechproject.commcare.service.CommcareCaseService;
@@ -17,13 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
-import org.worldvision.sierraleone.constants.SMSContent;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
 
 import java.util.Arrays;
+
+import static org.worldvision.sierraleone.constants.SMSContent.HOME_BIRTH_NOTIFICATION;
 
 @Component
 public class PostPartumVisitListener {
@@ -46,6 +50,12 @@ public class PostPartumVisitListener {
 
     @Autowired
     private MotechSchedulerService schedulerService;
+
+    @Autowired
+    private CMSLiteService cmsLiteService;
+
+    @Autowired
+    private WorldVisionSettings settings;
 
     // It should delete any scehduled events and reschedule new ones that fire on the pp_dates to check if two
     // consecutive have been missed
@@ -86,7 +96,7 @@ public class PostPartumVisitListener {
     }
 
     @MotechListener(subjects = EventKeys.POST_PARTUM_FORM_SUBJECT)
-    public void homeBirthNotification(MotechEvent event) {
+    public void homeBirthNotification(MotechEvent event) throws ContentNotFoundException {
         logger.info("MotechEvent " + event + " received on " + EventKeys.POST_PARTUM_FORM_SUBJECT + " Rule: Home Birth Notification");
 
         /*
@@ -122,7 +132,7 @@ public class PostPartumVisitListener {
             CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
             String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
-            String message = String.format(SMSContent.HOME_BIRTH_NOTIFICATION, chwName, motherName);
+            String message = String.format(getMessage(HOME_BIRTH_NOTIFICATION), chwName, motherName);
             smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
             logger.info("Sending home birth notification SMS to " + phone + " for mothercase: " + motherCaseId);
         }
@@ -160,5 +170,9 @@ public class PostPartumVisitListener {
         e.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
 
         schedulerService.scheduleRunOnceJob(new RunOnceSchedulableJob(e, secondConsecutiveAptDate.plusDays(1).toDate()));
+    }
+
+    private String getMessage(String name) throws ContentNotFoundException {
+        return cmsLiteService.getStringContent(settings.getLanguage(), name).getValue();
     }
 }

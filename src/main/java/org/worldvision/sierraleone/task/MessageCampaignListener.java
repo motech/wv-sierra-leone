@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Months;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
+import org.motechproject.cmslite.api.model.ContentNotFoundException;
+import org.motechproject.cmslite.api.service.CMSLiteService;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.event.MotechEvent;
@@ -18,14 +20,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.Utils;
+import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
-import org.worldvision.sierraleone.constants.SMSContent;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
 
 import java.util.Arrays;
 
 import static java.lang.String.format;
+import static org.worldvision.sierraleone.constants.SMSContent.CHILD_VITAMIN_A_REMINDER;
+import static org.worldvision.sierraleone.constants.SMSContent.MOTHER_REFERRAL_REMINDER;
+import static org.worldvision.sierraleone.constants.SMSContent.POSTNATAL_CONSULTATION_REMINDER;
 
 @Component
 public class MessageCampaignListener {
@@ -43,8 +48,14 @@ public class MessageCampaignListener {
     @Autowired
     private FixtureIdMap fixtureIdMap;
 
+    @Autowired
+    private CMSLiteService cmsLiteService;
+
+    @Autowired
+    private WorldVisionSettings settings;
+
     @MotechListener(subjects = EventKeys.SEND_MESSAGE)
-    public void handle(MotechEvent event) {
+    public void handle(MotechEvent event) throws ContentNotFoundException {
         logger.info(format("MotechEvent %s received on %s", event, EventKeys.SEND_MESSAGE));
 
         String referralCaseId = null;
@@ -89,7 +100,7 @@ public class MessageCampaignListener {
         }
     }
 
-    private void handleChildVitaminAReminderCampaign(String referralCaseId, String externalId) {
+    private void handleChildVitaminAReminderCampaign(String referralCaseId, String externalId) throws ContentNotFoundException {
         String[] elements;
         String childCaseId;
         String motherCaseId;
@@ -129,7 +140,7 @@ public class MessageCampaignListener {
                 String phuName = fixtureIdMap.getNameForFixture(phuId);
 
                 if (null != phone) {
-                    String message = format(SMSContent.CHILD_VITAMIN_A_REMINDER, childName, phuName);
+                    String message = format(getMessage(CHILD_VITAMIN_A_REMINDER), childName, phuName);
                     smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                     logger.info(format("Sending vitamin a reminder SMS to %s for mothercase: %s referralcase: %s", phone, motherCaseId, referralCaseId));
                 } else {
@@ -149,7 +160,7 @@ public class MessageCampaignListener {
         }
     }
 
-    private void handleMotherReferralReminderCampaign(String externalId) {
+    private void handleMotherReferralReminderCampaign(String externalId) throws ContentNotFoundException {
         String[] elements;
         String motherCaseId;
         String referralCaseId;
@@ -185,7 +196,7 @@ public class MessageCampaignListener {
             String motherName = motherCase.getFieldValues().get(Commcare.MOTHER_NAME);
 
             if (null != phone) {
-                String message = format(SMSContent.MOTHER_REFERRAL_REMINDER, motherName);
+                String message = format(getMessage(MOTHER_REFERRAL_REMINDER), motherName);
                 smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                 logger.info(format("Sending reminder SMS to %s for mothercase: %s referralcase: %s", phone, motherCaseId, referralCaseId));
             } else {
@@ -203,7 +214,7 @@ public class MessageCampaignListener {
         }
     }
 
-    private void handlePostNatalConsultationReminderCampaign(String externalId) {
+    private void handlePostNatalConsultationReminderCampaign(String externalId) throws ContentNotFoundException {
         CaseInfo motherCase; // Load the mothers case
         motherCase = commcareCaseService.getCaseByCaseId(externalId);
 
@@ -217,7 +228,7 @@ public class MessageCampaignListener {
             // Send SMS to her
             if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal)) {
                 if (null != phone) {
-                    String message = format(SMSContent.POSTNATAL_CONSULTATION_REMINDER, motherName);
+                    String message = format(getMessage(POSTNATAL_CONSULTATION_REMINDER), motherName);
                     smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                     logger.info(format("Sending reminder SMS to %s for mothercase: %s", phone, externalId));
                 } else {
@@ -235,5 +246,9 @@ public class MessageCampaignListener {
         } else {
             logger.error(format("Unable to find mothercase: %s in commcare", externalId));
         }
+    }
+
+    private String getMessage(String name) throws ContentNotFoundException {
+        return cmsLiteService.getStringContent(settings.getLanguage(), name).getValue();
     }
 }

@@ -6,6 +6,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.motechproject.cmslite.api.model.StringContent;
+import org.motechproject.cmslite.api.service.CMSLiteService;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.event.MotechEvent;
@@ -14,6 +16,7 @@ import org.motechproject.messagecampaign.contract.CampaignRequest;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
 import org.motechproject.sms.api.service.SendSmsRequest;
 import org.motechproject.sms.api.service.SmsService;
+import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 
@@ -26,6 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static org.worldvision.sierraleone.constants.SMSContent.MOTHER_REFERRAL_REMINDER;
 
 /**
  * Tests!
@@ -40,6 +44,12 @@ public class MotherReferralReminderCampaignTest {
     @Mock
     private SmsService smsService;
 
+    @Mock
+    private CMSLiteService cmsLiteService;
+
+    @Mock
+    private WorldVisionSettings settings;
+
     @InjectMocks
     private MessageCampaignListener messageCampaignListener = new MessageCampaignListener();
 
@@ -49,7 +59,7 @@ public class MotherReferralReminderCampaignTest {
     }
 
     @Test
-    public void motherNotFoundInCommcare() {
+    public void motherNotFoundInCommcare() throws Exception {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";
         String externalId = motherCaseId + ":" + referralCaseId;
@@ -67,7 +77,7 @@ public class MotherReferralReminderCampaignTest {
     }
 
     @Test
-    public void referralNotFoundInCommcare() {
+    public void referralNotFoundInCommcare() throws Exception {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";
         String externalId = motherCaseId + ":" + referralCaseId;
@@ -86,7 +96,7 @@ public class MotherReferralReminderCampaignTest {
     }
 
     @Test
-    public void caseClosedUnenrollMother() {
+    public void caseClosedUnenrollMother() throws Exception {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";
         String externalId = motherCaseId + ":" + referralCaseId;
@@ -114,7 +124,7 @@ public class MotherReferralReminderCampaignTest {
     }
 
     @Test
-    public void caseOpenSendSMS() {
+    public void caseOpenSendSMS() throws Exception {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";
         String externalId = motherCaseId + ":" + referralCaseId;
@@ -128,6 +138,10 @@ public class MotherReferralReminderCampaignTest {
 
         when(caseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
         when(caseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
+        when(settings.getLanguage()).thenReturn("English");
+        when(cmsLiteService.getStringContent("English", MOTHER_REFERRAL_REMINDER)).thenReturn(
+                new StringContent("English", "Name", "You / %s have been referred for care at your health centre. Please go directly to the facility for urgent care.")
+        );
 
         messageCampaignListener.handle(event);
 
@@ -136,7 +150,7 @@ public class MotherReferralReminderCampaignTest {
     }
 
     @Test
-    public void noPhoneNoAction() {
+    public void noPhoneNoAction() throws Exception {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";
         String externalId = motherCaseId + ":" + referralCaseId;

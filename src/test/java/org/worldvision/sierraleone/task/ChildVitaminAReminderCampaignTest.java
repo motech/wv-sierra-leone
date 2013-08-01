@@ -16,6 +16,7 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.messagecampaign.EventKeys;
 import org.motechproject.messagecampaign.contract.CampaignRequest;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
+import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
 
@@ -29,13 +30,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-/**
- * Created with IntelliJ IDEA.
- * User: rob
- * Date: 2/25/13
- * Time: 5:00 PM
- * To change this template use File | Settings | File Templates.
- */
 public class ChildVitaminAReminderCampaignTest {
     @Mock
     private CommcareCaseService caseService;
@@ -46,13 +40,16 @@ public class ChildVitaminAReminderCampaignTest {
     @InjectMocks
     private MessageCampaignListener messageCampaignListener = new MessageCampaignListener();
 
+    @Mock
+    private WorldVisionSettings settings;
+
     @Before
     public void setUp() {
         initMocks(this);
     }
 
     @Test
-    public void childNotFoundInCommcare() {
+    public void childNotFoundInCommcare() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = motherCaseId + ":" + childCaseId;
@@ -70,7 +67,7 @@ public class ChildVitaminAReminderCampaignTest {
     }
 
     @Test
-    public void childHadVitaminASoUnenroll() {
+    public void childHadVitaminASoUnenroll() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = childCaseId + ":" + motherCaseId;
@@ -97,7 +94,7 @@ public class ChildVitaminAReminderCampaignTest {
 
 
     @Test
-    public void childTooOldAtLimitSoUnenroll() {
+    public void childTooOldAtLimitSoUnenroll() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = childCaseId + ":" + motherCaseId;
@@ -124,7 +121,7 @@ public class ChildVitaminAReminderCampaignTest {
     }
 
     @Test
-    public void childTooOldOverLimitSoUnenroll() {
+    public void childTooOldOverLimitSoUnenroll() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = childCaseId + ":" + motherCaseId;
@@ -151,7 +148,7 @@ public class ChildVitaminAReminderCampaignTest {
     }
 
     @Test
-    public void shoulNotdSendReminderToMotherButMotherNotFound() {
+    public void shoulNotdSendReminderToMotherButMotherNotFound() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = childCaseId + ":" + motherCaseId;
@@ -172,7 +169,7 @@ public class ChildVitaminAReminderCampaignTest {
     }
 
     @Ignore
-    public void shouldNotSendReminderToMotherButNoPhone() {
+    public void shouldNotSendReminderToMotherButNoPhone() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = childCaseId + ":" + motherCaseId;
@@ -194,7 +191,7 @@ public class ChildVitaminAReminderCampaignTest {
     }
 
     @Ignore
-    public void shouldSendReminderToMother() {
+    public void shouldSendReminderToMother() throws Exception {
         String motherCaseId = "motherCaseId";
         String childCaseId = "childCaseId";
         String externalId = childCaseId + ":" + motherCaseId;
