@@ -258,7 +258,7 @@ public class CommCareFormStubListener {
         String attendedPostnatal = getValue(postPartumVisit, Commcare.ATTENDED_POSTNATAL);
         String placeOfBirth = getValue(postPartumVisit, Commcare.PLACE_OF_BIRTH);
 
-        String motherCaseId = getValue(form.getForm().getElement(CASE), Commcare.CASE_ID);
+        String motherCaseId = form.getForm().getElement(CASE).getAttributes().get(Commcare.CASE_ID);
 
         DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
         DateTime dateOfBirth = Utils.dateTimeFromCommcareDateString(dob);
