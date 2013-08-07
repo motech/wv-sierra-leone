@@ -14,6 +14,10 @@
         <jdk.version>1.7</jdk.version>
 
         <external.dependency.release.tag>r020</external.dependency.release.tag>
+
+        <db.server>localhost</db.server>
+        <db.port>5984</db.port>
+        <db.prefix>${user.name}_</db.prefix>
     </properties>
     <dependencies>
         <!-- to configure your module properties -->
@@ -66,6 +70,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-tasks-bundle</artifactId>
+            <version>${motech.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit</groupId>
             <artifactId>org.motechproject.org.junit</artifactId>
             <version>4.9-${external.dependency.release.tag}</version>
@@ -76,6 +86,26 @@
             <groupId>org.mockito</groupId>
             <artifactId>com.springsource.org.mockito</artifactId>
             <version>1.8.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>org.motechproject.osgi.it</artifactId>
+            <version>1.0.2.RELEASE-r013</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.osgi</groupId>
+                    <artifactId>org.eclipse.osgi</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-testing-utils</artifactId>
+            <version>${motech.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -227,6 +257,97 @@
         </plugins>
 
     </build>
+
+    <profiles>
+        <profile>
+            <id>IT</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.12.4</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-junit47</artifactId>
+                                <version>2.15</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.8</version>
+                        <executions>
+                            <execution>
+                                <id>copy-osgi-dependencies</id>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeScope>runtime</includeScope>
+                                    <overWriteIfNewer>true</overWriteIfNewer>
+                                    <outputDirectory>
+                                        ${user.home}/.motech/bundles
+                                    </outputDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>list-dependencies</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>resolve</goal>
+                                </goals>
+                                <configuration>
+                                    <outputFile>target/dependencies.list</outputFile>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>drop CouchDB databases</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <target>
+                                        <exec executable="curl">
+                                            <arg value="-s" />
+                                            <arg value="-S" />
+                                            <arg value="-X" />
+                                            <arg value="DELETE" />
+                                            <arg value="http://${db.server}:${db.port}/${db.prefix}motech-cmslite" />
+                                        </exec>
+                                        <exec executable="curl">
+                                            <arg value="-s" />
+                                            <arg value="-S" />
+                                            <arg value="-X" />
+                                            <arg value="DELETE" />
+                                            <arg value="http://${db.server}:${db.port}/${db.prefix}motech-tasks" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <reporting>
         <plugins>

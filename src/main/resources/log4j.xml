@@ -10,7 +10,7 @@
         </layout>
     </appender>
 
-    <logger name="org.worldvision">
+    <logger name="org.worldvision.sierraleone">
         <level value="ERROR"/>
     </logger>
 

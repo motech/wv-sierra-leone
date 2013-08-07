@@ -30,7 +30,6 @@ import java.util.Arrays;
 import static java.lang.String.format;
 import static org.worldvision.sierraleone.constants.SMSContent.CHILD_VITAMIN_A_REMINDER;
 import static org.worldvision.sierraleone.constants.SMSContent.MOTHER_REFERRAL_REMINDER;
-import static org.worldvision.sierraleone.constants.SMSContent.POSTNATAL_CONSULTATION_REMINDER;
 
 @Component
 public class MessageCampaignListener {
@@ -66,14 +65,6 @@ public class MessageCampaignListener {
         logger.info(format("Handling event for %s", campaignName));
 
         switch (campaignName) {
-            /*
-             Rule 1:
-             IF patient has delivered AND patient has not attended postnatal consultation at health center THEN send SMS to
-             patient every week until 45 days after delivery.
-            */
-            case Campaign.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN:
-                handlePostNatalConsultationReminderCampaign(externalId);
-                break;
             /*
              Rule 2:
              IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to patient
@@ -211,40 +202,6 @@ public class MessageCampaignListener {
 
             logger.info(format("unenrolling mothercase: %s referralcase: %s from %s", motherCaseId, referralCaseId, Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN));
             messageCampaignService.stopAll(cr);
-        }
-    }
-
-    private void handlePostNatalConsultationReminderCampaign(String externalId) throws ContentNotFoundException {
-        CaseInfo motherCase; // Load the mothers case
-        motherCase = commcareCaseService.getCaseByCaseId(externalId);
-
-        if (null != motherCase) {
-            // Verify she is still alive and still has not attended postnatal consultation
-            String stillAlive = motherCase.getFieldValues().get(Commcare.STILL_ALIVE);
-            String attendedPostnatal = motherCase.getFieldValues().get(Commcare.ATTENDED_POSTNATAL);
-            String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
-            String motherName = motherCase.getFieldValues().get(Commcare.MOTHER_NAME);
-
-            // Send SMS to her
-            if ("yes".equals(stillAlive) && "no".equals(attendedPostnatal)) {
-                if (null != phone) {
-                    String message = format(getMessage(POSTNATAL_CONSULTATION_REMINDER), motherName);
-                    smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
-                    logger.info(format("Sending reminder SMS to %s for mothercase: %s", phone, externalId));
-                } else {
-                    logger.info(format("No phone for mothercase %s not sending postnatal consultation remidner", externalId));
-                }
-            } else if ("no".equals(stillAlive) || "yes".equals(attendedPostnatal)) {
-
-                // If the mother has died or attended postnatal consultations we can unenroll the campaign
-                CampaignRequest cr = new CampaignRequest(externalId,
-                        Campaign.POSTNATAL_CONSULTATION_REMINDER_CAMPAIGN,
-                        null, null, null);
-                logger.info(format("unenrolling mothercase: %s stillAlive: %s attended: %s", externalId, stillAlive, attendedPostnatal));
-                messageCampaignService.stopAll(cr);
-            }
-        } else {
-            logger.error(format("Unable to find mothercase: %s in commcare", externalId));
         }
     }
 

@@ -6,6 +6,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <context:annotation-config/>
+    <context:component-scan base-package="org.worldvision.sierraleone"/>
 
     <bean id="moduleRegistrationData" class="org.motechproject.osgi.web.ModuleRegistrationData">
         <constructor-arg name="moduleName" value="sierra-leone"/>
@@ -24,8 +25,6 @@
             <bean class="org.motechproject.osgi.web.Header"/>
         </constructor-arg>
     </bean>
-
-    <context:component-scan base-package="org.worldvision.sierraleone"/>
 
     <bean id="wvSettings" class="org.worldvision.sierraleone.WorldVisionSettings" autowire="byType">
         <property name="configFiles">
