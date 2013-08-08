@@ -77,7 +77,7 @@
       "providerId" : "eec2fa1b5d77bd5c536def1b150bc6e4",
       "objectId" : 1,
       "type" : "StringContent",
-      "name" : "languageAndName",
+      "name" : "cmslite.languageAndName",
       "lookup" : [ {
         "field" : "name",
         "value" : "PostnatalConsultationReminder"
