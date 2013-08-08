@@ -1,0 +1,61 @@
+{
+  "_id" : "rule-2-unenroll-patient-if-closed",
+  "name" : "rule #2: Unenroll patient if closed",
+  "actions" : [ {
+    "displayName" : "msgCampaign.unenroll.user",
+    "channelName" : "msgCampaign.name",
+    "moduleName" : "motech-message-campaign",
+    "moduleVersion" : "0.21.0.SNAPSHOT",
+    "subject" : "org.motechproject.messagecampaign.unenroll-user",
+    "values" : {
+      "ExternalID" : "{{trigger.ExternalID}}",
+      "CampaignName" : "{{trigger.CampaignName}}"
+    }
+  } ],
+  "trigger" : {
+    "displayName" : "msgCampaign.send.message",
+    "channelName" : "msgCampaign.name",
+    "moduleName" : "motech-message-campaign",
+    "moduleVersion" : "0.21.0.SNAPSHOT",
+    "subject" : "org.motechproject.messagecampaign.fired-campaign-message"
+  },
+  "enabled" : true,
+  "taskConfig" : {
+    "steps" : [ {
+      "@type" : "FilterSet",
+      "order" : 0,
+      "filters" : [ {
+        "displayName" : "Campaign name (Trigger)",
+        "key" : "trigger.CampaignName",
+        "type" : "UNICODE",
+        "negationOperator" : true,
+        "operator" : "task.equals",
+        "expression" : "Mother Referral Reminder"
+      } ]
+    }, {
+      "@type" : "DataSource",
+      "order" : 1,
+      "providerName" : "commcare.name",
+      "providerId" : "3980fa00249eb3bf73e200bd85062954",
+      "objectId" : 0,
+      "type" : "CaseInfo",
+      "name" : "id",
+      "lookup" : [ {
+        "field" : "id",
+        "value" : "{{trigger.ExternalID?split(:,1)}}"
+      } ],
+      "failIfDataNotFound" : true
+    }, {
+      "@type" : "FilterSet",
+      "order" : 2,
+      "filters" : [ {
+        "displayName" : "Open (Case#0 (Commcare))",
+        "key" : "ad.3980fa00249eb3bf73e200bd85062954.CaseInfo#0.fieldValues.open",
+        "type" : "UNICODE",
+        "negationOperator" : false,
+        "operator" : "task.equals",
+        "expression" : "true"
+      } ]
+    } ]
+  }
+}

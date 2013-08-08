@@ -82,7 +82,9 @@ public class WorldVisionBundleIT extends BaseOsgiIT {
                 "rule-1-enroll-patient",
                 "rule-1-send-sms-to-patient",
                 "rule-1-unenroll-patient-if-attended-postnatal",
-                "rule-1-unenroll_patient-if-no-alive"
+                "rule-1-unenroll_patient-if-no-alive",
+                "rule-2-send-sms-to-patient",
+                "rule-2-unenroll-patient-if-closed"
         );
     }
 

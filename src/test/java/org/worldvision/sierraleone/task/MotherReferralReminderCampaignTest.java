@@ -96,60 +96,6 @@ public class MotherReferralReminderCampaignTest {
     }
 
     @Test
-    public void caseClosedUnenrollMother() throws Exception {
-        String motherCaseId = "motherCaseId";
-        String referralCaseId = "referralCaseId";
-        String externalId = motherCaseId + ":" + referralCaseId;
-
-        MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
-        event.getParameters().put(EventKeys.CAMPAIGN_NAME_KEY, Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN);
-        event.getParameters().put(EventKeys.EXTERNAL_ID_KEY, externalId);
-
-        CaseInfo motherCase = MotherCase(true);
-        CaseInfo referralCase = ReferralCase("false");
-
-        when(caseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
-        when(caseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
-
-        messageCampaignListener.handle(event);
-
-        ArgumentCaptor<CampaignRequest> cr = ArgumentCaptor.forClass(CampaignRequest.class);
-        verify(messageCampaignService, times(1)).stopAll(cr.capture());
-        verify(smsService, never()).sendSMS(Matchers.any(SendSmsRequest.class));
-
-        CampaignRequest campaignRequest = cr.getValue();
-
-        assertEquals("ExternalId does not match", externalId, campaignRequest.externalId());
-        assertEquals("Campaign Name does not match", Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN, campaignRequest.campaignName());
-    }
-
-    @Test
-    public void caseOpenSendSMS() throws Exception {
-        String motherCaseId = "motherCaseId";
-        String referralCaseId = "referralCaseId";
-        String externalId = motherCaseId + ":" + referralCaseId;
-
-        MotechEvent event = new MotechEvent(EventKeys.SEND_MESSAGE);
-        event.getParameters().put(EventKeys.CAMPAIGN_NAME_KEY, Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN);
-        event.getParameters().put(EventKeys.EXTERNAL_ID_KEY, externalId);
-
-        CaseInfo motherCase = MotherCase(true);
-        CaseInfo referralCase = ReferralCase("true");
-
-        when(caseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
-        when(caseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
-        when(settings.getLanguage()).thenReturn("English");
-        when(cmsLiteService.getStringContent("English", MOTHER_REFERRAL_REMINDER)).thenReturn(
-                new StringContent("English", "Name", "You / %s have been referred for care at your health centre. Please go directly to the facility for urgent care.")
-        );
-
-        messageCampaignListener.handle(event);
-
-        verify(messageCampaignService, never()).stopAll(Matchers.any(CampaignRequest.class));
-        verify(smsService, times(1)).sendSMS(Matchers.any(SendSmsRequest.class));
-    }
-
-    @Test
     public void noPhoneNoAction() throws Exception {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";

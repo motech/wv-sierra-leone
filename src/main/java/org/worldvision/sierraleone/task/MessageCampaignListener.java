@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.Commcare;
@@ -29,7 +28,6 @@ import java.util.Arrays;
 
 import static java.lang.String.format;
 import static org.worldvision.sierraleone.constants.SMSContent.CHILD_VITAMIN_A_REMINDER;
-import static org.worldvision.sierraleone.constants.SMSContent.MOTHER_REFERRAL_REMINDER;
 
 @Component
 public class MessageCampaignListener {
@@ -65,14 +63,6 @@ public class MessageCampaignListener {
         logger.info(format("Handling event for %s", campaignName));
 
         switch (campaignName) {
-            /*
-             Rule 2:
-             IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to patient
-             every 24 hours until referral is completed.
-            */
-            case Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN:
-                handleMotherReferralReminderCampaign(externalId);
-                break;
             /*
              Rule 6:
               IF Child has missed vitamin A dose, send a message to mother reminding her
@@ -147,60 +137,6 @@ public class MessageCampaignListener {
                     null, null, null);
 
             logger.info(format("unenrolling childcase: %s from %s", externalId, Campaign.CHILD_VITAMIN_A_REMINDER_CAMPAIGN));
-            messageCampaignService.stopAll(cr);
-        }
-    }
-
-    private void handleMotherReferralReminderCampaign(String externalId) throws ContentNotFoundException {
-        String[] elements;
-        String motherCaseId;
-        String referralCaseId;
-        CaseInfo motherCase;
-        CaseInfo referralCase; // The externalId encodes the mother case id and the referral id.
-        elements = externalId.split(":");
-        motherCaseId = elements[0];
-        referralCaseId = elements[1];
-
-        logger.info(format("motherCaseId: %s referralId: %s", motherCaseId, referralCaseId));
-
-        // Load mother case
-        motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
-
-        if (null == motherCase) {
-            logger.error(format("Unable to load mothercase: %s from commcare", motherCaseId));
-            return;
-        }
-
-        // Load referral case
-        referralCase = commcareCaseService.getCaseByCaseId(referralCaseId);
-
-        if (null == referralCase) {
-            logger.error(format("Unable to load referralcase: %s from commcare", referralCaseId));
-            return;
-        }
-
-        String caseOpen = referralCase.getFieldValues().get(Commcare.OPEN);
-
-        if ("true".equals(caseOpen)) {
-            // If open send SMS
-            String phone = Utils.mungeMothersPhone(motherCase.getFieldValues().get(Commcare.MOTHER_PHONE_NUMBER));
-            String motherName = motherCase.getFieldValues().get(Commcare.MOTHER_NAME);
-
-            if (null != phone) {
-                String message = format(getMessage(MOTHER_REFERRAL_REMINDER), motherName);
-                smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
-                logger.info(format("Sending reminder SMS to %s for mothercase: %s referralcase: %s", phone, motherCaseId, referralCaseId));
-            } else {
-                logger.info(format("No phone number for mothercase: %s referralcase: %s not sending mother referral reminder", motherCaseId, referralCaseId));
-            }
-
-        } else {
-            // If closed unenroll from message campaign
-            CampaignRequest cr = new CampaignRequest(externalId,
-                    Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
-                    null, null, null);
-
-            logger.info(format("unenrolling mothercase: %s referralcase: %s from %s", motherCaseId, referralCaseId, Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN));
             messageCampaignService.stopAll(cr);
         }
     }
