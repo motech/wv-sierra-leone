@@ -8,11 +8,10 @@ import org.motechproject.cmslite.api.service.CMSLiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +23,10 @@ public class ManagementSmsMessages implements OsgiServiceLifecycleListener {
 
     private boolean loadedMessages;
 
-    private ResourceLoader resourceLoader;
     private WorldVisionSettings settings;
 
     @Autowired
-    public ManagementSmsMessages(ResourceLoader resourceLoader, WorldVisionSettings settings) {
-        this.resourceLoader = resourceLoader;
+    public ManagementSmsMessages(WorldVisionSettings settings) {
         this.settings = settings;
     }
 
@@ -65,26 +62,21 @@ public class ManagementSmsMessages implements OsgiServiceLifecycleListener {
     }
 
     private Collection<StringContent> getMessages() {
-        String resourceName = String.format("/%s", FILE_NAME);
-        Resource resource = resourceLoader.getResource(resourceName);
-        LOGGER.info("Read resource: " + resourceName);
+        InputStream stream = settings.getRawConfig(FILE_NAME);
+        LOGGER.info("Read resource: " + FILE_NAME);
 
         Collection<StringContent> contents;
 
-        if (resource != null && resource.exists()) {
+        if (stream != null) {
             try {
-                contents = Utils.readJSON(
-                        resource.getInputStream(),
-                        List.class,
-                        StringContent.class
-                );
-                LOGGER.info(String.format("Read all messages from: %s", resourceName));
+                contents = Utils.readJSON(stream, List.class, StringContent.class);
+                LOGGER.info(String.format("Read all messages from: %s", FILE_NAME));
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);
-                throw new IllegalStateException(String.format("Can't read resource: %s", resourceName), e);
+                throw new IllegalStateException(String.format("Can't read resource: %s", FILE_NAME), e);
             }
         } else {
-            String errorMessage = String.format("Resource not exists: %s", resourceName);
+            String errorMessage = String.format("Resource not exists: %s", FILE_NAME);
 
             LOGGER.error(errorMessage);
             throw new IllegalStateException(errorMessage);

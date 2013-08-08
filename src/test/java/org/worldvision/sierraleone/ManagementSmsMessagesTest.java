@@ -21,50 +21,34 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class ManagementSmsMessagesTest {
-    private static final String FILE_NAME = "/sms-messages.json";
+    private static final String FILE_NAME = "sms-messages.json";
 
     @Mock
     private CMSLiteService cmsLiteService;
 
     @Mock
-    private ResourceLoader resourceLoader;
-
-    @Mock
     private WorldVisionSettings settings;
-
-    @Mock
-    private Resource resource;
 
     private ManagementSmsMessages mgr;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        mgr = new ManagementSmsMessages(resourceLoader, settings);
+        mgr = new ManagementSmsMessages(settings);
 
         when(settings.getLanguage()).thenReturn("English");
     }
 
     @Test(expected = IllegalStateException.class)
     public void shouldNotLoadMessagesIfResourceNotFound() throws Exception {
-        when(resourceLoader.getResource(FILE_NAME)).thenReturn(null);
-
-        mgr.bind(cmsLiteService, null);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void shouldNotLoadMessagesIfResourceNotExists() throws Exception {
-        when(resourceLoader.getResource(FILE_NAME)).thenReturn(resource);
-        when(resource.exists()).thenReturn(false);
+        when(settings.getRawConfig(FILE_NAME)).thenReturn(null);
 
         mgr.bind(cmsLiteService, null);
     }
 
     @Test
     public void shouldLoadMessages() throws Exception {
-        when(resourceLoader.getResource(FILE_NAME)).thenReturn(resource);
-        when(resource.exists()).thenReturn(true);
-        when(resource.getInputStream()).thenReturn(getResourcesAsStream());
+        when(settings.getRawConfig(FILE_NAME)).thenReturn(getResourcesAsStream());
 
         mgr.bind(cmsLiteService, null);
 
@@ -76,9 +60,7 @@ public class ManagementSmsMessagesTest {
 
     @Test
     public void shouldNotLoadSingleMessageTwice() throws Exception {
-        when(resourceLoader.getResource(FILE_NAME)).thenReturn(resource);
-        when(resource.exists()).thenReturn(true);
-        when(resource.getInputStream()).thenReturn(getResourcesAsStream());
+        when(settings.getRawConfig(FILE_NAME)).thenReturn(getResourcesAsStream());
 
         List<Content> contents = getResourcesAsList();
         Content loaded = contents.get(1);
@@ -99,9 +81,7 @@ public class ManagementSmsMessagesTest {
 
     @Test
     public void shouldNotLoadAllMessagesTwice() throws Exception {
-        when(resourceLoader.getResource(FILE_NAME)).thenReturn(resource);
-        when(resource.exists()).thenReturn(true);
-        when(resource.getInputStream()).thenReturn(getResourcesAsStream());
+        when(settings.getRawConfig(FILE_NAME)).thenReturn(getResourcesAsStream());
 
         mgr.bind(cmsLiteService, null);
 
@@ -115,9 +95,7 @@ public class ManagementSmsMessagesTest {
         // each of these methods were executed one time
         // by the previous execution of the 'bind' method
 
-        verify(resourceLoader, times(1)).getResource(FILE_NAME);
-        verify(resource, times(1)).exists();
-        verify(resource, times(1)).getInputStream();
+        verify(settings, times(1)).getRawConfig(FILE_NAME);
 
         for (Content content : getResourcesAsList()) {
             verify(cmsLiteService, times(1)).isStringContentAvailable(content.getLanguage(), content.getName());
@@ -127,9 +105,7 @@ public class ManagementSmsMessagesTest {
 
     @Test
     public void shouldChangeSettingsLanguageIfContentLanguageIsDifferent() throws Exception {
-        when(resourceLoader.getResource(FILE_NAME)).thenReturn(resource);
-        when(resource.exists()).thenReturn(true);
-        when(resource.getInputStream()).thenReturn(getResourcesAsStream());
+        when(settings.getRawConfig(FILE_NAME)).thenReturn(getResourcesAsStream());
         when(settings.getLanguage()).thenReturn("Spanish");
 
         mgr.bind(cmsLiteService, null);
