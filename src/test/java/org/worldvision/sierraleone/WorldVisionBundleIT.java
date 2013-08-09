@@ -84,7 +84,17 @@ public class WorldVisionBundleIT extends BaseOsgiIT {
                 "rule-1-unenroll-patient-if-attended-postnatal",
                 "rule-1-unenroll_patient-if-no-alive",
                 "rule-2-send-sms-to-patient",
-                "rule-2-unenroll-patient-if-closed"
+                "rule-2-unenroll-patient-if-closed",
+                "rule-4-Set-reminder-child_v5a_date",
+                "rule-4-Set-reminder-child_v5b_date",
+                "rule-4-Set-reminder-child_v5c_date",
+                "rule-4-Set-reminder-child_v5d_date",
+                "rule-4-Set-reminder-child_v6_date",
+                "rule-4-Set-reminder-child_v7_date",
+                "rule-4-Set-reminder-child_v8_date",
+                "rule-4-Set-reminder-child_v9_date",
+                "rule-4-Set-reminder-child_v10_date",
+                "rule-4-Set-reminder-child_v11_date"
         );
     }
 

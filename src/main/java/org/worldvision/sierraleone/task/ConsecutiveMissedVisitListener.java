@@ -22,6 +22,7 @@ import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,34 +53,32 @@ public class ConsecutiveMissedVisitListener {
 
     @MotechListener(subjects = EventKeys.CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT)
     public void childMissedVisitHandler(MotechEvent event) throws ContentNotFoundException {
-        List<DateTime> dates = null;
-        DateTime lastVisitDate = null;
-
         String childCaseId = EventKeys.getStringValue(event, EventKeys.CHILD_CASE_ID);
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
         CaseInfo childCase = commcareCaseService.getCaseByCaseId(childCaseId);
         if (null == childCase) {
-            logger.error("Unable to load childCase " + childCaseId + " from commcare not sending missed consecutive child visit");
+            logger.error(String.format("Unable to load childCase %s from commcare not sending missed consecutive child visit", childCaseId));
             return;
         }
 
         CaseInfo motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
         if (null == motherCase) {
-            logger.error("Unable to load mothercase " + motherCaseId + " from commcare not sending missed consecutive child visit");
+            logger.error(String.format("Unable to load mothercase %s from commcare not sending missed consecutive child visit", motherCaseId));
             return;
         }
 
         String phuId = motherCase.getFieldValues().get(Commcare.PHU_ID);
         if (null == phuId) {
-            logger.error("mothercase " + motherCaseId + " does not contain a phu not sending missed consecutive child visit");
+            logger.error(String.format("mothercase %s does not contain a phu not sending missed consecutive child visit", motherCaseId));
             return;
         }
 
         // Get last visit date
-        lastVisitDate = getDateField(childCase, Commcare.DATE_OF_VISIT);
+        DateTime lastVisitDate = getDateField(childCase, Commcare.DATE_OF_VISIT);
 
         // Place all expected visits dates in array
+        List<DateTime> dates = new ArrayList<>();
         dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5A_DATE));
         dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5B_DATE));
         dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5C_DATE));
@@ -102,9 +101,9 @@ public class ConsecutiveMissedVisitListener {
 
                 String message = String.format(getMessage(MISSED_CONSECUTIVE_CHILD_VISITS), chwName);
                 smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
-                logger.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId + " childcase: " + childCaseId);
+                logger.info(String.format("Sending missed consecutive child visit SMS to %s at %s for mothercase: %s childcase: %s", phuId, phone, motherCaseId, childCaseId));
             } else {
-                logger.error("No phone for phu: " + phuId + "  for mothercase: " + motherCaseId + " childcase: " + childCaseId + " not sending missed consecutive child visit");
+                logger.error(String.format("No phone for phu: %s  for mothercase: %s childcase: %s not sending missed consecutive child visit", phuId, motherCaseId, childCaseId));
             }
         }
     }
@@ -143,20 +142,20 @@ public class ConsecutiveMissedVisitListener {
 
     private boolean hasMissedConsecutiveAppointments(List<DateTime> aptDates, DateTime lastVisitDate) {
         int missedApt = 0;
+
         for (DateTime aptDate : aptDates) {
             // If the apt is after the last visit but before now then it was missed
             if (null != aptDate && aptDate.isAfter(lastVisitDate) && aptDate.isBeforeNow()) {
                 missedApt++;
             }
         }
+
         return (missedApt >= 2);
     }
 
     private DateTime getDateField(CaseInfo caseInfo, String fieldName) {
         String d = caseInfo.getFieldValues().get(fieldName);
-        DateTime dateTime = Utils.dateTimeFromCommcareDateString(d);
-
-        return dateTime;
+        return Utils.dateTimeFromCommcareDateString(d);
     }
 
     private String getMessage(String name) throws ContentNotFoundException {

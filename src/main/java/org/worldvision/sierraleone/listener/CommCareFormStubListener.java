@@ -35,16 +35,6 @@ import static org.worldvision.sierraleone.constants.Commcare.POST_PARTUM_VISIT;
 import static org.worldvision.sierraleone.constants.Commcare.REFERRAL_ID;
 import static org.worldvision.sierraleone.constants.EventKeys.ATTENDED_POSTNATAL;
 import static org.worldvision.sierraleone.constants.EventKeys.CHILD_CASE_ID;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_10_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_11_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_5A_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_5B_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_5C_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_5D_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_6_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_7_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_8_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_9_DATE;
 import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_FORM_SUBJECT;
 import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_BIRTH;
 import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_VISIT;
@@ -187,25 +177,13 @@ public class CommCareFormStubListener {
         event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
         event.getParameters().put(CHILD_CASE_ID, childCaseId);
         event.getParameters().put(VITAMIN_A, childCase.getFieldValues().get(Commcare.VITAMIN_A));
-        event.getParameters().put(CHILD_VISIT_5A_DATE, getDateField(childCase, Commcare.CHILD_VISIT_5A_DATE));
-        event.getParameters().put(CHILD_VISIT_5B_DATE, getDateField(childCase, Commcare.CHILD_VISIT_5B_DATE));
-        event.getParameters().put(CHILD_VISIT_5C_DATE, getDateField(childCase, Commcare.CHILD_VISIT_5C_DATE));
-        event.getParameters().put(CHILD_VISIT_5D_DATE, getDateField(childCase, Commcare.CHILD_VISIT_5D_DATE));
-        event.getParameters().put(CHILD_VISIT_6_DATE, getDateField(childCase, Commcare.CHILD_VISIT_6_DATE));
-        event.getParameters().put(CHILD_VISIT_7_DATE, getDateField(childCase, Commcare.CHILD_VISIT_7_DATE));
-        event.getParameters().put(CHILD_VISIT_8_DATE, getDateField(childCase, Commcare.CHILD_VISIT_8_DATE));
-        event.getParameters().put(CHILD_VISIT_9_DATE, getDateField(childCase, Commcare.CHILD_VISIT_9_DATE));
-        event.getParameters().put(CHILD_VISIT_10_DATE, getDateField(childCase, Commcare.CHILD_VISIT_10_DATE));
-        event.getParameters().put(CHILD_VISIT_11_DATE, getDateField(childCase, Commcare.CHILD_VISIT_11_DATE));
 
         return event;
     }
 
     private DateTime getDateField(CaseInfo caseInfo, String fieldName) {
         String d = caseInfo.getFieldValues().get(fieldName);
-        DateTime dateTime = Utils.dateTimeFromCommcareDateString(d);
-
-        return dateTime;
+        return Utils.dateTimeFromCommcareDateString(d);
     }
 
     private List<MotechEvent> convertPregnancyVisitFormToEvents(CommcareForm form, List<String> caseIds) {
