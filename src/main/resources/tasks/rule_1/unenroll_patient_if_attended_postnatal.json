@@ -1,61 +1,73 @@
 {
-  "_id" : "rule-1-unenroll-patient-if-attended-postnatal",
-  "name" : "rule #1: Unenroll patient if attended postnatal",
-  "actions" : [ {
-    "displayName" : "msgCampaign.unenroll.user",
-    "channelName" : "msgCampaign.name",
-    "moduleName" : "motech-message-campaign",
-    "moduleVersion" : "0.21.0.SNAPSHOT",
-    "subject" : "org.motechproject.messagecampaign.unenroll-user",
-    "values" : {
-      "ExternalID" : "{{trigger.ExternalID}}",
-      "CampaignName" : "{{trigger.CampaignName}}"
+  "_id": "rule-1-unenroll-patient-if-attended-postnatal",
+  "name": "rule #1: Unenroll patient if attended postnatal",
+  "actions": [
+    {
+      "displayName": "msgCampaign.unenroll.user",
+      "channelName": "msgCampaign.name",
+      "moduleName": "motech-message-campaign",
+      "moduleVersion": "0.21.0.SNAPSHOT",
+      "subject": "org.motechproject.messagecampaign.unenroll-user",
+      "values": {
+        "ExternalID": "{{trigger.ExternalID}}",
+        "CampaignName": "{{trigger.CampaignName}}"
+      }
     }
-  } ],
-  "trigger" : {
-    "displayName" : "msgCampaign.send.message",
-    "channelName" : "msgCampaign.name",
-    "moduleName" : "motech-message-campaign",
-    "moduleVersion" : "0.21.0.SNAPSHOT",
-    "subject" : "org.motechproject.messagecampaign.fired-campaign-message"
+  ],
+  "trigger": {
+    "displayName": "msgCampaign.send.message",
+    "channelName": "msgCampaign.name",
+    "moduleName": "motech-message-campaign",
+    "moduleVersion": "0.21.0.SNAPSHOT",
+    "subject": "org.motechproject.messagecampaign.fired-campaign-message"
   },
-  "enabled" : true,
-  "taskConfig" : {
-    "steps" : [ {
-      "@type" : "FilterSet",
-      "order" : 0,
-      "filters" : [ {
-        "displayName" : "Campaign name (Trigger)",
-        "key" : "trigger.CampaignName",
-        "type" : "UNICODE",
-        "negationOperator" : true,
-        "operator" : "task.equals",
-        "expression" : "Health Center Postnatal Consultation Reminder"
-      } ]
-    }, {
-      "@type" : "DataSource",
-      "order" : 1,
-      "providerName" : "commcare.name",
-      "providerId" : "eec2fa1b5d77bd5c536def1b150bdae7",
-      "objectId" : 0,
-      "type" : "CaseInfo",
-      "name" : "id",
-      "lookup" : [ {
-        "field" : "id",
-        "value" : "{{trigger.ExternalID}}"
-      } ],
-      "failIfDataNotFound" : true
-    }, {
-      "@type" : "FilterSet",
-      "order" : 2,
-      "filters" : [ {
-        "displayName" : "Attended postnatal (Case#0 (Commcare))",
-        "key" : "ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.attended_postnatal",
-        "type" : "UNICODE",
-        "negationOperator" : true,
-        "operator" : "task.equals",
-        "expression" : "yes"
-      } ]
-    } ]
+  "enabled": true,
+  "taskConfig": {
+    "steps": [
+      {
+        "@type": "FilterSet",
+        "order": 0,
+        "filters": [
+          {
+            "displayName": "Campaign name (Trigger)",
+            "key": "trigger.CampaignName",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.equals",
+            "expression": "Health Center Postnatal Consultation Reminder"
+          }
+        ]
+      },
+      {
+        "@type": "DataSource",
+        "order": 1,
+        "providerName": "commcare.name",
+        "providerId": "eec2fa1b5d77bd5c536def1b150bdae7",
+        "objectId": 0,
+        "type": "CaseInfo",
+        "name": "id",
+        "lookup": [
+          {
+            "field": "id",
+            "value": "{{trigger.ExternalID}}"
+          }
+        ],
+        "failIfDataNotFound": true
+      },
+      {
+        "@type": "FilterSet",
+        "order": 2,
+        "filters": [
+          {
+            "displayName": "Attended postnatal (Case#0 (Commcare))",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.attended_postnatal",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.equals",
+            "expression": "yes"
+          }
+        ]
+      }
+    ]
   }
 }
