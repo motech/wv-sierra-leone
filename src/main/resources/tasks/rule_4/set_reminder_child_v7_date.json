@@ -1,5 +1,5 @@
 {
-  "_id" : "rule-4-Set-reminder-child_v7_date",
+  "_id" : "rule-4-set-reminder-child_v7_date",
   "name" : "rule #4: Set reminder [child_v7_date]",
   "actions" : [ {
     "displayName" : "scheduler.unscheduleJobs",
