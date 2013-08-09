@@ -14,10 +14,14 @@ import org.worldvision.sierraleone.constants.EventKeys;
 
 @Component
 public class MotherReferralListener {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MotherReferralListener.class);
+
+    private MessageCampaignService messageCampaignService;
 
     @Autowired
-    private MessageCampaignService messageCampaignService;
+    public MotherReferralListener(MessageCampaignService messageCampaignService) {
+        this.messageCampaignService = messageCampaignService;
+    }
 
     @MotechListener(subjects = EventKeys.MOTHER_REFERRAL_SUBJECT)
     public void motherReferralReminder(MotechEvent event) {
@@ -27,11 +31,13 @@ public class MotherReferralListener {
         // Rule 2:
         // IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to
         // patient every 24 hours until referral is completed.
-        DateTime dateOfVisit = null;
+        DateTime dateOfVisit;
+
         try {
             dateOfVisit = (DateTime) event.getParameters().get(EventKeys.DATE_OF_VISIT);
         } catch (ClassCastException e) {
-            logger.warn("Event: " + event + " Key: " + EventKeys.DATE_OF_VISIT + " is not a DateTime");
+            LOGGER.error("Event: " + event + " Key: " + EventKeys.DATE_OF_VISIT + " is not a DateTime");
+            return;
         }
 
         // Enroll mother in message campaign reminding her to attend postnatal consultation
@@ -42,6 +48,7 @@ public class MotherReferralListener {
                 Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
                 dateOfVisit.toLocalDate(),
                 null, null);
+
         messageCampaignService.startFor(cr);
     }
 }

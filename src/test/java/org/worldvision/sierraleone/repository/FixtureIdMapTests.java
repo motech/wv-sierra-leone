@@ -2,11 +2,9 @@ package org.worldvision.sierraleone.repository;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.motechproject.commcare.domain.CommcareFixture;
 import org.motechproject.commcare.service.CommcareFixtureService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.worldvision.sierraleone.constants.Commcare;
 
 import java.util.ArrayList;
@@ -18,17 +16,17 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class FixtureIdMapIT {
+public class FixtureIdMapTests {
     @Mock
     CommcareFixtureService commcareFixtureService;
 
-    @InjectMocks
-    @Autowired
-    private FixtureIdMap fixtureIdMap = new FixtureIdMap();
+    private FixtureIdMap fixtureIdMap;
 
     @Before
     public void setUp() {
         initMocks(this);
+
+        fixtureIdMap = new FixtureIdMap(commcareFixtureService);
     }
 
     @Test

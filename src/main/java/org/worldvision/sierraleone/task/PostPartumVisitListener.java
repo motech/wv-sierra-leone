@@ -15,7 +15,7 @@ import org.worldvision.sierraleone.constants.EventKeys;
 
 @Component
 public class PostPartumVisitListener {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostPartumVisitListener.class);
 
     private CommcareCaseService commcareCaseService;
     private MotechSchedulerService schedulerService;
@@ -32,15 +32,13 @@ public class PostPartumVisitListener {
 
     @MotechListener(subjects = EventKeys.POST_PARTUM_FORM_SUBJECT)
     public void consecutiveMissedVisits(MotechEvent event) {
-        logger.info("MotechEvent " + event + " received on " + EventKeys.POST_PARTUM_FORM_SUBJECT + " Rule: Consecutive Missed Post Partum Visits");
+        LOGGER.info("MotechEvent " + event + " received on " + EventKeys.POST_PARTUM_FORM_SUBJECT + " Rule: Consecutive Missed Post Partum Visits");
 
-        /*
-        */
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 
         CaseInfo motherCase = commcareCaseService.getCaseByCaseId(motherCaseId);
         if (null == motherCase) {
-            logger.error("Unable to load mothercase " + motherCaseId + " from commcare");
+            LOGGER.error("Unable to load mothercase " + motherCaseId + " from commcare");
             return;
         }
 
@@ -48,10 +46,11 @@ public class PostPartumVisitListener {
         try {
             secondConsecutiveAptDate = (DateTime) event.getParameters().get(EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE);
         } catch (ClassCastException e) {
-            logger.warn("Event: " + event + " Key: " + EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE + " is not a DateTime");
+            LOGGER.error("Event: " + event + " Key: " + EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE + " is not a DateTime");
+            return;
         }
 
-        logger.info("Second Consecutive Apt Date: " + secondConsecutiveAptDate.toString());
+        LOGGER.info("Second Consecutive Apt Date: " + secondConsecutiveAptDate.toString());
 
         String baseSubject = EventKeys.CONSECUTIVE_POST_PARTUM_VISIT_BASE_SUBJECT + motherCaseId;
 

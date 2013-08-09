@@ -6,8 +6,6 @@ import org.mockito.Mock;
 import org.motechproject.cmslite.api.model.Content;
 import org.motechproject.cmslite.api.model.StringContent;
 import org.motechproject.cmslite.api.service.CMSLiteService;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

@@ -14,15 +14,20 @@ import java.io.StringWriter;
 import java.util.Collection;
 
 public final class Utils {
-    private Utils() { }
+    private static final int YEAR_DIGITS_COUNT = 4;
+    private static final int MONTH_DIGITS_COUNT = 2;
+    private static final int DAY_DIGITS_COUNT = 2;
+
+    private Utils() {
+    }
 
     public static DateTime dateTimeFromCommcareDateString(String dateStr) {
         DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
-                .appendYear(4, 4)
+                .appendYear(YEAR_DIGITS_COUNT, YEAR_DIGITS_COUNT)
                 .appendLiteral('-')
-                .appendMonthOfYear(2)
+                .appendMonthOfYear(MONTH_DIGITS_COUNT)
                 .appendLiteral('-')
-                .appendDayOfMonth(2)
+                .appendDayOfMonth(DAY_DIGITS_COUNT)
                 .toFormatter();
 
         return dateStr == null ? null : dateFormatter.parseDateTime(dateStr);

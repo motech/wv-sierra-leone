@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.worldvision.sierraleone.constants.Commcare.CASE;
-import static org.worldvision.sierraleone.constants.Commcare.CASE_ID;
 import static org.worldvision.sierraleone.constants.Commcare.CASE_TYPE;
 import static org.worldvision.sierraleone.constants.Commcare.CREATE_REFERRAL;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
@@ -47,14 +46,18 @@ import static org.worldvision.sierraleone.constants.EventKeys.SECOND_CONSECUTIVE
 public class CommCareFormStubListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     private CommcareFormService commcareFormService;
-
-    @Autowired
     private CommcareCaseService commcareCaseService;
+    private EventRelay eventRelay;
 
     @Autowired
-    private EventRelay eventRelay;
+    public CommCareFormStubListener(CommcareFormService commcareFormService,
+                                    CommcareCaseService commcareCaseService,
+                                    EventRelay eventRelay) {
+        this.commcareFormService = commcareFormService;
+        this.commcareCaseService = commcareCaseService;
+        this.eventRelay = eventRelay;
+    }
 
     @MotechListener(subjects = EventSubjects.FORM_STUB_EVENT)
     public void handle(MotechEvent event) {
@@ -86,48 +89,34 @@ public class CommCareFormStubListener {
         List<String> caseIds = (List<String>) event.getParameters().get(EventDataKeys.CASE_IDS);
 
         // Create MOTECH event, populate subject and params below
-        List<MotechEvent> events = new ArrayList<>(0);
-
         switch (formName) {
             case "Post-Partum Visit":
-                events.addAll(convertPostPartumFormToEvents(form, caseIds));
+                publishEvents(convertPostPartumFormToEvents(form, caseIds));
                 break;
 
             case "Pregnancy Visit":
-                events.addAll(convertPregnancyVisitFormToEvents(form, caseIds));
+                publishEvents(convertPregnancyVisitFormToEvents(form, caseIds));
                 break;
 
             default:
                 logger.info("Ignoring commcare forwarded form of type: " + formName);
                 break;
         }
+    }
 
-        // publish event
+    private void publishEvents(List<MotechEvent> events) {
         for (MotechEvent e : events) {
             if (null != e) {
                 eventRelay.sendEventMessage(e);
             }
         }
-
     }
 
     private List<MotechEvent> convertPregnancyVisitFormToEvents(CommcareForm form, List<String> caseIds) {
-        String dov = null;
-        String createReferral = null;
-        String referralId = null;
-        String motherCaseId = null;
-
-        FormValueElement element = form.getForm().getElement(CREATE_REFERRAL);
-        createReferral = ((element != null) ? element.getValue() : null);
-
-        element = form.getForm().getElement(REFERRAL_ID);
-        referralId = ((element != null) ? element.getValue() : null);
-
-        element = form.getForm().getElement(CASE);
-        motherCaseId = element.getAttributes().get(CASE_ID);
-
-        element = form.getForm().getElement(Commcare.DATE_OF_VISIT);
-        dov = ((element != null) ? element.getValue() : null);
+        String createReferral = getValue(form.getForm(), CREATE_REFERRAL);
+        String referralId = getValue(form.getForm(), REFERRAL_ID);
+        String motherCaseId = getValue(form.getForm(), CASE);
+        String dov = getValue(form.getForm(), DATE_OF_VISIT);
 
         DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
 
@@ -137,7 +126,7 @@ public class CommCareFormStubListener {
         logger.info("dateOfVisit: " + dateOfVisit);
 
         List<MotechEvent> ret = new ArrayList<>();
-        MotechEvent event = null;
+        MotechEvent event;
 
         if ("yes".equals(createReferral)) {
             event = getReferralEvent(motherCaseId, form, caseIds, dateOfVisit);
@@ -193,10 +182,15 @@ public class CommCareFormStubListener {
         List<MotechEvent> ret = new ArrayList<>();
 
         if (checker.check()) {
-            MotechEvent event = createPostPartumFormEvent(
-                    gaveBirth, attendedPostnatal, placeOfBirth, motherCaseId, dateOfVisit, dateOfBirth,
-                    daysSinceBirth, secondConsecutiveVisitDate
-            );
+            MotechEvent event = new MotechEvent(POST_PARTUM_FORM_SUBJECT);
+            event.getParameters().put(GAVE_BIRTH, gaveBirth);
+            event.getParameters().put(DATE_OF_BIRTH, dateOfBirth);
+            event.getParameters().put(DATE_OF_VISIT, dateOfVisit);
+            event.getParameters().put(DAYS_SINCE_BIRTH, daysSinceBirth);
+            event.getParameters().put(ATTENDED_POSTNATAL, attendedPostnatal);
+            event.getParameters().put(PLACE_OF_BIRTH, placeOfBirth);
+            event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
+            event.getParameters().put(SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE, secondConsecutiveVisitDate);
 
             ret.add(event);
 
@@ -212,27 +206,7 @@ public class CommCareFormStubListener {
 
     private String getValue(FormValueElement form, String key) {
         FormValueElement element = form.getElement(key);
-
         return element != null ? element.getValue() : null;
-    }
-
-    private MotechEvent createPostPartumFormEvent(String gaveBirth, String attendedPostnatal,
-                                                  String placeOfBirth, String motherCaseId,
-                                                  DateTime dateOfVisit, DateTime dateOfBirth,
-                                                  int daysSinceBirth,
-                                                  DateTime secondConsecutiveVisitDate) {
-        MotechEvent event = new MotechEvent(POST_PARTUM_FORM_SUBJECT);
-
-        event.getParameters().put(GAVE_BIRTH, gaveBirth);
-        event.getParameters().put(DATE_OF_BIRTH, dateOfBirth);
-        event.getParameters().put(DATE_OF_VISIT, dateOfVisit);
-        event.getParameters().put(DAYS_SINCE_BIRTH, daysSinceBirth);
-        event.getParameters().put(ATTENDED_POSTNATAL, attendedPostnatal);
-        event.getParameters().put(PLACE_OF_BIRTH, placeOfBirth);
-        event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
-        event.getParameters().put(SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE, secondConsecutiveVisitDate);
-
-        return event;
     }
 
     // The commcare stub form event contains a list of the cases affected by the form.  This method iterates
@@ -260,16 +234,15 @@ public class CommCareFormStubListener {
         checker.checkFieldExists(REFERRAL_CASE_ID, referralId);
         checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
 
-        if (!checker.check()) {
-            return null;
+        MotechEvent event = null;
+
+        if (checker.check()) {
+            event = new MotechEvent(MOTHER_REFERRAL_SUBJECT);
+
+            event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
+            event.getParameters().put(REFERRAL_CASE_ID, referralId);
+            event.getParameters().put(DATE_OF_VISIT, dateOfVisit);
         }
-
-        MotechEvent event;
-        event = new MotechEvent(MOTHER_REFERRAL_SUBJECT);
-
-        event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
-        event.getParameters().put(REFERRAL_CASE_ID, referralId);
-        event.getParameters().put(DATE_OF_VISIT, dateOfVisit);
 
         return event;
     }

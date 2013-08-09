@@ -14,32 +14,24 @@ import java.util.Map;
 
 @Repository
 public class FixtureIdMap {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Map<String, CommcareFixture> fixtures;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FixtureIdMap.class);
 
-    @Autowired
+    private final Map<String, CommcareFixture> fixtures;
     private CommcareFixtureService commcareFixtureService;
 
+    @Autowired
+    public FixtureIdMap(CommcareFixtureService commcareFixtureService) {
+        this.commcareFixtureService = commcareFixtureService;
+        this.fixtures = new HashMap<>();
+    }
+
     public String fixtureIdForPHUId(String phuId) {
-        String ret = null;
-
-        if (null == fixtures) {
-            refreshFixtureMap();
-        }
-
+        refreshFixtureMap();
         CommcareFixture fixture = fixtures.get(phuId);
-        if (null != fixture) {
-            ret = fixture.getId();
-        }
-
-        return ret;
+        return fixture == null ? null : fixture.getId();
     }
 
     public synchronized void refreshFixtureMap() {
-        if (null == fixtures) {
-            fixtures = new HashMap<String, CommcareFixture>();
-        }
-
         // Load all fixtures from commcare
         List<CommcareFixture> allFixtures = commcareFixtureService.getAllFixtures();
 
@@ -59,20 +51,20 @@ public class FixtureIdMap {
     public String getPhoneForFixture(String phuId) {
         String fixtureId = fixtureIdForPHUId(phuId);
         if (null == fixtureId) {
-            logger.error("Unable to get fixtureId for phu " + phuId);
+            LOGGER.error("Unable to get fixtureId for phu " + phuId);
             return null;
         }
 
         CommcareFixture fixture = fixtureIdForPHUIdWithRetry(fixtureId, phuId);
 
         if (null == fixture) {
-            logger.error("Unable to load fixture " + fixtureId + " from commcare");
+            LOGGER.error("Unable to load fixture " + fixtureId + " from commcare");
             return null;
         }
 
         String phone = fixture.getFields().get(Commcare.PHONE);
         if (null == phone) {
-            logger.error("No phone for phu " + phuId + " fixture " + fixtureId);
+            LOGGER.error("No phone for phu " + phuId + " fixture " + fixtureId);
         }
 
         return phone;
@@ -81,20 +73,20 @@ public class FixtureIdMap {
     public String getNameForFixture(String phuId) {
         String fixtureId = fixtureIdForPHUId(phuId);
         if (null == fixtureId) {
-            logger.error("Unable to get fixtureId for phu " + phuId);
+            LOGGER.error("Unable to get fixtureId for phu " + phuId);
             return null;
         }
 
         CommcareFixture fixture = fixtureIdForPHUIdWithRetry(fixtureId, phuId);
 
         if (null == fixture) {
-            logger.error("Unable to load fixture " + fixtureId + " from commcare");
+            LOGGER.error("Unable to load fixture " + fixtureId + " from commcare");
             return null;
         }
 
         String name = fixture.getFields().get(Commcare.NAME);
         if (null == name) {
-            logger.error("No name for phu " + phuId + " fixture " + fixtureId);
+            LOGGER.error("No name for phu " + phuId + " fixture " + fixtureId);
         }
 
         return name;
@@ -111,7 +103,7 @@ public class FixtureIdMap {
 
             String fixtureIdForPHUId = fixtureIdForPHUId(phuId);
             if (null == fixtureIdForPHUId) {
-                logger.error("Unable to get fixtureId for phu " + phuId);
+                LOGGER.error("Unable to get fixtureId for phu " + phuId);
                 return null;
             }
 

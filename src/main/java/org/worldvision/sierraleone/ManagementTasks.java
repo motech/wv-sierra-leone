@@ -33,10 +33,10 @@ public class ManagementTasks implements OsgiServiceLifecycleListener {
     private static final String TASKS_DIR_PATTERN = "/tasks/**/*.json";
     private static final String ID_FIELD = "_id";
 
-    private TriggerHandler handler;
-    private TaskService taskService;
-    private ChannelService channelService;
-    private TaskDataProviderService providerService;
+    private volatile TriggerHandler handler;
+    private volatile TaskService taskService;
+    private volatile ChannelService channelService;
+    private volatile TaskDataProviderService providerService;
 
     private final ObjectMapper mapper;
     private final ResourcePatternResolver resourcePatternResolver;

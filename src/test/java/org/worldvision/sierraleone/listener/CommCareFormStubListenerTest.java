@@ -1,9 +1,7 @@
 package org.worldvision.sierraleone.listener;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.motechproject.commcare.domain.CaseInfo;
@@ -43,12 +41,13 @@ public class CommCareFormStubListenerTest {
     @Mock
     private EventRelay eventRelay;
 
-    @InjectMocks
-    private CommCareFormStubListener commCareFormStubListener = new CommCareFormStubListener();
+    private CommCareFormStubListener commCareFormStubListener;
 
     @Before
     public void setUp() {
         initMocks(this);
+
+        commCareFormStubListener = new CommCareFormStubListener(commcareFormService, commcareCaseService, eventRelay);
     }
 
     @Test

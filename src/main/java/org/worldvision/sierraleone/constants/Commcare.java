@@ -1,8 +1,5 @@
 package org.worldvision.sierraleone.constants;
 
-/**
- *
- */
 public final class Commcare {
     private Commcare() { }
 

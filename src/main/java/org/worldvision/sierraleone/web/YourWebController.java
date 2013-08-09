@@ -4,8 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+// service methods for angular ui
 @Controller
-public class YourWebController {    // service methods for angular ui
+public class YourWebController {
 
     @RequestMapping("/your-objects")
     @ResponseBody

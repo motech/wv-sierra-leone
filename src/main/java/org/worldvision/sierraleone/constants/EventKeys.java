@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public final class EventKeys {
     private EventKeys() { }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("org.worldvision.sierraleone.constants.EventKeys");
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventKeys.class);
 
     public static final String DATE_OF_BIRTH = "date_of_birth";
     public static final String DATE_OF_VISIT = "date_of_visit";

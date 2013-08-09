@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FormChecker {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(FormChecker.class);
 
     private Map<String, String> metadata = new HashMap<>();
     private List<String> fields = new ArrayList<>();
@@ -21,7 +21,7 @@ public class FormChecker {
     }
 
     public void checkFieldExists(String name, String value) {
-        if (null == value || value.isEmpty()) {
+        if (StringUtils.isEmpty(value)) {
             fields.add(name);
         }
     }
@@ -36,11 +36,11 @@ public class FormChecker {
         if (fields.isEmpty()) {
             return true;
         } else {
-            StringBuffer msg = new StringBuffer("Form Missing Fields: ");
+            StringBuilder msg = new StringBuilder("Form Missing Fields: ");
 
             if (!metadata.isEmpty()) {
                 msg.append("metadata(");
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 for (String key : metadata.keySet()) {
                     list.add(key + ":" + metadata.get(key));
                 }
@@ -52,7 +52,7 @@ public class FormChecker {
             msg.append(StringUtils.join(fields, ','));
             msg.append(") ");
 
-            logger.error(msg.toString());
+            LOGGER.error(msg.toString());
         }
 
         return false;

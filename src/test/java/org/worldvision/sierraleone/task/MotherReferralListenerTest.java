@@ -24,12 +24,13 @@ public class MotherReferralListenerTest {
     @Mock
     private MessageCampaignService messageCampaignService;
 
-    @InjectMocks
-    private MotherReferralListener motherReferralListener = new MotherReferralListener();
+    private MotherReferralListener motherReferralListener;
 
     @Before
     public void setUp() {
         initMocks(this);
+
+        motherReferralListener = new MotherReferralListener(messageCampaignService);
     }
 
     @Test
