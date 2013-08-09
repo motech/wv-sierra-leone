@@ -94,7 +94,8 @@ public class WorldVisionBundleIT extends BaseOsgiIT {
                 "rule-4-Set-reminder-child_v8_date",
                 "rule-4-Set-reminder-child_v9_date",
                 "rule-4-Set-reminder-child_v10_date",
-                "rule-4-Set-reminder-child_v11_date"
+                "rule-4-Set-reminder-child_v11_date",
+                "rule-5-send-sms-to-phu"
         );
     }
 

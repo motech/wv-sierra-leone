@@ -13,7 +13,7 @@
 }, {
    "language": "English",
    "name": "HomeBirthNotification",
-   "value": "CHW %s has registered a home delivery by woman %s - Call to confirm woman is referred and cared for at home."
+   "value": "CHW %s %s has registered a home delivery by woman %s - Call to confirm woman is referred and cared for at home."
 }, {
    "language": "English",
    "name": "MissedConsecutiveChildVisits",
