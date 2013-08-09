@@ -277,44 +277,6 @@ public class CommCareFormStubListenerTest {
     }
 
     @Test
-    public void childVisitFormShouldPublishEvent() {
-        String formId = "formId";
-        CommcareForm form = CommcareForm("Child Visit");
-        form.getForm().setElementName("form");
-
-        String childCaseId = "childCaseId";
-        FormValueElement formValueElement = new FormValueElement();
-        formValueElement.setElementName(Commcare.CASE);
-        formValueElement.addAttribute(Commcare.CASE_ID, childCaseId);
-
-        form.getForm().addFormValueElement(Commcare.CASE, formValueElement);
-
-        String motherCaseId = "motherCaseId";
-        Map<String, String> parent = new HashMap<String, String>();
-        parent.put(Commcare.CASE_TYPE, "mother");
-        parent.put(Commcare.CASE_ID, motherCaseId);
-
-        Map<String, Map<String, String>> indices = new HashMap<String, Map<String, String>>();
-        indices.put(Commcare.PARENT, parent);
-
-        CaseInfo childCase = new CaseInfo();
-        Map<String, String> fieldValues = new HashMap<String, String>();
-        fieldValues.put(Commcare.VITAMIN_A, "yes");
-        fieldValues.put(Commcare.DATE_OF_BIRTH, "2013-01-03");
-        fieldValues.put(Commcare.DATE_OF_VISIT, "2013-01-03");
-
-        childCase.setFieldValues(fieldValues);
-        childCase.setIndices(indices);
-
-        when(commcareFormService.retrieveForm(formId)).thenReturn(form);
-        when(commcareCaseService.getCaseByCaseId(childCaseId)).thenReturn(childCase);
-
-        commCareFormStubListener.handle(CommcareFormStubEvent(formId));
-
-        verify(eventRelay, times(1)).sendEventMessage(Matchers.any(MotechEvent.class));
-    }
-
-    @Test
     public void childVisitFormMissingFieldShouldNotPublishEvent() {
         String formId = "formId";
         CommcareForm form = CommcareForm("Child Visit");

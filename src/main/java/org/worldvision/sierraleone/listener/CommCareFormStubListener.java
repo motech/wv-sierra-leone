@@ -21,7 +21,6 @@ import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.constants.Commcare;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +29,9 @@ import static org.worldvision.sierraleone.constants.Commcare.CASE_ID;
 import static org.worldvision.sierraleone.constants.Commcare.CASE_TYPE;
 import static org.worldvision.sierraleone.constants.Commcare.CREATE_REFERRAL;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
-import static org.worldvision.sierraleone.constants.Commcare.PARENT;
 import static org.worldvision.sierraleone.constants.Commcare.POST_PARTUM_VISIT;
 import static org.worldvision.sierraleone.constants.Commcare.REFERRAL_ID;
 import static org.worldvision.sierraleone.constants.EventKeys.ATTENDED_POSTNATAL;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_CASE_ID;
-import static org.worldvision.sierraleone.constants.EventKeys.CHILD_VISIT_FORM_SUBJECT;
 import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_BIRTH;
 import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_VISIT;
 import static org.worldvision.sierraleone.constants.EventKeys.DAYS_SINCE_BIRTH;
@@ -46,7 +42,6 @@ import static org.worldvision.sierraleone.constants.EventKeys.PLACE_OF_BIRTH;
 import static org.worldvision.sierraleone.constants.EventKeys.POST_PARTUM_FORM_SUBJECT;
 import static org.worldvision.sierraleone.constants.EventKeys.REFERRAL_CASE_ID;
 import static org.worldvision.sierraleone.constants.EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE;
-import static org.worldvision.sierraleone.constants.EventKeys.VITAMIN_A;
 
 @Component
 public class CommCareFormStubListener {
@@ -102,10 +97,6 @@ public class CommCareFormStubListener {
                 events.addAll(convertPregnancyVisitFormToEvents(form, caseIds));
                 break;
 
-            case "Child Visit":
-                events.addAll(convertChildVisitFormToEvents(form));
-                break;
-
             default:
                 logger.info("Ignoring commcare forwarded form of type: " + formName);
                 break;
@@ -118,72 +109,6 @@ public class CommCareFormStubListener {
             }
         }
 
-    }
-
-    private List<MotechEvent> convertChildVisitFormToEvents(CommcareForm form) {
-        FormValueElement element = form.getForm().getElement(CASE);
-        String childCaseId = element.getAttributes().get(CASE_ID);
-        String motherCaseId = "";
-
-        CaseInfo childCase = commcareCaseService.getCaseByCaseId(childCaseId);
-        if (childCase.getIndices().containsKey(PARENT)) {
-            Map<String, String> parent = childCase.getIndices().get(PARENT);
-
-            if (parent.containsKey(CASE_TYPE) && "mother".equals(parent.get(CASE_TYPE))) {
-                motherCaseId = childCase.getIndices().get(PARENT).get(CASE_ID);
-            } else {
-                logger.error("Parent of childcase " + childCaseId + " is not a mothercase (" + parent.get(CASE_TYPE) + ")");
-                return Collections.<MotechEvent>emptyList();
-            }
-        } else {
-            logger.error("No parent case for childcase: " + childCaseId);
-            return Collections.<MotechEvent>emptyList();
-        }
-
-        String vitaminA = childCase.getFieldValues().get(Commcare.VITAMIN_A);
-
-        DateTime dateOfBirth = getDateField(childCase, Commcare.DATE_OF_BIRTH);
-        DateTime dateOfVisit = getDateField(childCase, Commcare.DATE_OF_VISIT);
-
-        logger.info("Child Case Id: " + childCaseId);
-        logger.info("Mother Case Id: " + motherCaseId);
-        logger.info("dateOfBirth: " + dateOfBirth);
-        logger.info("vitaminA: " + vitaminA);
-
-        FormChecker checker = new FormChecker();
-        checker.addMetadata("type", form.getId());
-        checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
-        checker.addMetadata("id", form.getId());
-
-        checker.checkFieldExists("dateOfBirth", dateOfBirth);
-        checker.checkFieldExists("dateOfVisit", dateOfVisit);
-        checker.checkFieldExists(CASE_ID, childCaseId);
-        checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
-
-        if (!checker.check()) {
-            return Collections.<MotechEvent>emptyList();
-        }
-
-        List<MotechEvent> ret = new ArrayList<>();
-        ret.add(createChildVisitFormEvent(childCaseId, motherCaseId, childCase));
-
-        return ret;
-    }
-
-    private MotechEvent createChildVisitFormEvent(String childCaseId, String motherCaseId, CaseInfo childCase) {
-        MotechEvent event = new MotechEvent(CHILD_VISIT_FORM_SUBJECT);
-
-        event.getParameters().put(DATE_OF_BIRTH, getDateField(childCase, Commcare.DATE_OF_BIRTH));
-        event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
-        event.getParameters().put(CHILD_CASE_ID, childCaseId);
-        event.getParameters().put(VITAMIN_A, childCase.getFieldValues().get(Commcare.VITAMIN_A));
-
-        return event;
-    }
-
-    private DateTime getDateField(CaseInfo caseInfo, String fieldName) {
-        String d = caseInfo.getFieldValues().get(fieldName);
-        return Utils.dateTimeFromCommcareDateString(d);
     }
 
     private List<MotechEvent> convertPregnancyVisitFormToEvents(CommcareForm form, List<String> caseIds) {

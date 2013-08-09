@@ -1,0 +1,75 @@
+{
+  "_id" : "rule-6-enroll-patient",
+  "name" : "rule #6: Enroll patient",
+  "actions" : [ {
+      "displayName" : "msgCampaign.enroll.user",
+      "channelName" : "msgCampaign.name",
+      "moduleName" : "motech-message-campaign",
+      "moduleVersion" : "0.21.0.SNAPSHOT",
+      "subject" : "org.motechproject.messagecampaign.enroll-user",
+      "values" : {
+        "ExternalID" : "{{ad.4408354fae5368389825691bc5095421.CommcareForm#0.form.elements.case.attributes.case_id}}:{{ad.4408354fae5368389825691bc5095421.CaseInfo#1.indices.parent.case_id}}",
+        "CampaignName" : "Child Vitamin A Reminder",
+        "ReferanceDate" : "{{ad.4408354fae5368389825691bc5095421.CaseInfo#1.fieldValues.dob?datetime(yyyy-MM-dd)}}"
+      }
+    } ],
+    "trigger" : {
+      "displayName" : "commcare.formstub",
+      "channelName" : "commcare",
+      "moduleName" : "motech-commcare-api",
+      "moduleVersion" : "0.21.0.SNAPSHOT",
+      "subject" : "org.motechproject.commcare.api.formstub"
+    },
+    "enabled" : true,
+    "taskConfig" : {
+      "steps" : [ {
+        "@type" : "DataSource",
+        "order" : 0,
+        "providerName" : "commcare.name",
+        "providerId" : "4408354fae5368389825691bc5095421",
+        "objectId" : 0,
+        "type" : "CommcareForm",
+        "name" : "id",
+        "lookup" : [ {
+          "field" : "id",
+          "value" : "{{trigger.formId}}"
+        } ],
+        "failIfDataNotFound" : true
+      }, {
+        "@type" : "FilterSet",
+        "order" : 1,
+        "filters" : [ {
+          "displayName" : "Form (Form#0 (Commcare))",
+          "key" : "ad.4408354fae5368389825691bc5095421.CommcareForm#0.form",
+          "type" : "UNICODE",
+          "negationOperator" : true,
+          "operator" : "task.equals",
+          "expression" : "Child Visit"
+        } ]
+      }, {
+        "@type" : "DataSource",
+        "order" : 2,
+        "providerName" : "commcare.name",
+        "providerId" : "4408354fae5368389825691bc5095421",
+        "objectId" : 1,
+        "type" : "CaseInfo",
+        "name" : "id",
+        "lookup" : [ {
+          "field" : "id",
+          "value" : "{{ad.4408354fae5368389825691bc5095421.CommcareForm#0.form.elements.case.attributes.case_id}}"
+        } ],
+        "failIfDataNotFound" : true
+      }, {
+        "@type" : "FilterSet",
+        "order" : 3,
+        "filters" : [ {
+          "displayName" : "Vitamin A (Case#1 (Commcare))",
+          "key" : "ad.4408354fae5368389825691bc5095421.CaseInfo#1.fieldValues.vitamin_a",
+          "type" : "UNICODE",
+          "negationOperator" : true,
+          "operator" : "task.equals",
+          "expression" : "no"
+        } ]
+      } ]
+    }
+  }

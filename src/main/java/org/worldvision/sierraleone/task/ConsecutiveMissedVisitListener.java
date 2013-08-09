@@ -33,23 +33,26 @@ import static org.worldvision.sierraleone.constants.SMSContent.MISSED_CONSECUTIV
 public class ConsecutiveMissedVisitListener {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
     private CommcareCaseService commcareCaseService;
-
-    @Autowired
     private CommcareUserService commcareUserService;
-
-    @Autowired
     private FixtureIdMap fixtureIdMap;
-
-    @Autowired
     private SmsService smsService;
-
-    @Autowired
     private CMSLiteService cmsLiteService;
+    private WorldVisionSettings settings;
 
     @Autowired
-    private WorldVisionSettings settings;
+    public ConsecutiveMissedVisitListener(CommcareCaseService commcareCaseService,
+                                          CommcareUserService commcareUserService,
+                                          FixtureIdMap fixtureIdMap, SmsService smsService,
+                                          CMSLiteService cmsLiteService,
+                                          WorldVisionSettings settings) {
+        this.commcareCaseService = commcareCaseService;
+        this.commcareUserService = commcareUserService;
+        this.fixtureIdMap = fixtureIdMap;
+        this.smsService = smsService;
+        this.cmsLiteService = cmsLiteService;
+        this.settings = settings;
+    }
 
     @MotechListener(subjects = EventKeys.CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT)
     public void childMissedVisitHandler(MotechEvent event) throws ContentNotFoundException {

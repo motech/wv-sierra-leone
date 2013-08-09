@@ -1,0 +1,122 @@
+{
+  "_id" : "rule-6-send-sms",
+  "name" : "rule #6: Send sms",
+  "actions" : [ {
+    "displayName" : "sms.send",
+    "channelName" : "sms.api",
+    "moduleName" : "motech-sms-api-bundle",
+    "moduleVersion" : "0.21.0.SNAPSHOT",
+    "subject" : "SendSMS",
+    "serviceInterface" : null,
+    "serviceMethod" : null,
+    "values" : {
+      "message" : "{{ad.4408354fae5368389825691bc50b171a.StringContent#2.value?format({{ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.child_name}},{{ad.4408354fae5368389825691bc50b09d4.CommcareFixture#3.fields.name}})}}",
+      "number" : "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.mother_phone_number}}"
+    }
+  } ],
+  "trigger" : {
+    "displayName" : "msgCampaign.send.message",
+    "channelName" : "msgCampaign.name",
+    "moduleName" : "motech-message-campaign",
+    "moduleVersion" : "0.21.0.SNAPSHOT",
+    "subject" : "org.motechproject.messagecampaign.fired-campaign-message"
+  },
+  "enabled" : true,
+  "taskConfig" : {
+    "steps" : [ {
+      "@type" : "FilterSet",
+      "order" : 0,
+      "filters" : [ {
+        "displayName" : "Campaign name (Trigger)",
+        "key" : "trigger.CampaignName",
+        "type" : "UNICODE",
+        "negationOperator" : true,
+        "operator" : "task.equals",
+        "expression" : "Child Vitamin A Reminder"
+      } ]
+    }, {
+      "@type" : "DataSource",
+      "order" : 1,
+      "providerName" : "commcare.name",
+      "providerId" : "4408354fae5368389825691bc50b09d4",
+      "objectId" : 0,
+      "type" : "CaseInfo",
+      "name" : "id",
+      "lookup" : [ {
+        "field" : "id",
+        "value" : "{{trigger.ExternalID?split(:,0)}}"
+      } ],
+      "failIfDataNotFound" : true
+    }, {
+      "@type" : "FilterSet",
+      "order" : 2,
+      "filters" : [ {
+        "displayName" : "Date of birth (Case#0 (Commcare))",
+        "key" : "ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.dob",
+        "type" : "DATE",
+        "negationOperator" : true,
+        "operator" : "task.moreMonthsFromNow",
+        "expression" : "6"
+      }, {
+        "displayName" : "Vitamin A (Case#0 (Commcare))",
+        "key" : "ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.vitamin_a",
+        "type" : "UNICODE",
+        "negationOperator" : true,
+        "operator" : "task.equals",
+        "expression" : "no"
+      } ]
+    }, {
+      "@type" : "DataSource",
+      "order" : 3,
+      "providerName" : "commcare.name",
+      "providerId" : "4408354fae5368389825691bc50b09d4",
+      "objectId" : 1,
+      "type" : "CaseInfo",
+      "name" : "id",
+      "lookup" : [ {
+        "field" : "id",
+        "value" : "{{trigger.ExternalID?split(:,1)}}"
+      } ],
+      "failIfDataNotFound" : true
+    }, {
+      "@type" : "FilterSet",
+      "order" : 4,
+      "filters" : [ {
+        "displayName" : "Mother phone number (Case#1 (Commcare))",
+        "key" : "ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.mother_phone_number",
+        "type" : "UNICODE",
+        "negationOperator" : true,
+        "operator" : "task.exist"
+      } ]
+    }, {
+      "@type" : "DataSource",
+      "order" : 5,
+      "providerName" : "cmslite.name",
+      "providerId" : "4408354fae5368389825691bc50b171a",
+      "objectId" : 2,
+      "type" : "StringContent",
+      "name" : "cmslite.languageAndName",
+      "lookup" : [ {
+        "field" : "name",
+        "value" : "ChildVitaminAReminder"
+      }, {
+        "field" : "language",
+        "value" : "English"
+      } ],
+      "failIfDataNotFound" : true
+    }, {
+      "@type" : "DataSource",
+      "order" : 6,
+      "providerName" : "commcare.name",
+      "providerId" : "4408354fae5368389825691bc50b09d4",
+      "objectId" : 3,
+      "type" : "CommcareFixture",
+      "name" : "id",
+      "lookup" : [ {
+        "field" : "id",
+        "value" : "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.phu_id}}"
+      } ],
+      "failIfDataNotFound" : true
+    } ]
+  }
+}
