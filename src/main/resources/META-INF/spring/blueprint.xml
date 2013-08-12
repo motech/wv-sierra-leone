@@ -8,24 +8,6 @@
     <context:annotation-config/>
     <context:component-scan base-package="org.worldvision.sierraleone"/>
 
-    <bean id="moduleRegistrationData" class="org.motechproject.osgi.web.ModuleRegistrationData">
-        <constructor-arg name="moduleName" value="sierra-leone"/>
-        <constructor-arg name="url" value="../sierra-leone/resources/index.html"/>
-        <constructor-arg name="angularModules">
-            <list>
-                <value>sierra-leone</value>
-            </list>
-        </constructor-arg>
-        <constructor-arg name="i18n">
-            <map>
-                <entry key="messages" value="../sierra-leone/resources/messages/"/>
-            </map>
-        </constructor-arg>
-        <constructor-arg name="header">
-            <bean class="org.motechproject.osgi.web.Header"/>
-        </constructor-arg>
-    </bean>
-
     <bean id="wvSettings" class="org.worldvision.sierraleone.WorldVisionSettings" autowire="byType">
         <property name="configFiles">
             <list>

@@ -3,7 +3,6 @@ package org.worldvision.sierraleone.constants;
 public final class Commcare {
     private Commcare() { }
 
-    public static final String VITAMIN_A = "vitamin_a";
     public static final String NAME = "name";
     public static final String DATE_OF_BIRTH = "dob";
     public static final String CASE = "case";
@@ -18,18 +17,8 @@ public final class Commcare {
     public static final String POST_PARTUM_VISIT = "post_partum_visit";
     public static final String ATTENDED_POSTNATAL = "attended_postnatal";
     public static final String PLACE_OF_BIRTH = "place_of_birth";
-    public static final String REGISTRATION = "registration";
-    public static final String MOTHER_ALIVE = "mother_alive";
-    public static final String SUBCASE = "subcase_0";
-    public static final String INDEX = "index";
-    public static final String MOTHER_PHONE_NUMBER = "mother_phone_number";
-    public static final String OPEN = "open";
     public static final String PHU_ID = "phu_id";
-    public static final String USER_ID = "user_id";
-    public static final String PHU_NAME = "phu_name";
     public static final String PHONE = "phone";
-    public static final String MOTHER_NAME = "mother_name";
-    public static final String CHILD_NAME = "child_name";
     public static final String NEXT_VISIT_DATE_PLUS_1 = "next_visit_date_plus_1";
     public static final String CHILD_VISIT_5A_DATE = "child_v5a_date";
     public static final String CHILD_VISIT_5B_DATE = "child_v5b_date";

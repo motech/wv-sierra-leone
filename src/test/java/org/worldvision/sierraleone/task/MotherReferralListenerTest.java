@@ -4,12 +4,10 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.messagecampaign.contract.CampaignRequest;
 import org.motechproject.messagecampaign.service.MessageCampaignService;
-import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.EventKeys;
 
 import static junit.framework.Assert.assertEquals;
@@ -52,7 +50,7 @@ public class MotherReferralListenerTest {
         CampaignRequest campaignRequest = cr.getValue();
 
         assertEquals("ExternalId does not match", (motherCaseId + ":" + referralCaseId), campaignRequest.externalId());
-        assertEquals("Campaign Name does not match", Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN, campaignRequest.campaignName());
+        assertEquals("Campaign Name does not match", MotherReferralListener.MOTHER_REFERRAL_REMINDER_CAMPAIGN, campaignRequest.campaignName());
         assertEquals("Reference Date does not match", dateOfVisit.toLocalDate(), campaignRequest.referenceDate());
     }
 }

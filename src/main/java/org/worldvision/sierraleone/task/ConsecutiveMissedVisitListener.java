@@ -26,9 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.worldvision.sierraleone.constants.SMSContent.MISSED_CONSECUTIVE_CHILD_VISITS;
-import static org.worldvision.sierraleone.constants.SMSContent.MISSED_CONSECUTIVE_POST_PARTUM_VISITS;
-
 @Component
 public class ConsecutiveMissedVisitListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsecutiveMissedVisitListener.class);
@@ -102,7 +99,7 @@ public class ConsecutiveMissedVisitListener {
                 CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
                 String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
-                String message = String.format(getMessage(MISSED_CONSECUTIVE_CHILD_VISITS), chwName);
+                String message = String.format(getMessage("MissedConsecutiveChildVisits"), chwName);
                 smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
                 LOGGER.info(String.format("Sending missed consecutive child visit SMS to %s at %s for mothercase: %s childcase: %s", phuId, phone, motherCaseId, childCaseId));
             } else {
@@ -135,7 +132,7 @@ public class ConsecutiveMissedVisitListener {
             CommcareUser commcareUser = commcareUserService.getCommcareUserById(motherCase.getUserId());
             String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
-            String message = String.format(getMessage(MISSED_CONSECUTIVE_POST_PARTUM_VISITS), chwName);
+            String message = String.format(getMessage("MissedConsecutivePostPartumVisits"), chwName);
             smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
             LOGGER.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId);
         } else {

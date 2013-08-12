@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.worldvision.sierraleone.constants.Campaign;
 import org.worldvision.sierraleone.constants.EventKeys;
 
 @Component
 public class MotherReferralListener {
+    public static final String MOTHER_REFERRAL_REMINDER_CAMPAIGN = "Mother Referral Reminder";
     private static final Logger LOGGER = LoggerFactory.getLogger(MotherReferralListener.class);
 
     private MessageCampaignService messageCampaignService;
@@ -45,7 +45,7 @@ public class MotherReferralListener {
         // caseId:referalId
         String externalId = motherCaseId + ":" + referralCaseId;
         CampaignRequest cr = new CampaignRequest(externalId,
-                Campaign.MOTHER_REFERRAL_REMINDER_CAMPAIGN,
+                MOTHER_REFERRAL_REMINDER_CAMPAIGN,
                 dateOfVisit.toLocalDate(),
                 null, null);
 
