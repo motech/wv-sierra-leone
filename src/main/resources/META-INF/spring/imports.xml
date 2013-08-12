@@ -21,8 +21,6 @@
 
     <osgi:reference id="smsServiceOsgi" interface="org.motechproject.sms.api.service.SmsService" cardinality="0..1"/>
 
-    <osgi:reference id="schedulerServiceOsgi" interface="org.motechproject.scheduler.MotechSchedulerService" cardinality="0..1"/>
-
     <osgi:reference id="cmsLiteServiceOsgi" interface="org.motechproject.cmslite.api.service.CMSLiteService" cardinality="0..1">
         <osgi:reference-listener ref="managementSmsMessages"/>
     </osgi:reference>

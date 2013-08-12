@@ -83,8 +83,12 @@ public class WorldVisionBundleIT extends BaseOsgiIT {
                 "rule-1-send-sms-to-patient",
                 "rule-1-unenroll-patient-if-attended-postnatal",
                 "rule-1-unenroll_patient-if-no-alive",
+
                 "rule-2-send-sms-to-patient",
                 "rule-2-unenroll-patient-if-closed",
+
+                "rule-3-set-reminder",
+
                 "rule-4-set-reminder-child_v5a_date",
                 "rule-4-set-reminder-child_v5b_date",
                 "rule-4-set-reminder-child_v5c_date",
@@ -95,7 +99,9 @@ public class WorldVisionBundleIT extends BaseOsgiIT {
                 "rule-4-set-reminder-child_v9_date",
                 "rule-4-set-reminder-child_v10_date",
                 "rule-4-set-reminder-child_v11_date",
+
                 "rule-5-send-sms-to-phu",
+
                 "rule-6-enroll-patient",
                 "rule-6-send-sms",
                 "rule-6-unenroll-if-took-vitamin-a"
