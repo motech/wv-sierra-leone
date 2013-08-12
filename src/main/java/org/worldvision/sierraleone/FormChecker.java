@@ -36,7 +36,7 @@ public class FormChecker {
         if (fields.isEmpty()) {
             return true;
         } else {
-            StringBuffer msg = new StringBuffer("Form Missing Fields: ");
+            StringBuilder msg = new StringBuilder("Form Missing Fields: ");
 
             if (!metadata.isEmpty()) {
                 msg.append("metadata(");

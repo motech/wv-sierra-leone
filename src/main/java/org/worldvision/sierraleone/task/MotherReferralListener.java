@@ -34,6 +34,11 @@ public class MotherReferralListener {
             logger.warn("Event: " + event + " Key: " + EventKeys.DATE_OF_VISIT + " is not a DateTime");
         }
 
+        if (null == dateOfVisit) {
+            logger.error("Event: " + event + " did not provide a valid " + EventKeys.DATE_OF_VISIT);
+            return;
+        }
+
         // Enroll mother in message campaign reminding her to attend postnatal consultation
         // I can't append extra data to an enrollment so I'm encoding the externalId as
         // caseId:referalId

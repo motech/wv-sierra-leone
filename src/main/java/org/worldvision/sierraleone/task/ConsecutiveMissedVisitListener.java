@@ -143,8 +143,7 @@ public class ConsecutiveMissedVisitListener {
 
     private DateTime getDateField(CaseInfo caseInfo, String fieldName) {
         String d = caseInfo.getFieldValues().get(fieldName);
-        DateTime dateTime = Utils.dateTimeFromCommcareDateString(d);
 
-        return dateTime;
+        return Utils.dateTimeFromCommcareDateString(d);
     }
 }

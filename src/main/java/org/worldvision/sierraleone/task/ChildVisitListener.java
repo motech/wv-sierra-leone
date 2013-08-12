@@ -58,6 +58,11 @@ public class ChildVisitListener {
         logger.info("dateOfBirth: " + dateOfBirth);
         logger.info("vitaminA: " + vitaminA);
 
+        if (null == dateOfBirth) {
+            logger.error("Event: " + event + " did not provide a valid " + EventKeys.DATE_OF_BIRTH);
+            return;
+        }
+
         if ("no".equals(vitaminA)) {
             // Enroll mother in message campaign reminding her to get vitamin a for her child
             String externalId = childCaseId + ":" + motherCaseId;

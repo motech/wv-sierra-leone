@@ -54,7 +54,7 @@ public class PostPartumVisitListener {
     @Autowired
     MotechSchedulerService schedulerService;
 
-    // It should delete any scehduled events and reschedule new ones that fire on the pp_dates to check if two
+    // It should delete any scheduled events and reschedule new ones that fire on the pp_dates to check if two
     // consecutive have been missed
 
     @MotechListener(subjects = EventKeys.POST_PARTUM_FORM_SUBJECT)
@@ -76,6 +76,11 @@ public class PostPartumVisitListener {
             dateOfBirth = (DateTime) event.getParameters().get(EventKeys.DATE_OF_BIRTH);
         } catch (ClassCastException e) {
             logger.warn("Event: " + event + " Key: " + EventKeys.DATE_OF_BIRTH + " is not a DateTime");
+        }
+
+        if (null == dateOfBirth) {
+            logger.error("Event: " + event + " did not provide a valid " + EventKeys.DATE_OF_BIRTH);
+            return;
         }
 
         logger.info("Date Of Birth: " + dateOfBirth.toString());
@@ -154,6 +159,11 @@ public class PostPartumVisitListener {
             secondConsecutiveAptDate = (DateTime) event.getParameters().get(EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE);
         } catch (ClassCastException e) {
             logger.warn("Event: " + event + " Key: " + EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE + " is not a DateTime");
+        }
+
+        if (null == secondConsecutiveAptDate) {
+            logger.error("Event: " + event + " did not provide a valid " + EventKeys.SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE);
+            return;
         }
 
         logger.info("Second Consecutive Apt Date: " + secondConsecutiveAptDate.toString());
