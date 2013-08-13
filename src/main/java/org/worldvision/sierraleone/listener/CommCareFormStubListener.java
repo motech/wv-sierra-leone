@@ -23,7 +23,6 @@ import org.worldvision.sierraleone.constants.EventKeys;
 import java.util.List;
 
 import static org.worldvision.sierraleone.constants.Commcare.CASE;
-import static org.worldvision.sierraleone.constants.Commcare.CASE_TYPE;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
 import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_VISIT;
 import static org.worldvision.sierraleone.constants.EventKeys.MOTHER_CASE_ID;
@@ -118,7 +117,7 @@ public class CommCareFormStubListener {
             if (!motherCaseId.equals(caseId)) {
                 CaseInfo caseInfo = commcareCaseService.getCaseByCaseId(caseId);
 
-                if ("referral".equals(caseInfo.getFieldValues().get(CASE_TYPE))) {
+                if ("referral".equals(caseInfo.getCaseType())) {
                     referralId = caseId;
                 }
             }

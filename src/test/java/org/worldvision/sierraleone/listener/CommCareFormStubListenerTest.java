@@ -15,13 +15,10 @@ import org.motechproject.event.listener.EventRelay;
 import org.worldvision.sierraleone.constants.Commcare;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -104,18 +101,12 @@ public class CommCareFormStubListenerTest {
         form.getForm().addFormValueElement(Commcare.POST_PARTUM_VISIT, postPartumVisit);
 
         CaseInfo referralCase = new CaseInfo();
-        Map<String, String> fieldValues = new HashMap<String, String>();
-        fieldValues.put(Commcare.CASE_TYPE, "referral");
-
-        referralCase.setFieldValues(fieldValues);
+        referralCase.setCaseType("referral");
 
         when(commcareCaseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
 
         CaseInfo motherCase = new CaseInfo();
-        fieldValues = new HashMap<String, String>();
-        fieldValues.put(Commcare.CASE_TYPE, "mother");
-
-        motherCase.setFieldValues(fieldValues);
+        motherCase.setCaseType("mother");
 
         when(commcareCaseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
 
@@ -163,18 +154,12 @@ public class CommCareFormStubListenerTest {
         aCase.addAttribute(Commcare.CASE_ID, motherCaseId);
 
         CaseInfo referralCase = new CaseInfo();
-        Map<String, String> fieldValues = new HashMap<String, String>();
-        fieldValues.put(Commcare.CASE_TYPE, "referral");
-
-        referralCase.setFieldValues(fieldValues);
+        referralCase.setCaseType("referral");
 
         when(commcareCaseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
 
         CaseInfo motherCase = new CaseInfo();
-        fieldValues = new HashMap<>();
-        fieldValues.put(Commcare.CASE_TYPE, "mother");
-
-        motherCase.setFieldValues(fieldValues);
+        motherCase.setCaseType("mother");
 
         when(commcareCaseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
 
@@ -183,7 +168,7 @@ public class CommCareFormStubListenerTest {
         List<String> list = Arrays.asList(motherCaseId, referralCaseId);
         commCareFormStubListener.handle(CommcareFormStubEvent(formId, list));
 
-        verify(eventRelay, times(1)).sendEventMessage(any(MotechEvent.class));
+        verify(eventRelay).sendEventMessage(any(MotechEvent.class));
     }
 
     @Test
@@ -201,18 +186,12 @@ public class CommCareFormStubListenerTest {
         aCase.addAttribute(Commcare.CASE_ID, motherCaseId);
 
         CaseInfo referralCase = new CaseInfo();
-        Map<String, String> fieldValues = new HashMap<>();
-        fieldValues.put(Commcare.CASE_TYPE, "referral");
-
-        referralCase.setFieldValues(fieldValues);
+        referralCase.setCaseType("referral");
 
         when(commcareCaseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
 
         CaseInfo motherCase = new CaseInfo();
-        fieldValues = new HashMap<>();
-        fieldValues.put(Commcare.CASE_TYPE, "mother");
-
-        motherCase.setFieldValues(fieldValues);
+        motherCase.setCaseType("mother");
 
         when(commcareCaseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
 

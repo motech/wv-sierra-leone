@@ -278,10 +278,43 @@
                         </dependencies>
                         <executions>
                             <execution>
+                                <id>integration-test</id>
                                 <goals>
                                     <goal>integration-test</goal>
+                                </goals>
+                                <configuration>
+                                    <encoding>UTF-8</encoding>
+                                    <excludes>
+                                        <exclude>**/**/*BundleIT.java</exclude>
+                                    </excludes>
+                                    <summaryFile>target/failsafe-reports/failsafe-summary-it.xml</summaryFile>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>integration-test-osgi</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                                <configuration>
+                                    <encoding>UTF-8</encoding>
+                                    <includes>
+                                        <include>**/**/*BundleIT.java</include>
+                                    </includes>
+                                    <summaryFile>target/failsafe-reports/failsafe-summary-it-osgi.xml</summaryFile>
+                                    <forkMode>always</forkMode>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>verify</id>
+                                <goals>
                                     <goal>verify</goal>
                                 </goals>
+                                <configuration>
+                                    <summaryFiles>
+                                        <summaryFile>target/failsafe-reports/failsafe-summary-it.xml</summaryFile>
+                                        <summaryFile>target/failsafe-reports/failsafe-summary-it-osgi.xml</summaryFile>
+                                    </summaryFiles>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -337,6 +370,13 @@
                                             <arg value="-X"/>
                                             <arg value="DELETE"/>
                                             <arg value="http://${db.server}:${db.port}/${db.prefix}motech-tasks"/>
+                                        </exec>
+                                        <exec executable="curl">
+                                            <arg value="-s"/>
+                                            <arg value="-S"/>
+                                            <arg value="-X"/>
+                                            <arg value="DELETE"/>
+                                            <arg value="http://${db.server}:${db.port}/${db.prefix}motech-message-campaign"/>
                                         </exec>
                                     </target>
                                 </configuration>

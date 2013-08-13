@@ -16,9 +16,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-/**
- * Tests!
- */
 public class MotherReferralListenerTest {
     @Mock
     private MessageCampaignService messageCampaignService;
