@@ -25,18 +25,16 @@ public class MotherReferralListener {
 
     @MotechListener(subjects = EventKeys.MOTHER_REFERRAL_SUBJECT)
     public void motherReferralReminder(MotechEvent event) {
-        String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
-        String referralCaseId = EventKeys.getStringValue(event, EventKeys.REFERRAL_CASE_ID);
-
         // Rule 2:
         // IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to
         // patient every 24 hours until referral is completed.
-        DateTime dateOfVisit;
 
-        try {
-            dateOfVisit = (DateTime) event.getParameters().get(EventKeys.DATE_OF_VISIT);
-        } catch (ClassCastException e) {
-            LOGGER.error("Event: " + event + " Key: " + EventKeys.DATE_OF_VISIT + " is not a DateTime");
+        String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
+        String referralCaseId = EventKeys.getStringValue(event, EventKeys.REFERRAL_CASE_ID);
+        DateTime dateOfVisit = EventKeys.getDateTimeValue(event, EventKeys.DATE_OF_VISIT);
+
+        if (null == dateOfVisit) {
+            LOGGER.error(String.format("Event: %s does not contain key: %s", event, EventKeys.DATE_OF_VISIT));
             return;
         }
 

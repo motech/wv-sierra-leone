@@ -44,8 +44,12 @@ public class ManagementTasks implements OsgiServiceLifecycleListener {
 
     @Autowired
     public ManagementTasks(BundleContext context) {
+        this(new OsgiBundleResourcePatternResolver(context.getBundle()));
+    }
+
+    public ManagementTasks(ResourcePatternResolver resourcePatternResolver) {
         this.mapper = new ObjectMapper();
-        this.resourcePatternResolver = new OsgiBundleResourcePatternResolver(context.getBundle());
+        this.resourcePatternResolver = resourcePatternResolver;
         this.taskRegistrationThread = new Thread(new TaskRegistration());
     }
 

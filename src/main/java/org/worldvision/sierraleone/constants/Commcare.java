@@ -8,7 +8,6 @@ public final class Commcare {
     public static final String CASE = "case";
     public static final String CASE_ID = "case_id";
     public static final String CASE_TYPE = "case_type";
-    public static final String PARENT = "parent";
     public static final String CREATE_REFERRAL = "create_referral";
     public static final String REFERRAL_ID = "referral_id";
     public static final String DATE_OF_VISIT = "date_of_visit";

@@ -11,7 +11,8 @@ import org.motechproject.messagecampaign.service.MessageCampaignService;
 import org.worldvision.sierraleone.constants.EventKeys;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.times;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -32,7 +33,7 @@ public class MotherReferralListenerTest {
     }
 
     @Test
-    public void verifyMotherCorrectlyEnrolled() {
+    public void shouldEnrollMother() {
         String motherCaseId = "motherCaseId";
         String referralCaseId = "referralCaseId";
         DateTime dateOfVisit = new DateTime(2013, 1, 1, 0, 0);
@@ -45,12 +46,27 @@ public class MotherReferralListenerTest {
         motherReferralListener.motherReferralReminder(event);
 
         ArgumentCaptor<CampaignRequest> cr = ArgumentCaptor.forClass(CampaignRequest.class);
-        verify(messageCampaignService, times(1)).startFor(cr.capture());
+        verify(messageCampaignService).startFor(cr.capture());
 
         CampaignRequest campaignRequest = cr.getValue();
 
-        assertEquals("ExternalId does not match", (motherCaseId + ":" + referralCaseId), campaignRequest.externalId());
-        assertEquals("Campaign Name does not match", MotherReferralListener.MOTHER_REFERRAL_REMINDER_CAMPAIGN, campaignRequest.campaignName());
-        assertEquals("Reference Date does not match", dateOfVisit.toLocalDate(), campaignRequest.referenceDate());
+        assertEquals(motherCaseId + ":" + referralCaseId, campaignRequest.externalId());
+        assertEquals(MotherReferralListener.MOTHER_REFERRAL_REMINDER_CAMPAIGN, campaignRequest.campaignName());
+        assertEquals(dateOfVisit.toLocalDate(), campaignRequest.referenceDate());
+    }
+
+    @Test
+    public void shouldNotEnrollMotherIfDateOfVisitIsNull() {
+        String motherCaseId = "motherCaseId";
+        String referralCaseId = "referralCaseId";
+
+        MotechEvent event = new MotechEvent(EventKeys.MOTHER_REFERRAL_SUBJECT);
+        event.getParameters().put(EventKeys.REFERRAL_CASE_ID, referralCaseId);
+        event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
+        event.getParameters().put(EventKeys.DATE_OF_VISIT, null);
+
+        motherReferralListener.motherReferralReminder(event);
+
+        verify(messageCampaignService, never()).startFor(any(CampaignRequest.class));
     }
 }

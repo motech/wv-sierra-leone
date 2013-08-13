@@ -107,7 +107,7 @@ public class FixtureIdMap {
                 return null;
             }
 
-            fixture = commcareFixtureService.getCommcareFixtureById(fixtureId);
+            fixture = commcareFixtureService.getCommcareFixtureById(fixtureIdForPHUId);
         }
 
         return fixture;

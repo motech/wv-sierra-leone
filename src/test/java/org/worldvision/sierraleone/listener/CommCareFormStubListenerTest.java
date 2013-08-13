@@ -2,7 +2,6 @@ package org.worldvision.sierraleone.listener;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareForm;
@@ -20,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,13 +27,9 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
-/**
- * These tests only validate that the appropriate number of events are published.  They
- * do not validate the data contained in the events..
- */
 public class CommCareFormStubListenerTest {
     @Mock
-    CommcareCaseService commcareCaseService;
+    private CommcareCaseService commcareCaseService;
 
     @Mock
     private CommcareFormService commcareFormService;
@@ -47,7 +43,25 @@ public class CommCareFormStubListenerTest {
     public void setUp() {
         initMocks(this);
 
-        commCareFormStubListener = new CommCareFormStubListener(commcareFormService, commcareCaseService, eventRelay);
+        commCareFormStubListener = new CommCareFormStubListener(
+                commcareFormService, commcareCaseService, eventRelay
+        );
+    }
+
+    @Test
+    public void shouldNotPublishEventIfEventNotContainFormId() {
+        commCareFormStubListener.handle(CommcareFormStubEvent(null));
+
+        verify(eventRelay, never()).sendEventMessage(null);
+    }
+
+    @Test
+    public void shouldNotPublishEventIfFormNotFound() {
+        when(commcareFormService.retrieveForm("formId")).thenReturn(null);
+
+        commCareFormStubListener.handle(CommcareFormStubEvent("formId"));
+
+        verify(eventRelay, never()).sendEventMessage(null);
     }
 
     @Test
@@ -63,41 +77,8 @@ public class CommCareFormStubListenerTest {
     }
 
     @Test
-    public void postPartumVisitWithoutReferralShouldPublishOneEvent() {
+    public void postPartumVisitReferralShouldPublish() {
         String formId = "formId";
-        CommcareForm form = CommcareForm("Post-Partum Visit");
-        form.getForm().setElementName("form");
-
-        AddSingleValueFormField(form, Commcare.STILL_ALIVE, "yes");
-        AddSingleValueFormField(form, Commcare.GAVE_BIRTH, "yes");
-        AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "no");
-        AddSingleValueFormField(form, Commcare.REFERRAL_ID, null);
-        AddSingleValueFormField(form, Commcare.DATE_OF_VISIT, "2013-01-03");
-        AddSingleValueFormField(form, Commcare.NEXT_VISIT_DATE_PLUS_1, "2013-01-03");
-
-        FormValueElement aCase = AddSingleValueFormField(form, Commcare.CASE, "case");
-        aCase.addAttribute(Commcare.CASE_ID, "caseId");
-
-        FormValueElement postPartumVisit = new FormValueElement();
-        postPartumVisit.setElementName(Commcare.POST_PARTUM_VISIT);
-
-        AddSubelementValueFormField(postPartumVisit, Commcare.DATE_OF_BIRTH, "2013-01-03");
-        AddSubelementValueFormField(postPartumVisit, Commcare.ATTENDED_POSTNATAL, "yes");
-        AddSubelementValueFormField(postPartumVisit, Commcare.PLACE_OF_BIRTH, "home");
-
-        form.getForm().addFormValueElement(Commcare.POST_PARTUM_VISIT, postPartumVisit);
-
-        when(commcareFormService.retrieveForm(formId)).thenReturn(form);
-
-        commCareFormStubListener.handle(CommcareFormStubEvent(formId));
-
-        verify(eventRelay, times(1)).sendEventMessage(Matchers.any(MotechEvent.class));
-    }
-
-    @Test
-    public void postPartumVisitWithReferralShouldPublishTwoEvents() {
-        String formId = "formId";
-        String referralId = "referralId";
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
         CommcareForm form = CommcareForm("Post-Partum Visit");
@@ -143,37 +124,7 @@ public class CommCareFormStubListenerTest {
         List<String> list = Arrays.asList(motherCaseId, referralCaseId);
         commCareFormStubListener.handle(CommcareFormStubEvent(formId, list));
 
-        verify(eventRelay, times(2)).sendEventMessage(Matchers.any(MotechEvent.class));
-    }
-
-    @Test
-    public void postPartumVisitWithMissingFieldShouldNotPublishEvent() {
-        String formId = "formId";
-        CommcareForm form = CommcareForm("Post-Partum Visit");
-        form.getForm().setElementName("form");
-
-        AddSingleValueFormField(form, Commcare.GAVE_BIRTH, "yes");
-        AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "no");
-        AddSingleValueFormField(form, Commcare.REFERRAL_ID, null);
-        AddSingleValueFormField(form, Commcare.DATE_OF_VISIT, "2013-01-03");
-
-        FormValueElement aCase = AddSingleValueFormField(form, Commcare.CASE, "case");
-//        aCase.addAttribute(Commcare.CASE_ID, "caseId");
-
-        FormValueElement postPartumVisit = new FormValueElement();
-        postPartumVisit.setElementName(Commcare.POST_PARTUM_VISIT);
-
-        AddSubelementValueFormField(postPartumVisit, Commcare.DATE_OF_BIRTH, "2013-01-03");
-        AddSubelementValueFormField(postPartumVisit, Commcare.ATTENDED_POSTNATAL, "yes");
-        AddSubelementValueFormField(postPartumVisit, Commcare.PLACE_OF_BIRTH, "home");
-
-        form.getForm().addFormValueElement(Commcare.POST_PARTUM_VISIT, postPartumVisit);
-
-        when(commcareFormService.retrieveForm(formId)).thenReturn(form);
-
-        commCareFormStubListener.handle(CommcareFormStubEvent(formId));
-
-        verify(eventRelay, never()).sendEventMessage(Matchers.any(MotechEvent.class));
+        verify(eventRelay).sendEventMessage(any(MotechEvent.class));
     }
 
     @Test
@@ -193,13 +144,12 @@ public class CommCareFormStubListenerTest {
 
         commCareFormStubListener.handle(CommcareFormStubEvent(formId));
 
-        verify(eventRelay, never()).sendEventMessage(Matchers.any(MotechEvent.class));
+        verify(eventRelay, never()).sendEventMessage(any(MotechEvent.class));
     }
 
     @Test
     public void pregnancyVisitWithReferralShouldPublishOneEvent() {
         String formId = "formId";
-        String referralId = "referralId";
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
         CommcareForm form = CommcareForm("Pregnancy Visit");
@@ -221,7 +171,7 @@ public class CommCareFormStubListenerTest {
         when(commcareCaseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
 
         CaseInfo motherCase = new CaseInfo();
-        fieldValues = new HashMap<String, String>();
+        fieldValues = new HashMap<>();
         fieldValues.put(Commcare.CASE_TYPE, "mother");
 
         motherCase.setFieldValues(fieldValues);
@@ -233,13 +183,12 @@ public class CommCareFormStubListenerTest {
         List<String> list = Arrays.asList(motherCaseId, referralCaseId);
         commCareFormStubListener.handle(CommcareFormStubEvent(formId, list));
 
-        verify(eventRelay, times(1)).sendEventMessage(Matchers.any(MotechEvent.class));
+        verify(eventRelay, times(1)).sendEventMessage(any(MotechEvent.class));
     }
 
     @Test
     public void pregnancyVisitWithReferralWithMissingFieldShouldNotPublishEvent() {
         String formId = "formId";
-        String referralId = "referralId";
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
         CommcareForm form = CommcareForm("Pregnancy Visit");
@@ -252,7 +201,7 @@ public class CommCareFormStubListenerTest {
         aCase.addAttribute(Commcare.CASE_ID, motherCaseId);
 
         CaseInfo referralCase = new CaseInfo();
-        Map<String, String> fieldValues = new HashMap<String, String>();
+        Map<String, String> fieldValues = new HashMap<>();
         fieldValues.put(Commcare.CASE_TYPE, "referral");
 
         referralCase.setFieldValues(fieldValues);
@@ -260,7 +209,7 @@ public class CommCareFormStubListenerTest {
         when(commcareCaseService.getCaseByCaseId(referralCaseId)).thenReturn(referralCase);
 
         CaseInfo motherCase = new CaseInfo();
-        fieldValues = new HashMap<String, String>();
+        fieldValues = new HashMap<>();
         fieldValues.put(Commcare.CASE_TYPE, "mother");
 
         motherCase.setFieldValues(fieldValues);
@@ -272,43 +221,7 @@ public class CommCareFormStubListenerTest {
         List<String> list = Arrays.asList(motherCaseId, referralCaseId);
         commCareFormStubListener.handle(CommcareFormStubEvent(formId, list));
 
-        verify(eventRelay, times(1)).sendEventMessage(Matchers.any(MotechEvent.class));
-    }
-
-    @Test
-    public void childVisitFormMissingFieldShouldNotPublishEvent() {
-        String formId = "formId";
-        CommcareForm form = CommcareForm("Child Visit");
-        form.getForm().setElementName("form");
-
-        String childCaseId = "childCaseId";
-        FormValueElement formValueElement = new FormValueElement();
-        formValueElement.setElementName(Commcare.CASE);
-        formValueElement.addAttribute(Commcare.CASE_ID, childCaseId);
-
-        form.getForm().addFormValueElement(Commcare.CASE, formValueElement);
-
-        String motherCaseId = "motherCaseId";
-        Map<String, String> parent = new HashMap<String, String>();
-        parent.put(Commcare.CASE_TYPE, "mother");
-        parent.put(Commcare.CASE_ID, motherCaseId);
-
-        Map<String, Map<String, String>> indices = new HashMap<String, Map<String, String>>();
-        indices.put(Commcare.PARENT, parent);
-
-        CaseInfo childCase = new CaseInfo();
-        Map<String, String> fieldValues = new HashMap<String, String>();
-        fieldValues.put(Commcare.DATE_OF_BIRTH, "2013-01-03");
-
-        childCase.setFieldValues(fieldValues);
-        childCase.setIndices(indices);
-
-        when(commcareFormService.retrieveForm(formId)).thenReturn(form);
-        when(commcareCaseService.getCaseByCaseId(childCaseId)).thenReturn(childCase);
-
-        commCareFormStubListener.handle(CommcareFormStubEvent(formId));
-
-        verify(eventRelay, never()).sendEventMessage(Matchers.any(MotechEvent.class));
+        verify(eventRelay).sendEventMessage(any(MotechEvent.class));
     }
 
     private void AddSubelementValueFormField(FormValueElement formValueElement, String elementName, String value) {

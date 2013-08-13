@@ -18,19 +18,23 @@ public final class Utils {
     private static final int MONTH_DIGITS_COUNT = 2;
     private static final int DAY_DIGITS_COUNT = 2;
 
-    private Utils() {
-    }
+    private static final DateTimeFormatter DATE_TIME_FORMATTER;
 
-    public static DateTime dateTimeFromCommcareDateString(String dateStr) {
-        DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
+    static {
+        DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
                 .appendYear(YEAR_DIGITS_COUNT, YEAR_DIGITS_COUNT)
                 .appendLiteral('-')
                 .appendMonthOfYear(MONTH_DIGITS_COUNT)
                 .appendLiteral('-')
                 .appendDayOfMonth(DAY_DIGITS_COUNT)
                 .toFormatter();
+    }
 
-        return dateStr == null ? null : dateFormatter.parseDateTime(dateStr);
+    private Utils() {
+    }
+
+    public static DateTime dateTimeFromCommcareDateString(String dateStr) {
+        return dateStr == null ? null : DATE_TIME_FORMATTER.parseDateTime(dateStr);
     }
 
     public static <T> Collection<T> readJSON(InputStream stream,
