@@ -11,7 +11,7 @@
       "values": {
         "ExternalID": "{{ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.case.attributes.case_id}}",
         "CampaignName": "Health Center Postnatal Consultation Reminder",
-        "ReferanceDate": "{{ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.dob?datetime(yyyy-MM-dd)}}"
+        "ReferanceDate": "{{ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.dob.value?datetime(yyyy-MM-dd HH:mm Z)}}"
       }
     }
   ],
@@ -55,7 +55,7 @@
           },
           {
             "displayName": "Gave birth (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.gave_birth",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.gave_birth.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
@@ -63,7 +63,7 @@
           },
           {
             "displayName": "Still alive (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.still_alive",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.still_alive.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
@@ -71,7 +71,7 @@
           },
           {
             "displayName": "Date of birth (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.dob",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.dob.value",
             "type": "DATE",
             "negationOperator": true,
             "operator": "task.lessDaysFromNow",
@@ -79,7 +79,7 @@
           },
           {
             "displayName": "Attended postnatal (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.attended_postnatal",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.attended_postnatal.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",

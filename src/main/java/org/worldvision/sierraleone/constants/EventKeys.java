@@ -24,7 +24,6 @@ public final class EventKeys {
     public static final String CHILD_CASE_ID = "child_case_id";
 
     public static final String BASE_SUBJECT = "org.worldvision.sierraleone.";
-    public static final String FORM_BASE_SUBJECT = BASE_SUBJECT + "form.";
     public static final String MOTHER_REFERRAL_SUBJECT = BASE_SUBJECT + "mother-referral";
 
     public static final String CONSECUTIVE_CHILD_VISIT_BASE_SUBJECT = BASE_SUBJECT + "child-visit.";

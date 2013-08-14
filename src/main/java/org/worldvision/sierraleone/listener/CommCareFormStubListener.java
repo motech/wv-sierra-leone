@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.worldvision.sierraleone.FormChecker;
+import org.worldvision.sierraleone.MotechEventBuilder;
 import org.worldvision.sierraleone.Utils;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
@@ -133,11 +134,12 @@ public class CommCareFormStubListener {
         checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
 
         if (checker.check()) {
-            MotechEvent event = new MotechEvent(MOTHER_REFERRAL_SUBJECT);
-
-            event.getParameters().put(MOTHER_CASE_ID, motherCaseId);
-            event.getParameters().put(REFERRAL_CASE_ID, referralId);
-            event.getParameters().put(DATE_OF_VISIT, dateOfVisit);
+            MotechEvent event = new MotechEventBuilder()
+                    .withSubject(MOTHER_REFERRAL_SUBJECT)
+                    .withParameter(MOTHER_CASE_ID, motherCaseId)
+                    .withParameter(REFERRAL_CASE_ID, referralId)
+                    .withParameter(DATE_OF_VISIT, dateOfVisit)
+                    .build();
 
             eventRelay.sendEventMessage(event);
         }

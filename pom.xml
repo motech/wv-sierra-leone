@@ -70,6 +70,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.motechproject</groupId>
+            <artifactId>motech-testing-utils</artifactId>
+            <version>${motech.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit</groupId>
             <artifactId>org.motechproject.org.junit</artifactId>
             <version>4.9-${external.dependency.release.tag}</version>
