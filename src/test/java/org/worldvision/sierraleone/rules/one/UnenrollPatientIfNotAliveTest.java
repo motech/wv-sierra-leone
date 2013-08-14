@@ -50,7 +50,6 @@ public class UnenrollPatientIfNotAliveTest extends RuleTest {
         handler.addDataProvider(COMMCARE_PROVIDER_ID, commcareDataProvider);
 
         setTask(1, "unenroll_patient_if_not_alive.json", "rule-1-unenroll_patient-if-no-alive");
-        setMessages();
     }
 
     @Test
