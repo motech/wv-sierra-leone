@@ -11,7 +11,7 @@
       "values": {
         "ExternalID": "{{ad.4408354fae5368389825691bc5095421.CommcareForm#0.form.elements.case.attributes.case_id}}:{{ad.4408354fae5368389825691bc5095421.CaseInfo#1.indices.parent.case_id}}",
         "CampaignName": "Child Vitamin A Reminder",
-        "ReferanceDate": "{{ad.4408354fae5368389825691bc5095421.CaseInfo#1.fieldValues.dob?datetime(yyyy-MM-dd)}}"
+        "ReferanceDate": "{{ad.4408354fae5368389825691bc5095421.CaseInfo#1.fieldValues.dob?datetime(yyyy-MM-dd HH:mm Z)}}"
       }
     }
   ],
