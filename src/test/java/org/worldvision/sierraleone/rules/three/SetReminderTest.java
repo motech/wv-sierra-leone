@@ -13,6 +13,7 @@ import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerActionProxyService;
 import org.motechproject.tasks.domain.ActionEvent;
 import org.motechproject.tasks.domain.ActionParameter;
+import org.motechproject.tasks.domain.Task;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.worldvision.sierraleone.MotechEventBuilder;
@@ -121,6 +122,8 @@ public class SetReminderTest extends RuleTest {
         when(bundleContext.getService(serviceReference)).thenReturn(actionProxyService);
 
         handler.handle(commcareFormstub());
+
+        verify(activityService, never()).addWarning(any(Task.class), anyString(), anyString());
 
         verify(actionProxyService).unscheduleJobs(SUBJECT);
         verify(actionProxyService).scheduleRunOnceJob(SUBJECT, map, START_DATE.plusDays(1));
