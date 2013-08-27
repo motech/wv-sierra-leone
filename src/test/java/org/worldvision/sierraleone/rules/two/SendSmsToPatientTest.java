@@ -35,8 +35,6 @@ import static org.motechproject.sms.api.constants.EventDataKeys.MESSAGE;
 import static org.motechproject.sms.api.constants.EventDataKeys.RECIPIENTS;
 import static org.motechproject.sms.api.constants.EventSubjects.SEND_SMS;
 import static org.motechproject.tasks.domain.ParameterType.LIST;
-import static org.worldvision.sierraleone.constants.Commcare.ATTENDED_POSTNATAL;
-import static org.worldvision.sierraleone.constants.Commcare.STILL_ALIVE;
 
 public class SendSmsToPatientTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "3980fa00249eb3bf73e200bd85062954";

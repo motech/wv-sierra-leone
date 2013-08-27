@@ -46,8 +46,8 @@
         "order": 1,
         "filters": [
           {
-            "displayName": "Form (Form#0 (Commcare))",
-            "key": "ad.4408354fae5368389825691bc5095421.CommcareForm#0.form",
+            "displayName": "Form name (Form#0 (Commcare))",
+            "key": "ad.4408354fae5368389825691bc5095421.CommcareForm#0.form.attributes.name",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",

@@ -31,6 +31,7 @@ import static org.mockito.Mockito.when;
 public abstract class RuleTest extends BaseUnitTest {
     protected static final String HEALTH_CENTER_POSTNATAL_CONSULTATION_REMINDER = "Health Center Postnatal Consultation Reminder";
     protected static final String MOTHER_REFERRAL_REMINDER = "Mother Referral Reminder";
+    protected static final String CHILD_VITAMIN_A_REMINDER = "Child Vitamin A Reminder";
 
     @Mock
     protected TaskService taskService;
