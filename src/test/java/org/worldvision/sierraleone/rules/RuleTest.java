@@ -28,7 +28,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class RuleTest extends BaseUnitTest {
+public abstract class RuleTest extends BaseUnitTest {
     protected static final String HEALTH_CENTER_POSTNATAL_CONSULTATION_REMINDER = "Health Center Postnatal Consultation Reminder";
     protected static final String MOTHER_REFERRAL_REMINDER = "Mother Referral Reminder";
 

@@ -9,8 +9,6 @@
       "moduleName": "motech-sms-api-bundle",
       "moduleVersion": "0.21.0.SNAPSHOT",
       "subject": "SendSMS",
-      "serviceInterface": null,
-      "serviceMethod": null,
       "values": {
         "message": "{{ad.4408354fae5368389825691bc50583c2.StringContent#3.value?format({{ad.4408354fae5368389825691bc5056ebf.CommcareUser#4.firstName}},{{ad.4408354fae5368389825691bc5056ebf.CommcareUser#4.lastName}},{{ad.4408354fae5368389825691bc5056ebf.CaseInfo#1.fieldValues.mother_name}})}}",
         "number": "{{ad.4408354fae5368389825691bc5056ebf.CommcareFixture#2.fields.phone}}"
@@ -57,7 +55,7 @@
           },
           {
             "displayName": "Place of birth (Form#0 (Commcare))",
-            "key": "ad.4408354fae5368389825691bc5056ebf.CommcareForm#0.form.elements.post_partum_visit.elements.place_of_birth",
+            "key": "ad.4408354fae5368389825691bc5056ebf.CommcareForm#0.form.elements.post_partum_visit.elements.place_of_birth.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
