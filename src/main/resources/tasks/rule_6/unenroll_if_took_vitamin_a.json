@@ -45,7 +45,7 @@
         "providerId": "4408354fae5368389825691bc5095421",
         "objectId": 0,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",

@@ -44,7 +44,7 @@
         "providerId": "3980fa00249eb3bf73e200bd85122e72",
         "objectId": 0,
         "type": "CommcareForm",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -74,7 +74,7 @@
         "providerId": "3980fa00249eb3bf73e200bd85122e72",
         "objectId": 1,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",

@@ -32,7 +32,7 @@
         "providerId": "4408354fae5368389825691bc5056ebf",
         "objectId": 0,
         "type": "CommcareForm",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -70,7 +70,7 @@
         "providerId": "4408354fae5368389825691bc5056ebf",
         "objectId": 1,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -86,7 +86,7 @@
         "providerId": "4408354fae5368389825691bc5056ebf",
         "objectId": 2,
         "type": "CommcareFixture",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -102,7 +102,7 @@
         "providerId": "4408354fae5368389825691bc5056ebf",
         "objectId": 4,
         "type": "CommcareUser",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -121,11 +121,11 @@
         "name": "cmslite.languageAndName",
         "lookup": [
           {
-            "field": "name",
+            "field": "cmslite.dataname",
             "value": "HomeBirthNotification"
           },
           {
-            "field": "language",
+            "field": "cmslite.language",
             "value": "English"
           }
         ],

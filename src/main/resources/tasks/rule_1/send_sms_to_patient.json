@@ -45,7 +45,7 @@
         "providerId": "eec2fa1b5d77bd5c536def1b150bdae7",
         "objectId": 0,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -94,11 +94,11 @@
         "name": "cmslite.languageAndName",
         "lookup": [
           {
-            "field": "name",
+            "field": "cmslite.dataname",
             "value": "PostnatalConsultationReminder"
           },
           {
-            "field": "language",
+            "field": "cmslite.language",
             "value": "English"
           }
         ],

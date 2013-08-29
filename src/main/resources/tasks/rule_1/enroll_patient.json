@@ -32,7 +32,7 @@
         "providerId": "eec2fa1b5d77bd5c536def1b150bdae7",
         "objectId": 0,
         "type": "CommcareForm",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",

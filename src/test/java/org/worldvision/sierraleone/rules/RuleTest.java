@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.CollectionType;
 import org.codehaus.jackson.map.type.TypeFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.motechproject.cmslite.api.model.StringContent;
@@ -13,6 +14,7 @@ import org.motechproject.event.listener.EventRelay;
 import org.motechproject.server.config.SettingsFacade;
 import org.motechproject.tasks.domain.Task;
 import org.motechproject.tasks.domain.TriggerEvent;
+import org.motechproject.tasks.ex.TaskHandlerException;
 import org.motechproject.tasks.service.TaskActivityService;
 import org.motechproject.tasks.service.TaskService;
 import org.motechproject.tasks.service.TaskTriggerHandler;
@@ -26,6 +28,10 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public abstract class RuleTest extends BaseUnitTest {
@@ -62,6 +68,15 @@ public abstract class RuleTest extends BaseUnitTest {
         handler = new TaskTriggerHandler(
                 taskService, activityService, registryService, eventRelay, taskSettings
         );
+    }
+
+    @Override
+    @After
+    public void tearDown() {
+        verify(activityService, never()).addError(any(Task.class), any(TaskHandlerException.class));
+        verify(activityService, never()).addError(any(Task.class), anyString());
+        verify(activityService, never()).addWarning(any(Task.class), anyString(), anyString());
+        verify(activityService, never()).addWarning(any(Task.class), anyString(), anyString(), any(Exception.class));
     }
 
     protected void setTask(int ruleNumber, String fileName, String ruleId) throws Exception {

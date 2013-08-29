@@ -81,8 +81,8 @@ public class SendSmsToPatientTest extends RuleTest {
         motherLookup.put("id", MOTHER_CASE_ID_VALUE);
 
         Map<String, String> cmsliteLookup = new HashMap<>();
-        cmsliteLookup.put("name", "MotherReferralReminder");
-        cmsliteLookup.put("language", "English");
+        cmsliteLookup.put("cmslite.dataname", "MotherReferralReminder");
+        cmsliteLookup.put("cmslite.language", "English");
 
         when(taskService.getActionEventFor(task.getActions().get(0))).thenReturn(actionEvent);
 
@@ -130,8 +130,8 @@ public class SendSmsToPatientTest extends RuleTest {
         motherLookup.put("id", MOTHER_CASE_ID_VALUE);
 
         Map<String, String> cmsliteLookup = new HashMap<>();
-        cmsliteLookup.put("name", "MotherReferralReminder");
-        cmsliteLookup.put("language", "English");
+        cmsliteLookup.put("cmslite.dataname", "MotherReferralReminder");
+        cmsliteLookup.put("cmslite.language", "English");
 
         referralCaseInfo = new CaseInfo();
         referralCaseInfo.setFieldValues(new HashMap<String, String>());
@@ -161,8 +161,8 @@ public class SendSmsToPatientTest extends RuleTest {
         motherLookup.put("id", MOTHER_CASE_ID_VALUE);
 
         Map<String, String> cmsliteLookup = new HashMap<>();
-        cmsliteLookup.put("name", "MotherReferralReminder");
-        cmsliteLookup.put("language", "English");
+        cmsliteLookup.put("cmslite.dataname", "MotherReferralReminder");
+        cmsliteLookup.put("cmslite.language", "English");
 
         referralCaseInfo = new CaseInfo();
         referralCaseInfo.setFieldValues(new HashMap<String, String>());

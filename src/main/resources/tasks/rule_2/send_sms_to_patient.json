@@ -45,7 +45,7 @@
         "providerId": "3980fa00249eb3bf73e200bd85062954",
         "objectId": 0,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -75,7 +75,7 @@
         "providerId": "3980fa00249eb3bf73e200bd85062954",
         "objectId": 1,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -115,11 +115,11 @@
         "name": "cmslite.languageAndName",
         "lookup": [
           {
-            "field": "name",
+            "field": "cmslite.dataname",
             "value": "MotherReferralReminder"
           },
           {
-            "field": "language",
+            "field": "cmslite.language",
             "value": "English"
           }
         ],

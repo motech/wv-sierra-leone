@@ -105,8 +105,8 @@ public class SendSmsTest extends RuleTest {
         fixture.getFields().put("name", "fixtureName");
 
         Map<String, String> cmsliteLookup = new HashMap<>();
-        cmsliteLookup.put("name", "ChildVitaminAReminder");
-        cmsliteLookup.put("language", "English");
+        cmsliteLookup.put("cmslite.dataname", "ChildVitaminAReminder");
+        cmsliteLookup.put("cmslite.language", "English");
 
         when(commcareDataProvider.lookup("CaseInfo", caseLookup)).thenReturn(caseInfo);
         when(commcareDataProvider.lookup("CaseInfo", parentCaseLookup)).thenReturn(parentCaseInfo);

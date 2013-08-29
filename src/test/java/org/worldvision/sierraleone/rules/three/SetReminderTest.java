@@ -136,7 +136,6 @@ public class SetReminderTest extends RuleTest {
 
         FormValueElement nextVisitDatePlus1 = new FormValueElement();
         nextVisitDatePlus1.setElementName("next_visit_date_plus_1");
-        nextVisitDatePlus1.setValue("2013-08-14");
 
         FormValueElement caseElement = new FormValueElement();
         caseElement.setElementName("case");
@@ -145,6 +144,7 @@ public class SetReminderTest extends RuleTest {
         FormValueElement form = new FormValueElement();
         form.addAttribute(Commcare.NAME, "Post-Partum Visit");
         form.addFormValueElement(Commcare.CASE, caseElement);
+        form.addFormValueElement("next_visit_date_plus_1", nextVisitDatePlus1);
 
         commcareForm = new CommcareForm();
         commcareForm.setForm(form);

@@ -133,8 +133,8 @@ public class SendSmsToPHUTest extends RuleTest {
         commcareUser.setLastName(LAST_NAME);
 
         Map<String, String> cmsliteLookup = new HashMap<>();
-        cmsliteLookup.put("name", "HomeBirthNotification");
-        cmsliteLookup.put("language", "English");
+        cmsliteLookup.put("cmslite.dataname", "HomeBirthNotification");
+        cmsliteLookup.put("cmslite.language", "English");
 
         when(taskService.getActionEventFor(task.getActions().get(0))).thenReturn(actionEvent);
 

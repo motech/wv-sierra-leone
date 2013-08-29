@@ -44,7 +44,7 @@
         "providerId": "7f871474375dc43dfd8a534abd021841",
         "objectId": 0,
         "type": "CommcareForm",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
@@ -81,7 +81,7 @@
         "providerId": "7f871474375dc43dfd8a534abd021841",
         "objectId": 1,
         "type": "CaseInfo",
-        "name": "id",
+        "name": "commcare.id",
         "lookup": [
           {
             "field": "id",

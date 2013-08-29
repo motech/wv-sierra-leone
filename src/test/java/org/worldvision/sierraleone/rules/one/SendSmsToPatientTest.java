@@ -76,8 +76,8 @@ public class SendSmsToPatientTest extends RuleTest {
         commcareLookup.put("id", CASE_ID_VALUE);
 
         Map<String, String> cmsliteLookup = new HashMap<>();
-        cmsliteLookup.put("name", "PostnatalConsultationReminder");
-        cmsliteLookup.put("language", "English");
+        cmsliteLookup.put("cmslite.dataname", "PostnatalConsultationReminder");
+        cmsliteLookup.put("cmslite.language", "English");
 
         when(taskService.getActionEventFor(task.getActions().get(0))).thenReturn(actionEvent);
 
