@@ -9,6 +9,7 @@ import org.motechproject.commcare.CommcareDataProvider;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareForm;
 import org.motechproject.commcare.domain.FormValueElement;
+import org.motechproject.commons.date.util.DateUtil;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.scheduler.MotechSchedulerActionProxyService;
 import org.motechproject.tasks.domain.ActionEvent;
@@ -39,7 +40,7 @@ public abstract class SetReminderChildDateTest extends RuleTest {
     private static final String FORM_ID_VALUE = "formId";
     private static final String CASE_ID_VALUE = "caseId";
     private static final String MOTHER_CASE_ID_VALUE = "motherCaseId";
-    private static final DateTime CHILD_DATE = newDateTime(2013, 9, 1);
+    private static final DateTime CHILD_DATE = DateUtil.today().toDateTimeAtStartOfDay().plusDays(5);
     private static final String SUBJECT = "org.worldvision.sierraleone.child-visit." + CHILD_DATE.toString("yyyy-MM-dd HH:mm Z");
 
     @Mock
@@ -62,8 +63,6 @@ public abstract class SetReminderChildDateTest extends RuleTest {
     public void setUp() throws Exception {
         initMocks(this);
         super.setUp();
-
-        mockCurrentDate(new LocalDate(2013, 8, 27));
 
         handler.addDataProvider(COMMCARE_PROVIDER_ID, commcareDataProvider);
         handler.setBundleContext(bundleContext);
