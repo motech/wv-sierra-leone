@@ -17,7 +17,7 @@ import org.motechproject.commcare.util.CommCareAPIHttpClient;
 import org.motechproject.commons.date.util.DateUtil;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.EventListener;
-import org.motechproject.event.listener.EventListenerRegistry;
+import org.motechproject.event.listener.impl.EventListenerRegistry;
 import org.motechproject.sms.api.constants.EventSubjects;
 import org.motechproject.sms.api.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;

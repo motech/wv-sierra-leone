@@ -13,7 +13,7 @@ import org.motechproject.commcare.service.impl.CommcareFormServiceImpl;
 import org.motechproject.commcare.util.CommCareAPIHttpClient;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.EventListener;
-import org.motechproject.event.listener.EventListenerRegistry;
+import org.motechproject.event.listener.impl.EventListenerRegistry;
 import org.motechproject.event.listener.EventRelay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
