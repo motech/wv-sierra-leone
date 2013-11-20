@@ -5,7 +5,7 @@
     {
       "displayName": "msgCampaign.unenroll.user",
       "channelName": "msgCampaign.name",
-      "moduleName": "motech-message-campaign",
+      "moduleName": "org.motechproject.motech-message-campaign",
       "moduleVersion": "0.21.0.SNAPSHOT",
       "subject": "org.motechproject.messagecampaign.unenroll-user",
       "values": {
@@ -17,7 +17,7 @@
   "trigger": {
     "displayName": "msgCampaign.send.message",
     "channelName": "msgCampaign.name",
-    "moduleName": "motech-message-campaign",
+    "moduleName": "org.motechproject.motech-message-campaign",
     "moduleVersion": "0.21.0.SNAPSHOT",
     "subject": "org.motechproject.messagecampaign.fired-campaign-message"
   },

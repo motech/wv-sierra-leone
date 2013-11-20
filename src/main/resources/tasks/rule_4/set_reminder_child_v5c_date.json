@@ -5,7 +5,7 @@
     {
       "displayName": "scheduler.unscheduleJobs",
       "channelName": "scheduler",
-      "moduleName": "motech-scheduler",
+      "moduleName": "org.motechproject.motech-scheduler",
       "moduleVersion": "0.21.0.SNAPSHOT",
       "serviceInterface": "org.motechproject.scheduler.MotechSchedulerActionProxyService",
       "serviceMethod": "unscheduleJobs",
@@ -16,7 +16,7 @@
     {
       "displayName": "scheduler.scheduleRunOnceJob",
       "channelName": "scheduler",
-      "moduleName": "motech-scheduler",
+      "moduleName": "org.motechproject.motech-scheduler",
       "moduleVersion": "0.21.0.SNAPSHOT",
       "serviceInterface": "org.motechproject.scheduler.MotechSchedulerActionProxyService",
       "serviceMethod": "scheduleRunOnceJob",
@@ -30,7 +30,7 @@
   "trigger": {
     "displayName": "commcare.formstub",
     "channelName": "commcare",
-    "moduleName": "motech-commcare-api",
+    "moduleName": "org.motechproject.motech-commcare-api",
     "moduleVersion": "0.21.0.SNAPSHOT",
     "subject": "org.motechproject.commcare.api.formstub"
   },

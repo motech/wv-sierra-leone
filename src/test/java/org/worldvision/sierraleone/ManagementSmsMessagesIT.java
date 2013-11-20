@@ -8,7 +8,7 @@ import org.motechproject.cmslite.api.model.StringContent;
 import org.motechproject.cmslite.api.repository.AllStreamContents;
 import org.motechproject.cmslite.api.repository.AllStringContents;
 import org.motechproject.cmslite.api.service.CMSLiteService;
-import org.motechproject.server.config.service.PlatformSettingsService;
+import org.motechproject.config.service.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -39,7 +39,7 @@ public class ManagementSmsMessagesIT {
     private AllStringContents allStringContents;
 
     @Autowired
-    private PlatformSettingsService platformSettingsService;
+    private ConfigurationService configurationService;
 
     private WorldVisionSettings settings;
 
@@ -55,7 +55,7 @@ public class ManagementSmsMessagesIT {
         settings = new WorldVisionSettings();
         settings.setModuleName("sierra-leone");
         settings.setConfigFiles(asList(language));
-        settings.setPlatformSettingsService(platformSettingsService);
+        settings.setConfigurationService(configurationService);
 
         mgr = new ManagementSmsMessages(settings);
     }
