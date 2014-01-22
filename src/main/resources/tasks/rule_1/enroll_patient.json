@@ -51,7 +51,7 @@
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
-            "expression": "Post-Partum Visit"
+            "expression": "Post Partum Visit"
           },
           {
             "displayName": "Gave birth (Form#0 (Commcare))",

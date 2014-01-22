@@ -69,7 +69,7 @@ public class CommCareFormStubListener {
         logger.info("form name " + formName);
 
         switch (formName) {
-            case "Post-Partum Visit":
+            case "Post Partum Visit":
                 /* fall through */
             case "Pregnancy Visit":
                 handleForm(caseIds, form);

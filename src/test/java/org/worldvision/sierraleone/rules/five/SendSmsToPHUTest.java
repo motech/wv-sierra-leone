@@ -102,7 +102,7 @@ public class SendSmsToPHUTest extends RuleTest {
 
         FormValueElement form = new FormValueElement();
         form.setElementName("form");
-        form.addAttribute(NAME, "Post-Partum Visit");
+        form.addAttribute(NAME, "Post Partum Visit");
         form.addFormValueElement("post_partum_visit", postPartumVisit);
         form.addFormValueElement(CASE, caseElement);
 
@@ -181,7 +181,7 @@ public class SendSmsToPHUTest extends RuleTest {
 
         FormValueElement form = new FormValueElement();
         form.setElementName("form");
-        form.addAttribute(NAME, "Post-Partum Visit");
+        form.addAttribute(NAME, "Post Partum Visit");
         form.addFormValueElement("post_partum_visit", postPartumVisit);
 
         commcareForm = new CommcareForm();

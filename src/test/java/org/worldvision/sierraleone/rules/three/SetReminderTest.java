@@ -100,7 +100,7 @@ public class SetReminderTest extends RuleTest {
         caseElement.addAttribute(Commcare.CASE_ID, CASE_ID_VALUE);
 
         FormValueElement form = new FormValueElement();
-        form.addAttribute(Commcare.NAME, "Post-Partum Visit");
+        form.addAttribute(Commcare.NAME, "Post Partum Visit");
         form.addFormValueElement(Commcare.NEXT_VISIT_DATE_PLUS_1, nextVisitDatePlus1);
         form.addFormValueElement(Commcare.CASE, caseElement);
 
@@ -139,7 +139,7 @@ public class SetReminderTest extends RuleTest {
         caseElement.addAttribute(Commcare.CASE_ID, CASE_ID_VALUE);
 
         FormValueElement form = new FormValueElement();
-        form.addAttribute(Commcare.NAME, "Post-Partum Visit");
+        form.addAttribute(Commcare.NAME, "Post Partum Visit");
         form.addFormValueElement(Commcare.CASE, caseElement);
         form.addFormValueElement("next_visit_date_plus_1", nextVisitDatePlus1);
 

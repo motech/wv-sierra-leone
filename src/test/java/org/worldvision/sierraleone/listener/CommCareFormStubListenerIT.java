@@ -119,7 +119,7 @@ public class CommCareFormStubListenerIT {
         postPartumVisit.put(Commcare.PLACE_OF_BIRTH, "home");
 
         ObjectNode form = mapper.createObjectNode();
-        form.put(String.format("@%s", Commcare.NAME), "Post-Partum Visit");
+        form.put(String.format("@%s", Commcare.NAME), "Post Partum Visit");
         form.put(Commcare.STILL_ALIVE, "yes");
         form.put(Commcare.GAVE_BIRTH, "yes");
         form.put(Commcare.CREATE_REFERRAL, "yes");

@@ -63,7 +63,7 @@
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
-            "expression": "Post-Partum Visit"
+            "expression": "Post Partum Visit"
           },
           {
             "displayName": "Next visit date (Form#0 (Commcare))",

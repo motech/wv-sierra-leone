@@ -82,7 +82,7 @@ public class EnrollPatientTest extends RuleTest {
 
         when(commcareDataProvider.lookup("CommcareForm", lookupFields)).thenReturn(commcareForm);
 
-        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "no", "yes", "yes", "Post-Partum Visit"));
+        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "no", "yes", "yes", "Post Partum Visit"));
 
         ArgumentCaptor<MotechEvent> captor = ArgumentCaptor.forClass(MotechEvent.class);
         handler.handle(commcareFormstub());
@@ -112,7 +112,7 @@ public class EnrollPatientTest extends RuleTest {
 
         when(commcareDataProvider.lookup("CommcareForm", lookupFields)).thenReturn(commcareForm);
 
-        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "yes", "yes", "yes", "Post-Partum Visit"));
+        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "yes", "yes", "yes", "Post Partum Visit"));
 
         handler.handle(commcareFormstub());
 
@@ -126,7 +126,7 @@ public class EnrollPatientTest extends RuleTest {
 
         when(commcareDataProvider.lookup("CommcareForm", lookupFields)).thenReturn(commcareForm);
 
-        when(commcareForm.getForm()).thenReturn(createForm("2013-06-14", "no", "yes", "yes", "Post-Partum Visit"));
+        when(commcareForm.getForm()).thenReturn(createForm("2013-06-14", "no", "yes", "yes", "Post Partum Visit"));
 
         handler.handle(commcareFormstub());
 
@@ -140,7 +140,7 @@ public class EnrollPatientTest extends RuleTest {
 
         when(commcareDataProvider.lookup("CommcareForm", lookupFields)).thenReturn(commcareForm);
 
-        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "no", "yes", "no", "Post-Partum Visit"));
+        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "no", "yes", "no", "Post Partum Visit"));
 
         handler.handle(commcareFormstub());
 
@@ -154,7 +154,7 @@ public class EnrollPatientTest extends RuleTest {
 
         when(commcareDataProvider.lookup("CommcareForm", lookupFields)).thenReturn(commcareForm);
 
-        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "no", "no", "yes", "Post-Partum Visit"));
+        when(commcareForm.getForm()).thenReturn(createForm("2013-08-14", "no", "no", "yes", "Post Partum Visit"));
 
         handler.handle(commcareFormstub());
 

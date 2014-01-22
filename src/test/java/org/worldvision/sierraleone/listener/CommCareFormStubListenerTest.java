@@ -78,7 +78,7 @@ public class CommCareFormStubListenerTest {
         String formId = "formId";
         String referralCaseId = "referralCaseId";
         String motherCaseId = "motherCaseId";
-        CommcareForm form = CommcareForm("Post-Partum Visit");
+        CommcareForm form = CommcareForm("Post Partum Visit");
         form.getForm().setElementName("form");
 
         AddSingleValueFormField(form, Commcare.STILL_ALIVE, "yes");
