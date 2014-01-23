@@ -10,8 +10,12 @@
         </layout>
     </appender>
 
+    <logger name="org.motechproject.tasks">
+        <level value="INFO"/>
+    </logger>
+
     <logger name="org.worldvision.sierraleone">
-        <level value="ERROR"/>
+        <level value="INFO"/>
     </logger>
 
     <root>

@@ -25,6 +25,7 @@ public class MotherReferralListener {
 
     @MotechListener(subjects = EventKeys.MOTHER_REFERRAL_SUBJECT)
     public void motherReferralReminder(MotechEvent event) {
+        LOGGER.debug(String.format("MotechEvent received on %s", EventKeys.MOTHER_REFERRAL_SUBJECT));
         // Rule 2:
         // IF “Mother needs to be referred” = TRUE and “Referral Completed” = FALSE, THEN send SMS to
         // patient every 24 hours until referral is completed.

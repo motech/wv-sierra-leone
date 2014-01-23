@@ -56,6 +56,7 @@ public class ConsecutiveMissedVisitListener {
 
     @MotechListener(subjects = EventKeys.CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT)
     public void childMissedVisitHandler(MotechEvent event) throws ContentNotFoundException {
+        LOGGER.debug(String.format("MotechEvent received on %s", EventKeys.CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT));
         String childCaseId = EventKeys.getStringValue(event, EventKeys.CHILD_CASE_ID);
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
 

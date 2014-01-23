@@ -40,11 +40,12 @@ public class ManagementSmsMessages implements OsgiServiceLifecycleListener {
     @Override
     public void unbind(Object service, Map properties) {
         if (service instanceof CMSLiteService) {
-            LOGGER.info("CMSLiteService is unavailable");
+            LOGGER.info("CMSLiteService became unavailable");
         }
     }
 
     private void loadMessages(CMSLiteService cmsLiteService) throws CMSLiteException {
+        LOGGER.info("Loading messages");
         Collection<StringContent> messages = getMessages();
 
         for (StringContent content : messages) {
@@ -59,6 +60,7 @@ public class ManagementSmsMessages implements OsgiServiceLifecycleListener {
         }
 
         loadedMessages = true;
+        LOGGER.info("Loaded messages");
     }
 
     private Collection<StringContent> getMessages() {

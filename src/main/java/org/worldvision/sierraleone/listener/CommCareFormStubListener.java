@@ -32,7 +32,7 @@ import static org.worldvision.sierraleone.constants.EventKeys.REFERRAL_CASE_ID;
 
 @Component
 public class CommCareFormStubListener {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(CommCareFormStubListener.class);
 
     private CommcareFormService commcareFormService;
     private CommcareCaseService commcareCaseService;
@@ -49,33 +49,34 @@ public class CommCareFormStubListener {
 
     @MotechListener(subjects = EventSubjects.FORM_STUB_EVENT)
     public void handle(MotechEvent event) {
-        logger.info("MotechEvent received on " + EventSubjects.FORM_STUB_EVENT);
+        LOG.debug(String.format("MotechEvent received on %s", EventSubjects.FORM_STUB_EVENT));
         String formId = EventKeys.getStringValue(event, EventDataKeys.FORM_ID);
         List<String> caseIds = EventKeys.getListValue(event, EventDataKeys.CASE_IDS, String.class);
 
         if (formId == null) {
-            logger.error("No " + EventDataKeys.FORM_ID + " key in event: " + event.toString());
+            LOG.error(String.format("No %s key in event: %s", EventDataKeys.FORM_ID, event.toString()));
             return;
         }
 
         // Get the form from CommCare
         CommcareForm form = commcareFormService.retrieveForm(formId);
         if (form == null) {
-            logger.error("Unable to load form " + formId + " from CommCare");
+            LOG.error(String.format("Unable to load form %s from CommCare", formId));
             return;
         }
 
         String formName = form.getForm().getAttributes().get(NAME);
-        logger.info("form name " + formName);
+        LOG.debug(String.format("form name %s", formName));
 
         switch (formName) {
             case "Post Partum Visit":
                 /* fall through */
             case "Pregnancy Visit":
+                LOG.info(String.format("Handle form: %s", formName));
                 handleForm(caseIds, form);
                 break;
             default:
-                logger.info("Ignoring commcare forwarded form of type: " + formName);
+                LOG.warn(String.format("Ignoring commcare forwarded form of type: %s", formName));
                 break;
         }
     }
@@ -86,9 +87,9 @@ public class CommCareFormStubListener {
         String motherCaseId = form.getForm().getElement(CASE).getAttributes().get(Commcare.CASE_ID);
         DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
 
-        logger.info("createReferral: " + createReferral);
-        logger.info("Mother Case Id: " + motherCaseId);
-        logger.info("dateOfVisit: " + dateOfVisit);
+        LOG.debug(String.format("createReferral: %s", createReferral));
+        LOG.debug(String.format("Mother Case Id: %s", motherCaseId));
+        LOG.debug(String.format("dateOfVisit: %s", dateOfVisit));
 
         FormChecker checker = new FormChecker();
         checker.addMetadata("type", form.getId());

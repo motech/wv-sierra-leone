@@ -36,6 +36,7 @@ public final class EventKeys {
         String ret = null;
         try {
             ret = (String) event.getParameters().get(key);
+            trace(event, key, ret);
         } catch (ClassCastException e) {
             LOGGER.warn(String.format("Event: %s Key: %s is not a String", event, key));
         }
@@ -47,6 +48,7 @@ public final class EventKeys {
         DateTime ret = null;
         try {
             ret = (DateTime) event.getParameters().get(key);
+            trace(event, key, ret);
         } catch (ClassCastException e) {
             LOGGER.warn(String.format("Event: %s Key: %s is not a DateTime", event, key));
         }
@@ -65,12 +67,18 @@ public final class EventKeys {
                     list.add(clazz.cast(obj));
                 }
             }
+
+            trace(event, key, list);
         } catch (ClassCastException e) {
             LOGGER.warn(String.format("Event: %s Key: %s is not a Collection of %s", event, key, clazz.getSimpleName()));
             list.clear();
         }
 
         return list;
+    }
+
+    private static void trace(MotechEvent event, String key, Object value) {
+        LOGGER.trace(String.format("Event: %s Key: %s Value: %s", event.getSubject(), key, value));
     }
 
 }
