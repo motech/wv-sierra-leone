@@ -21,7 +21,7 @@
       "serviceInterface": "org.motechproject.scheduler.MotechSchedulerActionProxyService",
       "serviceMethod": "scheduleRunOnceJob",
       "values": {
-        "startDate": "{{ad.7f871474375dc43dfd8a534abd021841.CommcareForm#0.form.elements.next_visit_date_plus_1.value?plusDays(1)?datetime(yyyy-MM-dd HH:mm Z)}}",
+        "startDate": "{{ad.7f871474375dc43dfd8a534abd021841.CommcareForm#0.form.elements.next_visit_plus_1.value?plusDays(1)?datetime(yyyy-MM-dd HH:mm Z)}}",
         "motechEventParameters": "mother_case_id:{{ad.7f871474375dc43dfd8a534abd021841.CommcareForm#0.form.elements.case.attributes.case_id}}",
         "motechEventSubject": "org.worldvision.sierraleone.post-partum.{{ad.7f871474375dc43dfd8a534abd021841.CommcareForm#0.form.elements.case.attributes.case_id}}"
       }
@@ -67,7 +67,7 @@
           },
           {
             "displayName": "Next visit date (Form#0 (Commcare))",
-            "key": "ad.7f871474375dc43dfd8a534abd021841.CommcareForm#0.form.elements.next_visit_date_plus_1.value",
+            "key": "ad.7f871474375dc43dfd8a534abd021841.CommcareForm#0.form.elements.next_visit_plus_1.value",
             "type": "DATE",
             "negationOperator": true,
             "operator": "task.exist"

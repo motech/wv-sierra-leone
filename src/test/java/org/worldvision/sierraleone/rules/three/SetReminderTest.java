@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.tasks.domain.ParameterType.DATE;
 import static org.motechproject.tasks.domain.ParameterType.MAP;
+import static org.worldvision.sierraleone.constants.Commcare.NEXT_VISIT_PLUS_1;
 
 public class SetReminderTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "7f871474375dc43dfd8a534abd021841";
@@ -92,7 +93,7 @@ public class SetReminderTest extends RuleTest {
         caseLookup.put("id", CASE_ID_VALUE);
 
         FormValueElement nextVisitDatePlus1 = new FormValueElement();
-        nextVisitDatePlus1.setElementName("next_visit_date_plus_1");
+        nextVisitDatePlus1.setElementName(NEXT_VISIT_PLUS_1);
         nextVisitDatePlus1.setValue(START_DATE.toString("yyyy-MM-dd"));
 
         FormValueElement caseElement = new FormValueElement();
@@ -101,7 +102,7 @@ public class SetReminderTest extends RuleTest {
 
         FormValueElement form = new FormValueElement();
         form.addAttribute(Commcare.NAME, "Post Partum Visit");
-        form.addFormValueElement(Commcare.NEXT_VISIT_DATE_PLUS_1, nextVisitDatePlus1);
+        form.addFormValueElement(NEXT_VISIT_PLUS_1, nextVisitDatePlus1);
         form.addFormValueElement(Commcare.CASE, caseElement);
 
         commcareForm = new CommcareForm();
@@ -132,7 +133,7 @@ public class SetReminderTest extends RuleTest {
         formLookup.put("id", FORM_ID_VALUE);
 
         FormValueElement nextVisitDatePlus1 = new FormValueElement();
-        nextVisitDatePlus1.setElementName("next_visit_date_plus_1");
+        nextVisitDatePlus1.setElementName(NEXT_VISIT_PLUS_1);
 
         FormValueElement caseElement = new FormValueElement();
         caseElement.setElementName("case");
@@ -141,7 +142,7 @@ public class SetReminderTest extends RuleTest {
         FormValueElement form = new FormValueElement();
         form.addAttribute(Commcare.NAME, "Post Partum Visit");
         form.addFormValueElement(Commcare.CASE, caseElement);
-        form.addFormValueElement("next_visit_date_plus_1", nextVisitDatePlus1);
+        form.addFormValueElement(NEXT_VISIT_PLUS_1, nextVisitDatePlus1);
 
         commcareForm = new CommcareForm();
         commcareForm.setForm(form);
@@ -160,7 +161,7 @@ public class SetReminderTest extends RuleTest {
         formLookup.put("id", FORM_ID_VALUE);
 
         FormValueElement nextVisitDatePlus1 = new FormValueElement();
-        nextVisitDatePlus1.setElementName("next_visit_date_plus_1");
+        nextVisitDatePlus1.setElementName(Commcare.NEXT_VISIT_PLUS_1);
         nextVisitDatePlus1.setValue("2013-08-14");
 
         FormValueElement caseElement = new FormValueElement();

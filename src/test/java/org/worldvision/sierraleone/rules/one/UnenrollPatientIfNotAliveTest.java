@@ -29,7 +29,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.messagecampaign.EventKeys.CAMPAIGN_NAME_KEY;
 import static org.motechproject.messagecampaign.EventKeys.EXTERNAL_ID_KEY;
 import static org.motechproject.messagecampaign.EventKeys.UNENROLL_USER_SUBJECT;
-import static org.worldvision.sierraleone.constants.Commcare.STILL_ALIVE;
+import static org.worldvision.sierraleone.constants.Commcare.MOTHER_ALIVE;
 
 public class UnenrollPatientIfNotAliveTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "eec2fa1b5d77bd5c536def1b150bdae7";
@@ -66,7 +66,7 @@ public class UnenrollPatientIfNotAliveTest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put(STILL_ALIVE, "no");
+        caseInfo.getFieldValues().put(MOTHER_ALIVE, "no");
 
         when(commcareDataProvider.lookup("CaseInfo", commcareLookup)).thenReturn(caseInfo);
 
@@ -97,7 +97,7 @@ public class UnenrollPatientIfNotAliveTest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put(STILL_ALIVE, "yes");
+        caseInfo.getFieldValues().put(MOTHER_ALIVE, "yes");
 
         when(commcareDataProvider.lookup("CaseInfo", commcareLookup)).thenReturn(caseInfo);
 

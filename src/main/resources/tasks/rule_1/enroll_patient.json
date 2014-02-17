@@ -55,7 +55,7 @@
           },
           {
             "displayName": "Gave birth (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.gave_birth.value",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.delivered.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
@@ -63,7 +63,7 @@
           },
           {
             "displayName": "Still alive (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.still_alive.value",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.mother_alive.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
@@ -79,7 +79,7 @@
           },
           {
             "displayName": "Attended postnatal (Form#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.attended_postnatal.value",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CommcareForm#0.form.elements.post_partum_visit.elements.attended_pnc.value",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",

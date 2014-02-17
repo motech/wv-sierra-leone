@@ -60,7 +60,7 @@
         "filters": [
           {
             "displayName": "Still alive (Case#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.still_alive",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.mother_alive",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
@@ -68,7 +68,7 @@
           },
           {
             "displayName": "Attended postnatal (Case#0 (Commcare))",
-            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.attended_postnatal",
+            "key": "ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.attended_pnc",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",

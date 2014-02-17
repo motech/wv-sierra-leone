@@ -30,7 +30,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.messagecampaign.EventKeys.CAMPAIGN_NAME_KEY;
 import static org.motechproject.messagecampaign.EventKeys.EXTERNAL_ID_KEY;
 import static org.motechproject.messagecampaign.EventKeys.UNENROLL_USER_SUBJECT;
-import static org.worldvision.sierraleone.constants.Commcare.ATTENDED_POSTNATAL;
+import static org.worldvision.sierraleone.constants.Commcare.ATTENDED_PNC;
 
 public class UnenrollPatientIfAttendedPostnatalTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "eec2fa1b5d77bd5c536def1b150bdae7";
@@ -71,7 +71,7 @@ public class UnenrollPatientIfAttendedPostnatalTest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put(ATTENDED_POSTNATAL, "yes");
+        caseInfo.getFieldValues().put(ATTENDED_PNC, "yes");
 
         when(commcareDataProvider.lookup("CaseInfo", commcareLookup)).thenReturn(caseInfo);
 
@@ -102,7 +102,7 @@ public class UnenrollPatientIfAttendedPostnatalTest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put(ATTENDED_POSTNATAL, "no");
+        caseInfo.getFieldValues().put(ATTENDED_PNC, "no");
 
         when(commcareDataProvider.lookup("CaseInfo", commcareLookup)).thenReturn(caseInfo);
 

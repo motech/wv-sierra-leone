@@ -81,12 +81,12 @@ public class CommCareFormStubListenerTest {
         CommcareForm form = CommcareForm("Post Partum Visit");
         form.getForm().setElementName("form");
 
-        AddSingleValueFormField(form, Commcare.STILL_ALIVE, "yes");
-        AddSingleValueFormField(form, Commcare.GAVE_BIRTH, "yes");
+        AddSingleValueFormField(form, Commcare.MOTHER_ALIVE, "yes");
+        AddSingleValueFormField(form, Commcare.DELIVERED, "yes");
         AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "yes");
         AddSingleValueFormField(form, Commcare.REFERRAL_ID, "referralId");
         AddSingleValueFormField(form, Commcare.DATE_OF_VISIT, "2013-01-03");
-        AddSingleValueFormField(form, Commcare.NEXT_VISIT_DATE_PLUS_1, "2013-01-03");
+        AddSingleValueFormField(form, Commcare.NEXT_VISIT_PLUS_1, "2013-01-03");
 
         FormValueElement aCase = AddSingleValueFormField(form, Commcare.CASE, "case");
         aCase.addAttribute(Commcare.CASE_ID, motherCaseId);
@@ -95,7 +95,7 @@ public class CommCareFormStubListenerTest {
         postPartumVisit.setElementName(Commcare.POST_PARTUM_VISIT);
 
         AddSubelementValueFormField(postPartumVisit, Commcare.DATE_OF_BIRTH, "2013-01-03");
-        AddSubelementValueFormField(postPartumVisit, Commcare.ATTENDED_POSTNATAL, "yes");
+        AddSubelementValueFormField(postPartumVisit, Commcare.ATTENDED_PNC, "yes");
         AddSubelementValueFormField(postPartumVisit, Commcare.PLACE_OF_BIRTH, "home");
 
         form.getForm().addFormValueElement(Commcare.POST_PARTUM_VISIT, postPartumVisit);

@@ -97,7 +97,7 @@ public class EnrollPatientTest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put("vitamin_a", "no");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "no");
         caseInfo.getFieldValues().put("dob", REFERANCE_DATE_VALUE.toString("yyyy-MM-dd"));
         caseInfo.setIndices(indices);
 
@@ -170,7 +170,7 @@ public class EnrollPatientTest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put("vitamin_a", "yes");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "yes");
         caseInfo.setIndices(indices);
 
 

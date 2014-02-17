@@ -67,7 +67,7 @@ public class UnenrollPatientIfTookVitaminATest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put("vitamin_a", "yes");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "yes");
 
         when(commcareDataProvider.lookup("CaseInfo", commcareLookup)).thenReturn(caseInfo);
 
@@ -98,7 +98,7 @@ public class UnenrollPatientIfTookVitaminATest extends RuleTest {
 
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
-        caseInfo.getFieldValues().put("vitamin_a", "no");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "no");
 
         when(commcareDataProvider.lookup("CaseInfo", commcareLookup)).thenReturn(caseInfo);
 

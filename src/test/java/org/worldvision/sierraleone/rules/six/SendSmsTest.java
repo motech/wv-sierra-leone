@@ -86,7 +86,7 @@ public class SendSmsTest extends RuleTest {
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
         caseInfo.getFieldValues().put("dob", new LocalDate(2013, 8, 14).plusMonths(8).toString("yyyy-MM-dd"));
-        caseInfo.getFieldValues().put("vitamin_a", "no");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "no");
         caseInfo.getFieldValues().put("child_name", "childName");
 
         Map<String, String> parentCaseLookup = new HashMap<>();
@@ -143,7 +143,7 @@ public class SendSmsTest extends RuleTest {
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
         caseInfo.getFieldValues().put("dob", new LocalDate(2013, 8, 14).plusMonths(8).toString("yyyy-MM-dd"));
-        caseInfo.getFieldValues().put("vitamin_a", "no");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "no");
         caseInfo.getFieldValues().put("child_name", "childName");
 
         Map<String, String> parentCaseLookup = new HashMap<>();
@@ -170,7 +170,7 @@ public class SendSmsTest extends RuleTest {
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
         caseInfo.getFieldValues().put("dob", new LocalDate(2013, 8, 14).plusMonths(8).toString("yyyy-MM-dd"));
-        caseInfo.getFieldValues().put("vitamin_a", "yes");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "yes");
 
         Map<String, String> parentCaseLookup = new HashMap<>();
         parentCaseLookup.put("id", PARENT_CASE_ID_VALUE);
@@ -196,7 +196,7 @@ public class SendSmsTest extends RuleTest {
         caseInfo = new CaseInfo();
         caseInfo.setFieldValues(new HashMap<String, String>());
         caseInfo.getFieldValues().put("dob", new LocalDate(2013, 8, 14).plusMonths(2).toString("yyyy-MM-dd"));
-        caseInfo.getFieldValues().put("vitamin_a", "no");
+        caseInfo.getFieldValues().put("vitamin_a_mother", "no");
         caseInfo.getFieldValues().put("child_name", "childName");
 
         Map<String, String> parentCaseLookup = new HashMap<>();

@@ -34,14 +34,14 @@ import static org.motechproject.messagecampaign.EventKeys.ENROLL_USER_SUBJECT;
 import static org.motechproject.messagecampaign.EventKeys.EXTERNAL_ID_KEY;
 import static org.motechproject.messagecampaign.EventKeys.REFERENCE_DATE;
 import static org.motechproject.tasks.domain.ParameterType.DATE;
-import static org.worldvision.sierraleone.constants.Commcare.ATTENDED_POSTNATAL;
+import static org.worldvision.sierraleone.constants.Commcare.ATTENDED_PNC;
 import static org.worldvision.sierraleone.constants.Commcare.CASE;
 import static org.worldvision.sierraleone.constants.Commcare.CASE_ID;
 import static org.worldvision.sierraleone.constants.Commcare.DATE_OF_BIRTH;
-import static org.worldvision.sierraleone.constants.Commcare.GAVE_BIRTH;
+import static org.worldvision.sierraleone.constants.Commcare.DELIVERED;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
 import static org.worldvision.sierraleone.constants.Commcare.POST_PARTUM_VISIT;
-import static org.worldvision.sierraleone.constants.Commcare.STILL_ALIVE;
+import static org.worldvision.sierraleone.constants.Commcare.MOTHER_ALIVE;
 
 public class EnrollPatientTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "eec2fa1b5d77bd5c536def1b150bdae7";
@@ -183,12 +183,12 @@ public class EnrollPatientTest extends RuleTest {
         FormValueElement postPartum = new FormValueElement();
         postPartum.setElementName(POST_PARTUM_VISIT);
         postPartum.addFormValueElement(DATE_OF_BIRTH, formValueElement(dob, DATE_OF_BIRTH));
-        postPartum.addFormValueElement(ATTENDED_POSTNATAL, formValueElement(attendedPostnatal, ATTENDED_POSTNATAL));
+        postPartum.addFormValueElement(ATTENDED_PNC, formValueElement(attendedPostnatal, ATTENDED_PNC));
 
         FormValueElement form = new FormValueElement();
         form.addAttribute(NAME, formName);
-        form.addFormValueElement(GAVE_BIRTH, formValueElement(gaveBirth, GAVE_BIRTH));
-        form.addFormValueElement(STILL_ALIVE, formValueElement(stillAlive, STILL_ALIVE));
+        form.addFormValueElement(DELIVERED, formValueElement(gaveBirth, DELIVERED));
+        form.addFormValueElement(MOTHER_ALIVE, formValueElement(stillAlive, MOTHER_ALIVE));
         form.addFormValueElement(POST_PARTUM_VISIT, postPartum);
         form.addFormValueElement(CASE, caseElement);
         return form;

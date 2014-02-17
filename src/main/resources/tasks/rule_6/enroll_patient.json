@@ -77,7 +77,7 @@
         "filters": [
           {
             "displayName": "Vitamin A (Case#1 (Commcare))",
-            "key": "ad.4408354fae5368389825691bc5095421.CaseInfo#1.fieldValues.vitamin_a",
+            "key": "ad.4408354fae5368389825691bc5095421.CaseInfo#1.fieldValues.vitamin_a_mother",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
