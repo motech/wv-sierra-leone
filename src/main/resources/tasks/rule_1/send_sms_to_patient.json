@@ -10,7 +10,7 @@
       "subject": "SendSMS",
       "values": {
         "message": "{{ad.eec2fa1b5d77bd5c536def1b150bc6e4.StringContent#1.value?format({{ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.mother_name}})}}",
-        "number": "+232 {{ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.mother_phone_number?substring(1)}}"
+        "recipients": "+232 {{ad.eec2fa1b5d77bd5c536def1b150bdae7.CaseInfo#0.fieldValues.mother_phone_number?substring(1)}}"
       }
     }
   ],

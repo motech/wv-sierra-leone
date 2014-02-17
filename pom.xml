@@ -10,10 +10,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <motech.version>0.22-SNAPSHOT</motech.version>
+        <motech.groupId>org.motechproject</motech.groupId>
+        <motech.version>0.22</motech.version>
         <jdk.version>1.7</jdk.version>
 
-        <external.dependency.release.tag>r020</external.dependency.release.tag>
+        <external.dependency.release.tag>r027</external.dependency.release.tag>
 
         <db.server>localhost</db.server>
         <db.port>5984</db.port>
@@ -22,55 +23,55 @@
     <dependencies>
         <!-- to configure your module properties -->
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-platform-server-config</artifactId>
             <version>${motech.version}</version>
         </dependency>
         <!-- to send/receive motech events -->
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-platform-event</artifactId>
             <version>${motech.version}</version>
         </dependency>
         <!-- to schedule jobs on motech -->
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-scheduler</artifactId>
             <version>${motech.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-commcare-api</artifactId>
             <version>${motech.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-message-campaign</artifactId>
             <version>${motech.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-sms-api-bundle</artifactId>
+            <groupId>${motech.groupId}</groupId>
+            <artifactId>motech-sms-bundle</artifactId>
             <version>${motech.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-cmslite-api</artifactId>
             <version>${motech.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.motechproject</groupId>
-            <artifactId>motech-tasks-bundle</artifactId>
+            <groupId>${motech.groupId}</groupId>
+            <artifactId>motech-tasks</artifactId>
             <version>${motech.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.motechproject</groupId>
+            <groupId>${motech.groupId}</groupId>
             <artifactId>motech-testing-utils</artifactId>
             <version>${motech.version}</version>
             <scope>test</scope>

@@ -39,9 +39,9 @@ import static org.worldvision.sierraleone.constants.Commcare.CASE;
 import static org.worldvision.sierraleone.constants.Commcare.CASE_ID;
 import static org.worldvision.sierraleone.constants.Commcare.DATE_OF_BIRTH;
 import static org.worldvision.sierraleone.constants.Commcare.DELIVERED;
+import static org.worldvision.sierraleone.constants.Commcare.MOTHER_ALIVE;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
 import static org.worldvision.sierraleone.constants.Commcare.POST_PARTUM_VISIT;
-import static org.worldvision.sierraleone.constants.Commcare.MOTHER_ALIVE;
 
 public class EnrollPatientTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "eec2fa1b5d77bd5c536def1b150bdae7";

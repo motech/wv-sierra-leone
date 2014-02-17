@@ -10,7 +10,7 @@
       "subject": "SendSMS",
       "values": {
         "message": "{{ad.4408354fae5368389825691bc50b171a.StringContent#2.value?format({{ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.child_name}},{{ad.4408354fae5368389825691bc50b09d4.CommcareFixture#3.fields.name}})}}",
-        "number": "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.mother_phone_number}}"
+        "recipients": "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.mother_phone_number}}"
       }
     }
   ],

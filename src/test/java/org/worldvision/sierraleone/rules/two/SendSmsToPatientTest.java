@@ -31,9 +31,9 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.motechproject.messagecampaign.EventKeys.CAMPAIGN_NAME_KEY;
 import static org.motechproject.messagecampaign.EventKeys.EXTERNAL_ID_KEY;
-import static org.motechproject.sms.api.constants.EventDataKeys.MESSAGE;
-import static org.motechproject.sms.api.constants.EventDataKeys.RECIPIENTS;
-import static org.motechproject.sms.api.constants.EventSubjects.SEND_SMS;
+import static org.motechproject.sms.SmsEventParams.MESSAGE;
+import static org.motechproject.sms.SmsEventParams.RECIPIENTS;
+import static org.motechproject.sms.SmsEventSubjects.SEND_SMS;
 import static org.motechproject.tasks.domain.ParameterType.LIST;
 
 public class SendSmsToPatientTest extends RuleTest {

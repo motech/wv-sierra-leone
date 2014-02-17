@@ -13,8 +13,8 @@ import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.commcare.service.CommcareUserService;
 import org.motechproject.commons.date.util.DateUtil;
 import org.motechproject.event.MotechEvent;
-import org.motechproject.sms.api.service.SendSmsRequest;
-import org.motechproject.sms.api.service.SmsService;
+import org.motechproject.sms.service.OutgoingSms;
+import org.motechproject.sms.service.SmsService;
 import org.worldvision.sierraleone.WorldVisionSettings;
 import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
@@ -134,11 +134,11 @@ public class ChildMissedVisitHandlerTest {
 
         listener.childMissedVisitHandler(event);
 
-        ArgumentCaptor<SendSmsRequest> captor = ArgumentCaptor.forClass(SendSmsRequest.class);
+        ArgumentCaptor<OutgoingSms> captor = ArgumentCaptor.forClass(OutgoingSms.class);
 
-        verify(smsService).sendSMS(captor.capture());
+        verify(smsService).send(captor.capture());
 
-        SendSmsRequest value = captor.getValue();
+        OutgoingSms value = captor.getValue();
 
         assertEquals(asList(phone), value.getRecipients());
         assertEquals(firstName + " " + lastName, value.getMessage());
@@ -191,7 +191,7 @@ public class ChildMissedVisitHandlerTest {
 
         listener.childMissedVisitHandler(event);
 
-        verify(smsService, never()).sendSMS(any(SendSmsRequest.class));
+        verify(smsService, never()).send(any(OutgoingSms.class));
     }
 
     @Test
@@ -234,11 +234,11 @@ public class ChildMissedVisitHandlerTest {
         listener.childMissedVisitHandler(event);
 
         verify(fixtureIdMap, never()).getPhoneForFixture(phuId);
-        verify(smsService, never()).sendSMS(any(SendSmsRequest.class));
+        verify(smsService, never()).send(any(OutgoingSms.class));
     }
 
     @Test
-    public void shouldNotSendSmsIfPhuIDIsNull() throws Exception {
+    public void shouldNotsendIfPhuIDIsNull() throws Exception {
         String childCaseId = "childCaseId";
         String motherCaseId = "motherCaseId";
 
@@ -257,7 +257,7 @@ public class ChildMissedVisitHandlerTest {
         listener.childMissedVisitHandler(event);
 
         verify(fixtureIdMap, never()).getPhoneForFixture(anyString());
-        verify(smsService, never()).sendSMS(any(SendSmsRequest.class));
+        verify(smsService, never()).send(any(OutgoingSms.class));
     }
 
     @Test
@@ -274,7 +274,7 @@ public class ChildMissedVisitHandlerTest {
         listener.childMissedVisitHandler(event);
 
         verify(fixtureIdMap, never()).getPhoneForFixture(anyString());
-        verify(smsService, never()).sendSMS(any(SendSmsRequest.class));
+        verify(smsService, never()).send(any(OutgoingSms.class));
     }
 
     @Test
@@ -290,6 +290,6 @@ public class ChildMissedVisitHandlerTest {
 
         verify(commcareCaseService, never()).getCaseByCaseId(motherCaseId);
         verify(fixtureIdMap, never()).getPhoneForFixture(anyString());
-        verify(smsService, never()).sendSMS(any(SendSmsRequest.class));
+        verify(smsService, never()).send(any(OutgoingSms.class));
     }
 }

@@ -10,8 +10,8 @@ import org.motechproject.commcare.service.CommcareCaseService;
 import org.motechproject.commcare.service.CommcareUserService;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.event.listener.annotations.MotechListener;
-import org.motechproject.sms.api.service.SendSmsRequest;
-import org.motechproject.sms.api.service.SmsService;
+import org.motechproject.sms.service.OutgoingSms;
+import org.motechproject.sms.service.SmsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +104,7 @@ public class ConsecutiveMissedVisitListener {
                 String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
                 String message = String.format(getMessage(CHILD_VISITS_MESSAGE_NAME), chwName);
-                smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+                smsService.send(new OutgoingSms(Arrays.asList(phone), message));
                 LOGGER.info(String.format("Sending missed consecutive child visit SMS to %s at %s for mothercase: %s childcase: %s", phuId, phone, motherCaseId, childCaseId));
             } else {
                 LOGGER.error(String.format("No phone for phu: %s  for mothercase: %s childcase: %s not sending missed consecutive child visit", phuId, motherCaseId, childCaseId));
@@ -137,7 +137,7 @@ public class ConsecutiveMissedVisitListener {
             String chwName = commcareUser.getFirstName() + " " + commcareUser.getLastName();
 
             String message = String.format(getMessage(POST_PARTUM_VISITS_MESSAGE_NAME), chwName);
-            smsService.sendSMS(new SendSmsRequest(Arrays.asList(phone), message));
+            smsService.send(new OutgoingSms(Arrays.asList(phone), message));
             LOGGER.info("Sending missed consecutive child visit SMS to " + phuId + " at " + phone + " for mothercase: " + motherCaseId);
         } else {
             LOGGER.error("No phone for phu: " + phuId + "  for mothercase: " + motherCaseId + " not sending missed consecutive post partum visit");

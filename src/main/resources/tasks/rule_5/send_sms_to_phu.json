@@ -11,7 +11,7 @@
       "subject": "SendSMS",
       "values": {
         "message": "{{ad.4408354fae5368389825691bc50583c2.StringContent#3.value?format({{ad.4408354fae5368389825691bc5056ebf.CommcareUser#4.firstName}},{{ad.4408354fae5368389825691bc5056ebf.CommcareUser#4.lastName}},{{ad.4408354fae5368389825691bc5056ebf.CaseInfo#1.fieldValues.mother_name}})}}",
-        "number": "{{ad.4408354fae5368389825691bc5056ebf.CommcareFixture#2.fields.phone}}"
+        "recipients": "{{ad.4408354fae5368389825691bc5056ebf.CommcareFixture#2.fields.phone}}"
       }
     }
   ],
