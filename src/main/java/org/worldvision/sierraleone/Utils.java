@@ -33,7 +33,7 @@ public final class Utils {
     private Utils() {
     }
 
-    public static DateTime dateTimeFromCommcareDateString(String dateStr) {
+    public static DateTime parseDateTime(String dateStr) {
         return dateStr == null ? null : DATE_TIME_FORMATTER.parseDateTime(dateStr);
     }
 

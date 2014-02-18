@@ -66,13 +66,13 @@ public class CommCareFormStubListener {
         }
 
         String formName = form.getForm().getAttributes().get(NAME);
-        LOG.debug(String.format("form name %s", formName));
+        LOG.info(String.format("Handle form: %s", formName));
 
         switch (formName) {
             case "Post Partum Visit":
+                handlePostPartumVisit(form);
                 /* fall through */
             case "Pregnancy Visit":
-                LOG.info(String.format("Handle form: %s", formName));
                 handleForm(caseIds, form);
                 break;
             default:
@@ -81,11 +81,80 @@ public class CommCareFormStubListener {
         }
     }
 
+    private void handlePostPartumVisit(CommcareForm form) {
+        String motherCaseId = form.getForm().getElement(CASE).getAttributes().get(Commcare.CASE_ID);
+        String visitSuccess = getValue(form.getForm(), Commcare.VISIT_SUCCESS);
+        String caseNextVisitAsString = getValue(form.getForm(), Commcare.CASE_NEXT_VISIT);
+        String dobAsString = getValue(form.getForm(), Commcare.CASE_DOB);
+        String caseOpv0 = getValue(form.getForm(), Commcare.CASE_OPV_0);
+        String caseBcg = getValue(form.getForm(), Commcare.CASE_BCG);
+        String caseAttendedPnc = getValue(form.getForm(), Commcare.CASE_ATTENDED_PNC);
+        String highRisk = null;
+        String attendedPnc = null;
+        String motherAlive = null;
+        String opv0 = null;
+        String bcg = null;
+
+        FormValueElement visitQuestions = form.getForm().getElement(Commcare.VISIT_QUESTIONS);
+        if (null != visitQuestions) {
+            highRisk = getValue(visitQuestions, Commcare.HIGH_RISK);
+            attendedPnc = getValue(visitQuestions, Commcare.ATTENDED_PNC);
+            motherAlive = getValue(visitQuestions, Commcare.MOTHER_ALIVE);
+
+            FormValueElement vaccinations = visitQuestions.getElement(Commcare.VACCINATIONS);
+            if (null != vaccinations) {
+                opv0 = getValue(vaccinations, Commcare.OPV_0);
+                bcg = getValue(vaccinations, Commcare.BCG);
+            }
+        }
+
+        FormChecker checker = new FormChecker();
+        checker.addMetadata("type", form.getId());
+        checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
+        checker.addMetadata("id", form.getId());
+
+        checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
+        checker.checkFieldExists(Commcare.VISIT_SUCCESS, visitSuccess);
+        checker.checkFieldExists(Commcare.CASE_NEXT_VISIT, caseNextVisitAsString);
+        checker.checkFieldExists(Commcare.CASE_DOB, dobAsString);
+        checker.checkFieldExists(Commcare.CASE_OPV_0, caseOpv0);
+        checker.checkFieldExists(Commcare.CASE_BCG, caseBcg);
+        checker.checkFieldExists(Commcare.OPV_0, opv0);
+        checker.checkFieldExists(Commcare.BCG, bcg);
+        checker.checkFieldExists(Commcare.HIGH_RISK, highRisk);
+        checker.checkFieldExists(Commcare.CASE_ATTENDED_PNC, caseAttendedPnc);
+        checker.checkFieldExists(Commcare.ATTENDED_PNC, attendedPnc);
+        checker.checkFieldExists(Commcare.MOTHER_ALIVE, motherAlive);
+
+        if (checker.check()) {
+            DateTime caseNextVisit = Utils.parseDateTime(caseNextVisitAsString);
+            DateTime dob = Utils.parseDateTime(dobAsString);
+
+            MotechEvent event = new MotechEventBuilder()
+                    .withSubject(EventKeys.POST_PARTUM_FORM_SUBJECT)
+                    .withParameter(EventKeys.MOTHER_CASE_ID, motherCaseId)
+                    .withParameter(Commcare.VISIT_SUCCESS, visitSuccess)
+                    .withParameter(Commcare.CASE_NEXT_VISIT, caseNextVisit)
+                    .withParameter(EventKeys.DATE_OF_BIRTH, dob)
+                    .withParameter(Commcare.CASE_OPV_0, caseOpv0)
+                    .withParameter(Commcare.CASE_BCG, caseBcg)
+                    .withParameter(Commcare.OPV_0, opv0)
+                    .withParameter(Commcare.BCG, bcg)
+                    .withParameter(Commcare.HIGH_RISK, highRisk)
+                    .withParameter(Commcare.CASE_ATTENDED_PNC, caseAttendedPnc)
+                    .withParameter(Commcare.ATTENDED_PNC, attendedPnc)
+                    .withParameter(Commcare.MOTHER_ALIVE, motherAlive)
+                    .build();
+
+            eventRelay.sendEventMessage(event);
+        }
+    }
+
     private void handleForm(List<String> caseIds, CommcareForm form) {
         String dov = getValue(form.getForm(), Commcare.DATE_OF_VISIT);
         String createReferral = getValue(form.getForm(), Commcare.CREATE_REFERRAL);
         String motherCaseId = form.getForm().getElement(CASE).getAttributes().get(Commcare.CASE_ID);
-        DateTime dateOfVisit = Utils.dateTimeFromCommcareDateString(dov);
+        DateTime dateOfVisit = Utils.parseDateTime(dov);
 
         LOG.debug(String.format("createReferral: %s", createReferral));
         LOG.debug(String.format("Mother Case Id: %s", motherCaseId));

@@ -159,7 +159,7 @@ public class ConsecutiveMissedVisitListener {
 
     private DateTime getDateField(CaseInfo caseInfo, String fieldName) {
         String d = caseInfo.getFieldValues().get(fieldName);
-        return Utils.dateTimeFromCommcareDateString(d);
+        return Utils.parseDateTime(d);
     }
 
     private String getMessage(String name) throws ContentNotFoundException {
