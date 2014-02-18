@@ -86,7 +86,6 @@ public class CommCareFormStubListenerTest {
         AddSingleValueFormField(form, Commcare.CREATE_REFERRAL, "yes");
         AddSingleValueFormField(form, Commcare.REFERRAL_ID, "referralId");
         AddSingleValueFormField(form, Commcare.DATE_OF_VISIT, "2013-01-03");
-        AddSingleValueFormField(form, Commcare.NEXT_VISIT_PLUS_1, "2013-01-03");
 
         FormValueElement aCase = AddSingleValueFormField(form, Commcare.CASE, "case");
         aCase.addAttribute(Commcare.CASE_ID, motherCaseId);
