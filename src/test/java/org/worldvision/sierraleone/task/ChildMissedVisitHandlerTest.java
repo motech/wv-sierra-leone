@@ -101,20 +101,17 @@ public class ChildMissedVisitHandlerTest {
 
         Map<String, String> childCaseFieldValues = new HashMap<>();
         childCaseFieldValues.put(Commcare.DATE_OF_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5A_DATE, aptDate1.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5B_DATE, aptDate2.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5C_DATE, aptDate3.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5D_DATE, aptDate4.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_6_DATE, aptDate5.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_7_DATE, aptDate6.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_8_DATE, aptDate7.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_9_DATE, aptDate8.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_10_DATE, aptDate9.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_11_DATE, aptDate10.toString("yyyy-MM-dd"));
 
         MotechEvent event = new MotechEvent();
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
+        event.getParameters().put(
+                EventKeys.CHILD_VISIT_DATES,
+                asList(
+                        aptDate1, aptDate2, aptDate3, aptDate4, aptDate5, aptDate6, aptDate7,
+                        aptDate8, aptDate9, aptDate10
+                )
+        );
 
         when(commcareCaseService.getCaseByCaseId(childCaseId)).thenReturn(childCase);
         when(commcareCaseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
@@ -166,20 +163,17 @@ public class ChildMissedVisitHandlerTest {
 
         Map<String, String> childCaseFieldValues = new HashMap<>();
         childCaseFieldValues.put(Commcare.DATE_OF_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5A_DATE, aptDate1.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5B_DATE, aptDate2.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5C_DATE, aptDate3.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5D_DATE, aptDate4.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_6_DATE, aptDate5.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_7_DATE, aptDate6.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_8_DATE, aptDate7.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_9_DATE, aptDate8.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_10_DATE, aptDate9.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_11_DATE, aptDate10.toString("yyyy-MM-dd"));
 
         MotechEvent event = new MotechEvent();
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
+        event.getParameters().put(
+                EventKeys.CHILD_VISIT_DATES,
+                asList(
+                        aptDate1, aptDate2, aptDate3, aptDate4, aptDate5, aptDate6, aptDate7,
+                        aptDate8, aptDate9, aptDate10
+                )
+        );
 
         when(commcareCaseService.getCaseByCaseId(childCaseId)).thenReturn(childCase);
         when(commcareCaseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);
@@ -213,17 +207,14 @@ public class ChildMissedVisitHandlerTest {
 
         Map<String, String> childCaseFieldValues = new HashMap<>();
         childCaseFieldValues.put(Commcare.DATE_OF_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_5D_DATE, aptDate4.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_6_DATE, aptDate5.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_7_DATE, aptDate6.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_8_DATE, aptDate7.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_9_DATE, aptDate8.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_10_DATE, aptDate9.toString("yyyy-MM-dd"));
-        childCaseFieldValues.put(Commcare.CHILD_VISIT_11_DATE, aptDate10.toString("yyyy-MM-dd"));
 
         MotechEvent event = new MotechEvent();
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
+        event.getParameters().put(
+                EventKeys.CHILD_VISIT_DATES,
+                asList(aptDate4, aptDate5, aptDate6, aptDate7, aptDate8, aptDate9, aptDate10)
+        );
 
         when(commcareCaseService.getCaseByCaseId(childCaseId)).thenReturn(childCase);
         when(commcareCaseService.getCaseByCaseId(motherCaseId)).thenReturn(motherCase);

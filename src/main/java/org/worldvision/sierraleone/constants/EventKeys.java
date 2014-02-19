@@ -13,8 +13,6 @@ import java.util.List;
  *
  */
 public final class EventKeys {
-    public static final String DATE_OF_BIRTH = "date_of_birth";
-
     private EventKeys() {
     }
 
@@ -24,13 +22,17 @@ public final class EventKeys {
     public static final String REFERRAL_CASE_ID = "referral_case_id";
     public static final String MOTHER_CASE_ID = "mother_case_id";
     public static final String CHILD_CASE_ID = "child_case_id";
-    public static final String SECOND_CONSECUTIVE_POST_PARTUM_VISIT_DATE = "second_consecutive_visit";
+
+    public static final String CHILD_VISIT_DATES = "child_visit_dates";
+
+    public static final String DATE_OF_BIRTH = "date_of_birth";
 
     public static final String BASE_SUBJECT = "org.worldvision.sierraleone.";
     public static final String MOTHER_REFERRAL_SUBJECT = BASE_SUBJECT + "mother-referral";
 
     public static final String FORM_BASE_SUBJECT = BASE_SUBJECT + "form.";
     public static final String POST_PARTUM_FORM_SUBJECT = FORM_BASE_SUBJECT + "post-partum";
+    public static final String CHILD_VISIT_FORM_SUBJECT = FORM_BASE_SUBJECT + "child-visit";
 
     public static final String CONSECUTIVE_CHILD_VISIT_BASE_SUBJECT = BASE_SUBJECT + "child-visit.";
     public static final String CONSECUTIVE_CHILD_VISIT_WILDCARD_SUBJECT = CONSECUTIVE_CHILD_VISIT_BASE_SUBJECT + "*";
