@@ -1,8 +1,20 @@
 package org.worldvision.sierraleone.constants;
 
 public final class Commcare {
-    private Commcare() { }
+    private Commcare() {
+    }
 
+    public static final String CASE_BIRTH_CERTIFICATE = "case_birth_certificate";
+    public static final String CASE_VITA_DATE = "case_vita_date";
+    public static final String CASE_DEWORM_DATE = "case_deworm_date";
+    public static final String START_DATE = "start_date";
+    public static final String BIRTH_CERTIFICATE = "birth_certificate";
+    public static final String COMP_BREASTFEEDING = "comp_breastfeeding";
+    public static final String EATS_3_TIMES_A_DAY = "eats_3_times_a_day";
+    public static final String IRON_RICH_FOODS = "iron_rich_foods";
+    public static final String BEDNET = "bednet";
+    public static final String VITA = "vita";
+    public static final String DEWORM = "deworm";
     public static final String CASE_NEXT_VISIT = "case_next_visit";
     public static final String CASE_DOB = "case_dob";
     public static final String CASE_OPV_0 = "case_opv0";
@@ -28,15 +40,4 @@ public final class Commcare {
     public static final String PLACE_OF_BIRTH = "place_of_birth";
     public static final String PHU_ID = "phu_id";
     public static final String PHONE = "phone";
-    public static final String CHILD_VISIT_5A_DATE = "child_v5a_date";
-    public static final String CHILD_VISIT_5B_DATE = "child_v5b_date";
-    public static final String CHILD_VISIT_5C_DATE = "child_v5c_date";
-    public static final String CHILD_VISIT_5D_DATE = "child_v5d_date";
-    public static final String CHILD_VISIT_6_DATE = "child_v6_date";
-    public static final String CHILD_VISIT_7_DATE = "child_v7_date";
-    public static final String CHILD_VISIT_8_DATE = "child_v8_date";
-    public static final String CHILD_VISIT_9_DATE = "child_v9_date";
-    public static final String CHILD_VISIT_10_DATE = "child_v10_date";
-    public static final String CHILD_VISIT_11_DATE = "child_v11_date";
 }
-

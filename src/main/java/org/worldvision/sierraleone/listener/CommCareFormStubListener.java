@@ -1,5 +1,6 @@
 package org.worldvision.sierraleone.listener;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareForm;
@@ -22,9 +23,12 @@ import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.worldvision.sierraleone.constants.Commcare.CASE;
+import static org.worldvision.sierraleone.constants.Commcare.CASE_ID;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
+import static org.worldvision.sierraleone.constants.EventKeys.CHILD_CASE_ID;
 import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_VISIT;
 import static org.worldvision.sierraleone.constants.EventKeys.MOTHER_CASE_ID;
 import static org.worldvision.sierraleone.constants.EventKeys.MOTHER_REFERRAL_SUBJECT;
@@ -69,6 +73,9 @@ public class CommCareFormStubListener {
         LOG.info(String.format("Handle form: %s", formName));
 
         switch (formName) {
+            case "Child Visit":
+                handleChildVisit(form);
+                /* fall through */
             case "Post Partum Visit":
                 handlePostPartumVisit(form);
                 /* fall through */
@@ -78,6 +85,97 @@ public class CommCareFormStubListener {
             default:
                 LOG.warn(String.format("Ignoring commcare forwarded form of type: %s", formName));
                 break;
+        }
+    }
+
+    @SuppressWarnings("PMD.NcssMethodCount")
+    private void handleChildVisit(CommcareForm form) {
+        String childCaseId = form.getForm().getElement(CASE).getAttributes().get(CASE_ID);
+        CaseInfo childCase = commcareCaseService.getCaseByCaseId(childCaseId);
+        if (null == childCase) {
+            LOG.error("Unable to load case " + childCaseId + " from commcare");
+            return;
+        }
+
+        Map<String, String> map = childCase.getIndices().get("parent");
+        String motherCaseId = map.get(CASE_ID);
+        String caseType = map.get("case_type");
+        boolean isMotherType = "mother".equalsIgnoreCase(caseType);
+
+        String dobAsString = getValue(form.getForm(), Commcare.CASE_DOB);
+        String caseBirthCertificate = getValue(form.getForm(), Commcare.CASE_BIRTH_CERTIFICATE);
+        String caseVitaDateAsString = getValue(form.getForm(), Commcare.CASE_VITA_DATE);
+        String caseDewormDateAsString = getValue(form.getForm(), Commcare.CASE_DEWORM_DATE);
+        String startDateAsString = getValue(form.getForm(), Commcare.START_DATE);
+        String birthCertificate = null;
+        String compBreastfeeding = null;
+        String eats3TimesADay = null;
+        String ironRichFoods = null;
+        String bednet = null;
+        String highRisk = null;
+        String vita = null;
+        String deworm = null;
+
+        FormValueElement visitQuestions = form.getForm().getElement(Commcare.VISIT_QUESTIONS);
+        if (null != visitQuestions) {
+            birthCertificate = getValue(visitQuestions, Commcare.BIRTH_CERTIFICATE);
+            compBreastfeeding = getValue(visitQuestions, Commcare.COMP_BREASTFEEDING);
+            eats3TimesADay = getValue(visitQuestions, Commcare.EATS_3_TIMES_A_DAY);
+            ironRichFoods = getValue(visitQuestions, Commcare.IRON_RICH_FOODS);
+            bednet = getValue(visitQuestions, Commcare.BEDNET);
+            highRisk = getValue(visitQuestions, Commcare.HIGH_RISK);
+            vita = getValue(visitQuestions, Commcare.VITA);
+            deworm = getValue(visitQuestions, Commcare.DEWORM);
+        }
+
+        FormChecker checker = getFormChecker(form);
+
+        checker.checkFieldExists(CHILD_CASE_ID, childCaseId);
+        checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
+        checker.checkFieldExists(Commcare.CASE_DOB, dobAsString);
+        checker.checkFieldExists(Commcare.START_DATE, startDateAsString);
+        checker.checkFieldExists(Commcare.CASE_BIRTH_CERTIFICATE, caseBirthCertificate);
+        checker.checkFieldExists(Commcare.BIRTH_CERTIFICATE, birthCertificate);
+        checker.checkFieldExists(Commcare.COMP_BREASTFEEDING, compBreastfeeding);
+        checker.checkFieldExists(Commcare.EATS_3_TIMES_A_DAY, eats3TimesADay);
+        checker.checkFieldExists(Commcare.IRON_RICH_FOODS, ironRichFoods);
+        checker.checkFieldExists(Commcare.BEDNET, bednet);
+        checker.checkFieldExists(Commcare.HIGH_RISK, highRisk);
+        checker.checkFieldExists(Commcare.VITA, vita);
+        checker.checkFieldExists(Commcare.DEWORM, deworm);
+
+        if (checker.check() && isMotherType) {
+            DateTime dob = Utils.parseDateTime(dobAsString);
+            DateTime caseVitaDate = StringUtils.isBlank(caseVitaDateAsString)
+                    ? null
+                    : Utils.parseDateTime(caseVitaDateAsString);
+            DateTime caseDewormDate = StringUtils.isBlank(caseDewormDateAsString)
+                    ? null
+                    : Utils.parseDateTime(caseDewormDateAsString);
+            DateTime startDate = StringUtils.isBlank(startDateAsString)
+                    ? null
+                    : Utils.parseDateTime(startDateAsString);
+
+            MotechEvent event = new MotechEventBuilder()
+                    .withSubject(EventKeys.CHILD_VISIT_FORM_SUBJECT)
+                    .withParameter(CHILD_CASE_ID, childCaseId)
+                    .withParameter(MOTHER_CASE_ID, motherCaseId)
+                    .withParameter(EventKeys.DATE_OF_BIRTH, dob)
+                    .withParameter(Commcare.START_DATE, startDate)
+                    .withParameter(Commcare.CASE_BIRTH_CERTIFICATE, caseBirthCertificate)
+                    .withParameter(Commcare.CASE_VITA_DATE, caseVitaDate)
+                    .withParameter(Commcare.START_DATE, caseDewormDate)
+                    .withParameter(Commcare.BIRTH_CERTIFICATE, birthCertificate)
+                    .withParameter(Commcare.COMP_BREASTFEEDING, compBreastfeeding)
+                    .withParameter(Commcare.EATS_3_TIMES_A_DAY, eats3TimesADay)
+                    .withParameter(Commcare.IRON_RICH_FOODS, ironRichFoods)
+                    .withParameter(Commcare.BEDNET, bednet)
+                    .withParameter(Commcare.HIGH_RISK, highRisk)
+                    .withParameter(Commcare.VITA, vita)
+                    .withParameter(Commcare.DEWORM, deworm)
+                    .build();
+
+            eventRelay.sendEventMessage(event);
         }
     }
 
@@ -108,10 +206,7 @@ public class CommCareFormStubListener {
             }
         }
 
-        FormChecker checker = new FormChecker();
-        checker.addMetadata("type", form.getId());
-        checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
-        checker.addMetadata("id", form.getId());
+        FormChecker checker = getFormChecker(form);
 
         checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
         checker.checkFieldExists(Commcare.VISIT_SUCCESS, visitSuccess);
@@ -160,10 +255,7 @@ public class CommCareFormStubListener {
         LOG.debug(String.format("Mother Case Id: %s", motherCaseId));
         LOG.debug(String.format("dateOfVisit: %s", dateOfVisit));
 
-        FormChecker checker = new FormChecker();
-        checker.addMetadata("type", form.getId());
-        checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
-        checker.addMetadata("id", form.getId());
+        FormChecker checker = getFormChecker(form);
 
         checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
         checker.checkFieldExists(DATE_OF_VISIT, dateOfVisit);
@@ -213,5 +305,14 @@ public class CommCareFormStubListener {
 
             eventRelay.sendEventMessage(event);
         }
+    }
+
+    private FormChecker getFormChecker(CommcareForm form) {
+        FormChecker checker = new FormChecker();
+        checker.addMetadata("type", form.getId());
+        checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
+        checker.addMetadata("id", form.getId());
+
+        return checker;
     }
 }

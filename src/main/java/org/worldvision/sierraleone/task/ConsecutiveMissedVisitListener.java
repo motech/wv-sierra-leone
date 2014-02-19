@@ -22,7 +22,6 @@ import org.worldvision.sierraleone.constants.Commcare;
 import org.worldvision.sierraleone.constants.EventKeys;
 import org.worldvision.sierraleone.repository.FixtureIdMap;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,19 +79,7 @@ public class ConsecutiveMissedVisitListener {
 
         // Get last visit date
         DateTime lastVisitDate = getDateField(childCase, Commcare.DATE_OF_VISIT);
-
-        // Place all expected visits dates in array
-        List<DateTime> dates = new ArrayList<>();
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5A_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5B_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5C_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_5D_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_6_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_7_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_8_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_9_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_10_DATE));
-        dates.add(getDateField(childCase, Commcare.CHILD_VISIT_11_DATE));
+        List<DateTime> dates = EventKeys.getListValue(event, EventKeys.CHILD_VISIT_DATES, DateTime.class);
 
         if (hasMissedConsecutiveAppointments(dates, lastVisitDate)) {
             // Get PHU phone
