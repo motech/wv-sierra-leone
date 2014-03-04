@@ -5,7 +5,7 @@
     {
       "displayName": "sms.send",
       "channelName": "sms.api",
-      "moduleName": "org.motechproject.motech-sms-api-bundle",
+      "moduleName": "motech-sms-api-bundle",
       "moduleVersion": "0.21.0.SNAPSHOT",
       "subject": "SendSMS",
       "values": {
@@ -17,7 +17,7 @@
   "trigger": {
     "displayName": "msgCampaign.send.message",
     "channelName": "msgCampaign.name",
-    "moduleName": "org.motechproject.motech-message-campaign",
+    "moduleName": "motech-message-campaign",
     "moduleVersion": "0.21.0.SNAPSHOT",
     "subject": "org.motechproject.messagecampaign.fired-campaign-message"
   },

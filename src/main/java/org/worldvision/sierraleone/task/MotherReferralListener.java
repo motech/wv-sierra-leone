@@ -45,7 +45,7 @@ public class MotherReferralListener {
         String externalId = motherCaseId + ":" + referralCaseId;
         CampaignRequest cr = new CampaignRequest(externalId,
                 MOTHER_REFERRAL_REMINDER_CAMPAIGN,
-                lastVisit.toLocalDate(), null);
+                lastVisit.toLocalDate(), null, null);
 
         messageCampaignService.startFor(cr);
     }
