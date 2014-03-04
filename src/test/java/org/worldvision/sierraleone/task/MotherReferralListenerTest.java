@@ -38,7 +38,7 @@ public class MotherReferralListenerTest {
         MotechEvent event = new MotechEvent(EventKeys.MOTHER_REFERRAL_SUBJECT);
         event.getParameters().put(EventKeys.REFERRAL_CASE_ID, referralCaseId);
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
-        event.getParameters().put(EventKeys.DATE_OF_VISIT, dateOfVisit);
+        event.getParameters().put(EventKeys.LAST_VISIT, dateOfVisit);
 
         motherReferralListener.motherReferralReminder(event);
 
@@ -60,7 +60,7 @@ public class MotherReferralListenerTest {
         MotechEvent event = new MotechEvent(EventKeys.MOTHER_REFERRAL_SUBJECT);
         event.getParameters().put(EventKeys.REFERRAL_CASE_ID, referralCaseId);
         event.getParameters().put(EventKeys.MOTHER_CASE_ID, motherCaseId);
-        event.getParameters().put(EventKeys.DATE_OF_VISIT, null);
+        event.getParameters().put(EventKeys.LAST_VISIT, null);
 
         motherReferralListener.motherReferralReminder(event);
 

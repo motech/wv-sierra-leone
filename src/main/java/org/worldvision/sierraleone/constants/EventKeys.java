@@ -18,7 +18,7 @@ public final class EventKeys {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventKeys.class);
 
-    public static final String DATE_OF_VISIT = "date_of_visit";
+    public static final String LAST_VISIT = "last_visit";
     public static final String REFERRAL_CASE_ID = "referral_case_id";
     public static final String MOTHER_CASE_ID = "mother_case_id";
     public static final String CHILD_CASE_ID = "child_case_id";
