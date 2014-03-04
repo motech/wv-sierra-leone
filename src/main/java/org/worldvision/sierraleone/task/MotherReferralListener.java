@@ -32,10 +32,10 @@ public class MotherReferralListener {
 
         String motherCaseId = EventKeys.getStringValue(event, EventKeys.MOTHER_CASE_ID);
         String referralCaseId = EventKeys.getStringValue(event, EventKeys.REFERRAL_CASE_ID);
-        DateTime dateOfVisit = EventKeys.getDateTimeValue(event, EventKeys.DATE_OF_VISIT);
+        DateTime lastVisit = EventKeys.getDateTimeValue(event, EventKeys.LAST_VISIT);
 
-        if (null == dateOfVisit) {
-            LOGGER.error(String.format("Event: %s does not contain key: %s", event, EventKeys.DATE_OF_VISIT));
+        if (null == lastVisit) {
+            LOGGER.error(String.format("Event: %s does not contain key: %s", event, EventKeys.LAST_VISIT));
             return;
         }
 
@@ -45,7 +45,7 @@ public class MotherReferralListener {
         String externalId = motherCaseId + ":" + referralCaseId;
         CampaignRequest cr = new CampaignRequest(externalId,
                 MOTHER_REFERRAL_REMINDER_CAMPAIGN,
-                dateOfVisit.toLocalDate(), null);
+                lastVisit.toLocalDate(), null);
 
         messageCampaignService.startFor(cr);
     }

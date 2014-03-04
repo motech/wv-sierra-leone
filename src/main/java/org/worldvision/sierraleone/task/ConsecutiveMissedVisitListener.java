@@ -78,7 +78,7 @@ public class ConsecutiveMissedVisitListener {
         }
 
         // Get last visit date
-        DateTime lastVisitDate = getDateField(childCase, Commcare.DATE_OF_VISIT);
+        DateTime lastVisitDate = getDateField(childCase, Commcare.LAST_VISIT);
         List<DateTime> dates = EventKeys.getListValue(event, EventKeys.CHILD_VISIT_DATES, DateTime.class);
 
         if (hasMissedConsecutiveAppointments(dates, lastVisitDate)) {

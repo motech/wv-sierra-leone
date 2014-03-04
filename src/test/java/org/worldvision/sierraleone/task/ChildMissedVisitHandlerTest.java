@@ -100,7 +100,7 @@ public class ChildMissedVisitHandlerTest {
         motherCaseFieldValues.put(Commcare.PHU_ID, phuId);
 
         Map<String, String> childCaseFieldValues = new HashMap<>();
-        childCaseFieldValues.put(Commcare.DATE_OF_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
+        childCaseFieldValues.put(Commcare.LAST_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
 
         MotechEvent event = new MotechEvent();
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
@@ -162,7 +162,7 @@ public class ChildMissedVisitHandlerTest {
         motherCaseFieldValues.put(Commcare.PHU_ID, phuId);
 
         Map<String, String> childCaseFieldValues = new HashMap<>();
-        childCaseFieldValues.put(Commcare.DATE_OF_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
+        childCaseFieldValues.put(Commcare.LAST_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
 
         MotechEvent event = new MotechEvent();
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);
@@ -206,7 +206,7 @@ public class ChildMissedVisitHandlerTest {
         motherCaseFieldValues.put(Commcare.PHU_ID, phuId);
 
         Map<String, String> childCaseFieldValues = new HashMap<>();
-        childCaseFieldValues.put(Commcare.DATE_OF_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
+        childCaseFieldValues.put(Commcare.LAST_VISIT, lastVisitDate.toString("yyyy-MM-dd"));
 
         MotechEvent event = new MotechEvent();
         event.getParameters().put(EventKeys.CHILD_CASE_ID, childCaseId);

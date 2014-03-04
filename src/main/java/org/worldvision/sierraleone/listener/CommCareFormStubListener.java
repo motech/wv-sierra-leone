@@ -29,7 +29,7 @@ import static org.worldvision.sierraleone.constants.Commcare.CASE;
 import static org.worldvision.sierraleone.constants.Commcare.CASE_ID;
 import static org.worldvision.sierraleone.constants.Commcare.NAME;
 import static org.worldvision.sierraleone.constants.EventKeys.CHILD_CASE_ID;
-import static org.worldvision.sierraleone.constants.EventKeys.DATE_OF_VISIT;
+import static org.worldvision.sierraleone.constants.EventKeys.LAST_VISIT;
 import static org.worldvision.sierraleone.constants.EventKeys.MOTHER_CASE_ID;
 import static org.worldvision.sierraleone.constants.EventKeys.MOTHER_REFERRAL_SUBJECT;
 import static org.worldvision.sierraleone.constants.EventKeys.REFERRAL_CASE_ID;
@@ -75,12 +75,12 @@ public class CommCareFormStubListener {
         switch (formName) {
             case "Child Visit":
                 handleChildVisit(form);
-                /* fall through */
+                break;
             case "Post Partum Visit":
                 handlePostPartumVisit(form);
                 /* fall through */
             case "Pregnancy Visit":
-                handleForm(caseIds, form);
+                handleReferral(caseIds, form);
                 break;
             default:
                 LOG.warn(String.format("Ignoring commcare forwarded form of type: %s", formName));
@@ -134,15 +134,6 @@ public class CommCareFormStubListener {
         checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
         checker.checkFieldExists(Commcare.CASE_DOB, dobAsString);
         checker.checkFieldExists(Commcare.START_DATE, startDateAsString);
-        checker.checkFieldExists(Commcare.CASE_BIRTH_CERTIFICATE, caseBirthCertificate);
-        checker.checkFieldExists(Commcare.BIRTH_CERTIFICATE, birthCertificate);
-        checker.checkFieldExists(Commcare.COMP_BREASTFEEDING, compBreastfeeding);
-        checker.checkFieldExists(Commcare.EATS_3_TIMES_A_DAY, eats3TimesADay);
-        checker.checkFieldExists(Commcare.IRON_RICH_FOODS, ironRichFoods);
-        checker.checkFieldExists(Commcare.BEDNET, bednet);
-        checker.checkFieldExists(Commcare.HIGH_RISK, highRisk);
-        checker.checkFieldExists(Commcare.VITA, vita);
-        checker.checkFieldExists(Commcare.DEWORM, deworm);
 
         if (checker.check() && isMotherType) {
             DateTime dob = Utils.parseDateTime(dobAsString);
@@ -212,14 +203,6 @@ public class CommCareFormStubListener {
         checker.checkFieldExists(Commcare.VISIT_SUCCESS, visitSuccess);
         checker.checkFieldExists(Commcare.CASE_NEXT_VISIT, caseNextVisitAsString);
         checker.checkFieldExists(Commcare.CASE_DOB, dobAsString);
-        checker.checkFieldExists(Commcare.CASE_OPV_0, caseOpv0);
-        checker.checkFieldExists(Commcare.CASE_BCG, caseBcg);
-        checker.checkFieldExists(Commcare.OPV_0, opv0);
-        checker.checkFieldExists(Commcare.BCG, bcg);
-        checker.checkFieldExists(Commcare.HIGH_RISK, highRisk);
-        checker.checkFieldExists(Commcare.CASE_ATTENDED_PNC, caseAttendedPnc);
-        checker.checkFieldExists(Commcare.ATTENDED_PNC, attendedPnc);
-        checker.checkFieldExists(Commcare.MOTHER_ALIVE, motherAlive);
 
         if (checker.check()) {
             DateTime caseNextVisit = Utils.parseDateTime(caseNextVisitAsString);
@@ -245,23 +228,12 @@ public class CommCareFormStubListener {
         }
     }
 
-    private void handleForm(List<String> caseIds, CommcareForm form) {
-        String dov = getValue(form.getForm(), Commcare.DATE_OF_VISIT);
+    private void handleReferral(List<String> caseIds, CommcareForm form) {
         String createReferral = getValue(form.getForm(), Commcare.CREATE_REFERRAL);
-        String motherCaseId = form.getForm().getElement(CASE).getAttributes().get(Commcare.CASE_ID);
-        DateTime dateOfVisit = Utils.parseDateTime(dov);
-
         LOG.debug(String.format("createReferral: %s", createReferral));
-        LOG.debug(String.format("Mother Case Id: %s", motherCaseId));
-        LOG.debug(String.format("dateOfVisit: %s", dateOfVisit));
 
-        FormChecker checker = getFormChecker(form);
-
-        checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
-        checker.checkFieldExists(DATE_OF_VISIT, dateOfVisit);
-
-        if (checker.check() && "yes".equals(createReferral)) {
-            sendReferralEvent(motherCaseId, form, caseIds, dateOfVisit);
+        if ("yes".equals(createReferral)) {
+            sendReferralEvent(form, caseIds);
         }
     }
 
@@ -273,8 +245,14 @@ public class CommCareFormStubListener {
     // The commcare stub form event contains a list of the cases affected by the form.  This method iterates
     // over that list finding the one that is the case.  This requires loading the case from commcare, so
     // we filter out the mother case so we can eliminate one remote call
-    private void sendReferralEvent(String motherCaseId, CommcareForm form, List<String> caseIds, DateTime dateOfVisit) {
+    private void sendReferralEvent(CommcareForm form, List<String> caseIds) {
+        String motherCaseId = form.getForm().getElement(CASE).getAttributes().get(Commcare.CASE_ID);
+        String lastVisitAsString = getValue(form.getForm(), Commcare.LAST_VISIT);
+        DateTime lastVisit = Utils.parseDateTime(lastVisitAsString);
         String referralId = null;
+
+        LOG.debug(String.format("%s: %s", MOTHER_CASE_ID, motherCaseId));
+        LOG.debug(String.format("%s: %s", LAST_VISIT, lastVisit));
 
         for (String caseId : caseIds) {
             if (!motherCaseId.equals(caseId)) {
@@ -286,12 +264,8 @@ public class CommCareFormStubListener {
             }
         }
 
-        FormChecker checker = new FormChecker();
-        checker.addMetadata("type", "referral");
-        checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
-        checker.addMetadata("id", form.getId());
-
-        checker.checkFieldExists(Commcare.DATE_OF_VISIT, dateOfVisit);
+        FormChecker checker = getFormChecker(form, "referral");
+        checker.checkFieldExists(LAST_VISIT, lastVisit);
         checker.checkFieldExists(REFERRAL_CASE_ID, referralId);
         checker.checkFieldExists(MOTHER_CASE_ID, motherCaseId);
 
@@ -300,7 +274,7 @@ public class CommCareFormStubListener {
                     .withSubject(MOTHER_REFERRAL_SUBJECT)
                     .withParameter(MOTHER_CASE_ID, motherCaseId)
                     .withParameter(REFERRAL_CASE_ID, referralId)
-                    .withParameter(DATE_OF_VISIT, dateOfVisit)
+                    .withParameter(LAST_VISIT, lastVisit)
                     .build();
 
             eventRelay.sendEventMessage(event);
@@ -308,8 +282,12 @@ public class CommCareFormStubListener {
     }
 
     private FormChecker getFormChecker(CommcareForm form) {
+        return getFormChecker(form, form.getId());
+    }
+
+    private FormChecker getFormChecker(CommcareForm form, String type) {
         FormChecker checker = new FormChecker();
-        checker.addMetadata("type", form.getId());
+        checker.addMetadata("type", type);
         checker.addMetadata("name", form.getForm().getAttributes().get(NAME));
         checker.addMetadata("id", form.getId());
 
