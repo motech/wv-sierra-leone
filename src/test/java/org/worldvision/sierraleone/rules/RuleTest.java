@@ -73,6 +73,8 @@ public abstract class RuleTest extends BaseUnitTest {
     @Override
     @After
     public void tearDown() {
+        super.tearDown();
+
         verify(activityService, never()).addError(any(Task.class), any(TaskHandlerException.class));
         verify(activityService, never()).addError(any(Task.class), anyString());
         verify(activityService, never()).addWarning(any(Task.class), anyString(), anyString());

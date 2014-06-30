@@ -1,0 +1,146 @@
+{
+  "_id": "rule-6-send-sms-to-phu",
+  "name": "rule #6: Send sms to PHU",
+  "actions": [
+    {
+      "displayName": "sms.send",
+      "channelName": "sms.api",
+      "moduleName": "motech-sms-api-bundle",
+      "moduleVersion": "0.21.0.SNAPSHOT",
+      "subject": "SendSMS",
+      "values": {
+        "message": "{{ad.4408354fae5368389825691bc50b171a.StringContent#3.value?format({{ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.child_name}})}}",
+        "number": "{{ad.4408354fae5368389825691bc5056ebf.CommcareFixture#2.fields.phone}}"
+      }
+    }
+  ],
+  "trigger": {
+    "displayName": "msgCampaign.send.message",
+    "channelName": "msgCampaign.name",
+    "moduleName": "motech-message-campaign",
+    "moduleVersion": "0.21.0.SNAPSHOT",
+    "subject": "org.motechproject.messagecampaign.fired-campaign-message"
+  },
+  "enabled": true,
+  "taskConfig": {
+    "steps": [
+      {
+        "@type": "FilterSet",
+        "order": 0,
+        "filters": [
+          {
+            "displayName": "Campaign name (Trigger)",
+            "key": "trigger.CampaignName",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.equals",
+            "expression": "Child Vitamin A Reminder"
+          }
+        ]
+      },
+      {
+        "@type": "DataSource",
+        "order": 1,
+        "providerName": "commcare.name",
+        "providerId": "4408354fae5368389825691bc50b09d4",
+        "objectId": 0,
+        "type": "CaseInfo",
+        "name": "commcare.id",
+        "lookup": [
+          {
+            "field": "id",
+            "value": "{{trigger.ExternalID?split(:,0)}}"
+          }
+        ],
+        "failIfDataNotFound": true
+      },
+      {
+        "@type": "FilterSet",
+        "order": 2,
+        "filters": [
+          {
+            "displayName": "Date of birth (Case#0 (Commcare))",
+            "key": "ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.dob",
+            "type": "DATE",
+            "negationOperator": true,
+            "operator": "task.moreMonthsFromNow",
+            "expression": "6"
+          },
+          {
+            "displayName": "Vitamin A (Case#0 (Commcare))",
+            "key": "ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.vitamin_a_mother",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.equals",
+            "expression": "no"
+          }
+        ]
+      },
+      {
+        "@type": "DataSource",
+        "order": 3,
+        "providerName": "commcare.name",
+        "providerId": "4408354fae5368389825691bc50b09d4",
+        "objectId": 1,
+        "type": "CaseInfo",
+        "name": "commcare.id",
+        "lookup": [
+          {
+            "field": "id",
+            "value": "{{trigger.ExternalID?split(:,1)}}"
+          }
+        ],
+        "failIfDataNotFound": true
+      },
+      {
+        "@type": "FilterSet",
+        "order": 4,
+        "filters": [
+          {
+            "displayName": "Mother phu id (Case#1 (Commcare))",
+            "key": "ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.phu_id",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.exist"
+          }
+        ]
+      },
+      {
+        "@type": "DataSource",
+        "order": 5,
+        "providerName": "commcare.name",
+        "providerId": "4408354fae5368389825691bc50b09d4",
+        "objectId": 2,
+        "type": "CommcareFixture",
+        "name": "commcare.id",
+        "lookup": [
+          {
+            "field": "id",
+            "value": "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.phu_id}}"
+          }
+        ],
+        "failIfDataNotFound": true
+      },
+      {
+        "@type": "DataSource",
+        "order": 6,
+        "providerName": "cmslite.name",
+        "providerId": "4408354fae5368389825691bc50b171a",
+        "objectId": 3,
+        "type": "StringContent",
+        "name": "cmslite.languageAndName",
+        "lookup": [
+          {
+            "field": "cmslite.dataname",
+            "value": "ChildVitaminAReminder_PHU"
+          },
+          {
+            "field": "cmslite.language",
+            "value": "English"
+          }
+        ],
+        "failIfDataNotFound": true
+      }
+    ]
+  }
+}

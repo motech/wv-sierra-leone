@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.motechproject.commcare.domain.CaseInfo;
 import org.motechproject.commcare.domain.CommcareFixture;
 import org.motechproject.commons.api.DataProvider;
+import org.motechproject.commons.date.util.DateUtil;
 import org.motechproject.event.MotechEvent;
 import org.motechproject.tasks.domain.ActionEvent;
 import org.motechproject.tasks.domain.ActionParameter;
@@ -37,7 +38,7 @@ import static org.motechproject.sms.api.constants.EventDataKeys.RECIPIENTS;
 import static org.motechproject.sms.api.constants.EventSubjects.SEND_SMS;
 import static org.motechproject.tasks.domain.ParameterType.LIST;
 
-public class SendSmsTest extends RuleTest {
+public class SendSmsToPatientTest extends RuleTest {
     private static final String COMMCARE_PROVIDER_ID = "4408354fae5368389825691bc50b09d4";
     private static final String CMSLITE_PROVIDER_ID = "4408354fae5368389825691bc50b171a";
     private static final String CASE_ID_VALUE = "caseId";
@@ -67,7 +68,7 @@ public class SendSmsTest extends RuleTest {
         handler.addDataProvider(COMMCARE_PROVIDER_ID, commcareDataProvider);
         handler.addDataProvider(CMSLITE_PROVIDER_ID, cmsliteDataProvider);
 
-        setTask(6, "send_sms.json", "rule-6-send-sms");
+        setTask(6, "send_sms_to_patient.json", "rule-6-send-sms-to-patient");
         setMessages();
     }
 

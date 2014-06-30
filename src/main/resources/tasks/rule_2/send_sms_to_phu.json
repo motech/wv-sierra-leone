@@ -1,6 +1,6 @@
 {
-  "_id": "rule-6-send-sms",
-  "name": "rule #6: Send sms",
+  "_id": "rule-2-send-sms-to-phu",
+  "name": "rule #2: Send sms to PHU",
   "actions": [
     {
       "displayName": "sms.send",
@@ -9,8 +9,8 @@
       "moduleVersion": "0.21.0.SNAPSHOT",
       "subject": "SendSMS",
       "values": {
-        "message": "{{ad.4408354fae5368389825691bc50b171a.StringContent#2.value?format({{ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.child_name}},{{ad.4408354fae5368389825691bc50b09d4.CommcareFixture#3.fields.name}})}}",
-        "number": "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.mother_phone_number}}"
+        "message": "{{ad.3980fa00249eb3bf73e200bd85061c11.StringContent#3.value?format({{ad.3980fa00249eb3bf73e200bd85062954.CaseInfo#1.fieldValues.mother_name}})}}",
+        "number": "{{ad.4408354fae5368389825691bc5056ebf.CommcareFixture#2.fields.phone}}"
       }
     }
   ],
@@ -34,7 +34,7 @@
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.equals",
-            "expression": "Child Vitamin A Reminder"
+            "expression": "Mother Referral Reminder"
           }
         ]
       },
@@ -42,46 +42,8 @@
         "@type": "DataSource",
         "order": 1,
         "providerName": "commcare.name",
-        "providerId": "4408354fae5368389825691bc50b09d4",
+        "providerId": "3980fa00249eb3bf73e200bd85062954",
         "objectId": 0,
-        "type": "CaseInfo",
-        "name": "commcare.id",
-        "lookup": [
-          {
-            "field": "id",
-            "value": "{{trigger.ExternalID?split(:,0)}}"
-          }
-        ],
-        "failIfDataNotFound": true
-      },
-      {
-        "@type": "FilterSet",
-        "order": 2,
-        "filters": [
-          {
-            "displayName": "Date of birth (Case#0 (Commcare))",
-            "key": "ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.dob",
-            "type": "DATE",
-            "negationOperator": true,
-            "operator": "task.moreMonthsFromNow",
-            "expression": "6"
-          },
-          {
-            "displayName": "Vitamin A (Case#0 (Commcare))",
-            "key": "ad.4408354fae5368389825691bc50b09d4.CaseInfo#0.fieldValues.vitamin_a_mother",
-            "type": "UNICODE",
-            "negationOperator": true,
-            "operator": "task.equals",
-            "expression": "no"
-          }
-        ]
-      },
-      {
-        "@type": "DataSource",
-        "order": 3,
-        "providerName": "commcare.name",
-        "providerId": "4408354fae5368389825691bc50b09d4",
-        "objectId": 1,
         "type": "CaseInfo",
         "name": "commcare.id",
         "lookup": [
@@ -94,11 +56,48 @@
       },
       {
         "@type": "FilterSet",
+        "order": 2,
+        "filters": [
+          {
+            "displayName": "Open (Case#0 (Commcare))",
+            "key": "ad.3980fa00249eb3bf73e200bd85062954.CaseInfo#0.fieldValues.open",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.equals",
+            "expression": "true"
+          }
+        ]
+      },
+      {
+        "@type": "DataSource",
+        "order": 3,
+        "providerName": "commcare.name",
+        "providerId": "3980fa00249eb3bf73e200bd85062954",
+        "objectId": 1,
+        "type": "CaseInfo",
+        "name": "commcare.id",
+        "lookup": [
+          {
+            "field": "id",
+            "value": "{{trigger.ExternalID?split(:,0)}}"
+          }
+        ],
+        "failIfDataNotFound": true
+      },
+      {
+        "@type": "FilterSet",
         "order": 4,
         "filters": [
           {
-            "displayName": "Mother phone number (Case#1 (Commcare))",
-            "key": "ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.mother_phone_number",
+            "displayName": "Mother name (Case#1 (Commcare))",
+            "key": "ad.3980fa00249eb3bf73e200bd85062954.CaseInfo#1.fieldValues.mother_name",
+            "type": "UNICODE",
+            "negationOperator": true,
+            "operator": "task.exist"
+          },
+          {
+            "displayName": "Mother phu id (Case#1 (Commcare))",
+            "key": "ad.3980fa00249eb3bf73e200bd85062954.CaseInfo#1.fieldValues.phu_id",
             "type": "UNICODE",
             "negationOperator": true,
             "operator": "task.exist"
@@ -107,32 +106,32 @@
       },
       {
         "@type": "DataSource",
-        "order": 5,
+        "order": 3,
         "providerName": "commcare.name",
-        "providerId": "4408354fae5368389825691bc50b09d4",
-        "objectId": 3,
+        "providerId": "3980fa00249eb3bf73e200bd85062954",
+        "objectId": 2,
         "type": "CommcareFixture",
         "name": "commcare.id",
         "lookup": [
           {
             "field": "id",
-            "value": "{{ad.4408354fae5368389825691bc50b09d4.CaseInfo#1.fieldValues.phu_id}}"
+            "value": "{{ad.3980fa00249eb3bf73e200bd85062954.CaseInfo#1.fieldValues.phu_id}}"
           }
         ],
         "failIfDataNotFound": true
       },
       {
         "@type": "DataSource",
-        "order": 6,
+        "order": 5,
         "providerName": "cmslite.name",
-        "providerId": "4408354fae5368389825691bc50b171a",
-        "objectId": 2,
+        "providerId": "3980fa00249eb3bf73e200bd85061c11",
+        "objectId": 3,
         "type": "StringContent",
         "name": "cmslite.languageAndName",
         "lookup": [
           {
             "field": "cmslite.dataname",
-            "value": "ChildVitaminAReminder"
+            "value": "MotherReferralReminder_PHU"
           },
           {
             "field": "cmslite.language",

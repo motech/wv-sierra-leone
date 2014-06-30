@@ -2,15 +2,27 @@
    "language": "English",
    "name": "PostnatalConsultationReminder",
    "value": "You / %s have been referred for post-partum consultation care at your health centre. Please go directly to the facility as soon as possible"
+},{
+   "language": "English",
+   "name": "PostnatalConsultationReminder_PHU",
+   "value": "Your patient (%s) have been referred for post-partum consultation care at your health centre."
 }, {
    "language": "English",
    "name": "MotherReferralReminder",
    "value": "You / %s have been referred for care at your health centre. Please go directly to the facility for urgent care."
 }, {
    "language": "English",
+   "name": "MotherReferralReminder_PHU",
+   "value": "Your patient (%s) have been referred for care at your health centre."
+}, {
+   "language": "English",
    "name": "ChildVitaminAReminder",
    "value": "Your child %s has missed a Vitamin A dose which they need to grow healthy and resist disease. Take the child to %s as soon as possible."
 }, {
+    "language": "English",
+    "name": "ChildVitaminAReminder_PHU",
+    "value": "Your patient (%s) has missed a Vitamin A dose which they need to grow healthy and resist disease."
+ }, {
    "language": "English",
    "name": "HomeBirthNotification",
    "value": "CHW %s %s has registered a home delivery by woman %s - Call to confirm woman is referred and cared for at home."
